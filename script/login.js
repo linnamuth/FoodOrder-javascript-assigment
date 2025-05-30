@@ -1,67 +1,94 @@
+// Show Register Form
 function showRegister() {
-    document.getElementById("loginForm").style.display = "none";
-    document.getElementById("registerForm").style.display = "block";
-    document.getElementById("loginTab").classList.remove("active");
-    document.getElementById("registerTab").classList.add("active");
+  document.getElementById("loginForm").style.display = "none";
+  document.getElementById("registerForm").style.display = "block";
+  document.getElementById("loginTab").classList.remove("active");
+  document.getElementById("registerTab").classList.add("active");
 }
 
+// Show Login Form
 function showLogin() {
-    document.getElementById("loginForm").style.display = "block";
-    document.getElementById("registerForm").style.display = "none";
-    document.getElementById("loginTab").classList.add("active");
-    document.getElementById("registerTab").classList.remove("active");
+  document.getElementById("loginForm").style.display = "block";
+  document.getElementById("registerForm").style.display = "none";
+  document.getElementById("loginTab").classList.add("active");
+  document.getElementById("registerTab").classList.remove("active");
 }
 
-// Swap navbar to show user icon
-function showUserIcon() {
-    const authLinks = document.getElementById("authLinks");
-    const userIcon = document.getElementById("userIcon");
+// Show User Icon when logged in
+function showUserIcon(username) {
+  const authLinks = document.getElementById("authLinks");
+  const userIcon = document.getElementById("userIcon");
+  const userName = document.getElementById("userName");
 
-    if(authLinks && userIcon){
-        authLinks.classList.add("d-none");
-        userIcon.classList.remove("d-none");
-    }
+  authLinks.classList.add("d-none");
+  userIcon.classList.remove("d-none");
+  userName.textContent = username;
 }
 
 // Handle Login Form
-document.getElementById("loginForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    alert("Logged in successfully!");
+document.getElementById("loginForm").addEventListener("submit", function (e) {
+  e.preventDefault();
 
-    // Save login info
-    localStorage.setItem('loggedIn', 'true');
+  const email = document.getElementById("loginUsername").value;
+  const password = document.getElementById("loginPassword").value;
 
-    // Redirect
-    window.location.href = "index.html";
+  // Validate login
+  if (email && password) {
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "Logged in successfully!",
+      showConfirmButton: false,
+      timer: 1500,
+      toast: true,
+    }).then(() => {
+      // Save login info
+      localStorage.setItem("loggedIn", "true");
+      localStorage.setItem("username", email);
+      window.location.href = "index.html";
+    });
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Invalid Credentials",
+      text: "Please enter both email and password.",
+    });
+  }
 });
-function showLogout () {
-    localStorage.removeItem('loggedIn');
-    window.location.href = "index.html"; // or your login page
 
-}
 // Handle Register Form
-document.getElementById("registerForm").addEventListener("submit", function(e) {
+document
+  .getElementById("registerForm")
+  .addEventListener("submit", function (e) {
     e.preventDefault();
 
+    let name = document.getElementById("registerName").value;
+    let email = document.getElementById("registerEmail").value;
     let password = document.getElementById("registerPassword").value;
     let confirmPassword = document.getElementById("confirmPassword").value;
 
     if (password !== confirmPassword) {
-        alert("Passwords do not match. Please try again.");
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Passwords do not match!',
+        showConfirmButton: false,
+        timer: 2000,
+        toast: true
+      });
     } else {
-        alert("Registered successfully!");
-
-        // Save login info
-        localStorage.setItem('loggedIn', 'true');
-
-        // Redirect
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Registered successfully!',
+        showConfirmButton: false,
+        timer: 1500,
+        toast: true
+      }).then(() => {
+        localStorage.setItem("loggedIn", "true");
+        localStorage.setItem("username", name); 
+        // Redirect to home page
         window.location.href = "index.html";
+      });
     }
-});
-// When page loads, check if user is already logged in
-window.onload = function() {
-    if(localStorage.getItem('loggedIn') === 'true') {
-        showUserIcon();
-    }
-}
-
+  });

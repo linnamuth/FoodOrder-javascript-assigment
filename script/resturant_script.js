@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
         price: "4.20",
         imgSrc: "./img/latte.jpg",
         link: "categoryPage.html?category=Latte",
-        storeId: "store123",
         variations: {
           sizes: [
             { size: "Small", price: 3.5 },
@@ -26,7 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
         price: "4.00",
         imgSrc: "./img/cappuccino.jpg",
         link: "categoryPage.html?category=Cappuccino",
-        storeId: "store123",
         variations: {
           sizes: [
             { size: "Small", price: 3.5 },
@@ -44,7 +42,6 @@ document.addEventListener("DOMContentLoaded", function () {
         price: "4.30",
         imgSrc: "./img/flat-white.jpg",
         link: "categoryPage.html?category=FlatWhite",
-        storeId: "store123",
         variations: {
           sizes: [
             { size: "Small", price: 3.5 },
@@ -62,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
         price: "4.75",
         imgSrc: "./img/caramel-macchiato.jpg",
         link: "categoryPage.html?category=CaramelMacchiato",
-        storeId: "store123",
         variations: {
           sizes: [
             { size: "Small", price: 3.5 },
@@ -80,7 +76,6 @@ document.addEventListener("DOMContentLoaded", function () {
         price: "1.50",
         imgSrc: "./img/black-coffee.jpg",
         link: "categoryPage.html?category=Cortado",
-        storeId: "store123",
         variations: {
           sizes: [
             { size: "Small", price: 3.5 },
@@ -98,7 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
         price: "1.75",
         imgSrc: "./img/hoc-white.jpg",
         link: "categoryPage.html?category=TurkishCoffee",
-        storeId: "store123",
         variations: {
           sizes: [
             { size: "Small", price: 3.5 },
@@ -116,7 +110,6 @@ document.addEventListener("DOMContentLoaded", function () {
         price: "1.80",
         imgSrc: "./img/Matcha.jpg",
         link: "categoryPage.html?category=VietnameseIcedCoffee",
-        storeId: "store123",
         variations: {
           sizes: [
             { size: "Small", price: 3.5 },
@@ -134,7 +127,6 @@ document.addEventListener("DOMContentLoaded", function () {
         price: "4.40",
         imgSrc: "./img/honey-black.jpg",
         link: "categoryPage.html?category=VietnameseIcedCoffee",
-        storeId: "store123",
         variations: {
           sizes: [
             { size: "Small", price: 3.5 },
@@ -151,7 +143,6 @@ document.addEventListener("DOMContentLoaded", function () {
         price: "2.10",
         imgSrc: "./img/green-tea-latte.jpg",
         link: "categoryPage.html?category=VietnameseIcedCoffee",
-        storeId: "store123",
         variations: {
           sizes: [
             { size: "Small", price: 3.5 },
@@ -168,8 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
           "Sweet, creamy frappuccino with matcha flavor and red bean topping.",
         price: "2.75",
         imgSrc: "./img/Bean-Matchea.jpg",
-        link: "categoryPage.html?category=VietnameseIcedCoffee",
-        storeId: "store123",
+        link: "categoryPage.html?category=VietnameseIcedCoffee",        
         variations: {
           sizes: [
             { size: "Small", price: 3.5 },
@@ -491,29 +481,38 @@ document.addEventListener("DOMContentLoaded", function () {
   const categoryDetails = document.getElementById("restaurantDetails");
   const openCageApiKey = "268a7e9e3ae94232ae797729b1a08c99";
 
+  const geocodeCache = new Map(); // Cache to store results
+
   async function getCoordinatesFromAddress(address) {
+    if (geocodeCache.has(address)) return geocodeCache.get(address);
+
     const coordsRegex = /^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/;
     if (coordsRegex.test(address)) {
       const [lat, lon] = address.split(",").map(Number);
-      return { lat, lon };
+      const result = { lat, lon };
+      geocodeCache.set(address, result);
+      return result;
     }
+
     try {
       const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
         address
       )}&key=${openCageApiKey}`;
       const response = await fetch(url);
       const data = await response.json();
-      if (data.results && data.results.length) {
-        return {
+      if (data.results && data.results.length > 0) {
+        const result = {
           lat: data.results[0].geometry.lat,
           lon: data.results[0].geometry.lng,
         };
+        geocodeCache.set(address, result); // Cache it
+        return result;
       }
-      return null;
     } catch (error) {
       console.error("Error fetching coordinates:", error);
-      return null;
     }
+
+    return null;
   }
   function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371;
@@ -529,56 +528,62 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   async function renderCards(lat, lng) {
     const cartSection = document.getElementById("cartSection");
+
     if (
-      categories[category] &&
-      brands[category] &&
-      brands[category].length > 0
+      !categories[category] ||
+      !brands[category] ||
+      brands[category].length === 0
     ) {
-      let brandCards = "";
-      for (const brand of brands[category]) {
-        const brandCoords = await getCoordinatesFromAddress(brand.address);
-        const distance = brandCoords
-          ? calculateDistance(lat, lng, brandCoords.lat, brandCoords.lon)
-          : "N/A";
-
-        const dynamicMapLink = `https://www.google.com/maps?q=${encodeURIComponent(
-          brand.address
-        )}`;
-
-        const locationDisplay = `
-          Location: ${brand.address || "Not available"} 
-          <a href="${dynamicMapLink}" target="_blank" style="color:orange;">Open Maps</a>
-          <br>Distance: ${distance.toFixed(1)} km`;
-
-        brandCards += `
-          <div>
-            <div class="d-flex">
-              <img src="${brand.image}" class="img-header">
-              <div class="mt-4">
-                <p class="ml-4 mb-0" style="color: gray;">${brand.type}</p>
-                <h1 class="ml-4 font-weight-bold">${brand.brand_name}</h1>
-                <div class="d-flex">
-                  <button class="ml-4" style="border-radius: 30px; border: none; height: 30px;">
-                    <p class="p-1" style="font-size: 12px;">${brand.description}</p>
-                  </button>
-                  <p class="ml-2 mt-1">
-                    <i class="${brand.icon}" style="font-size: 16px; margin-right: 5px;"></i>
-                    ${brand.delivery}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <p class="mt-2 text-muted">${locationDisplay}</p>
-          </div>
-        `;
-      }
-      brandTitle.innerHTML = brandCards;
-      cartSection.style.display = "";
-    } else {
       brandTitle.innerHTML = "";
       cartSection.style.display = "none";
+      return;
     }
+
+    const brandPromises = brands[category].map(async (brand) => {
+      const brandCoords = await getCoordinatesFromAddress(brand.address);
+      const distance = brandCoords
+        ? calculateDistance(lat, lng, brandCoords.lat, brandCoords.lon)
+        : null;
+
+      const dynamicMapLink = `https://www.google.com/maps?q=${encodeURIComponent(
+        brand.address
+      )}`;
+      const locationDisplay = `
+      Location: ${brand.address || "Not available"} 
+      <a href="${dynamicMapLink}" target="_blank" style="color:orange;">Open Maps</a>
+      <br>Distance: ${distance !== null ? distance.toFixed(1) + " km" : "N/A"}`;
+
+      return `
+      <div>
+        <div class="row g-0">
+          <div class="col-md-3 d-flex align-items-center justify-content-center p-3">
+            <img src="${brand.image}" class="img-fluid rounded" alt="${brand.brand_name}">
+          </div>
+          <div class="col-md-9">
+            <div class="card-body">
+              <p class="text-muted mb-1">${brand.type}</p>
+              <h5 class="card-title fw-bold">${brand.brand_name}</h5>
+              <div class="d-flex align-items-center mb-2">
+                <span class="badge bg-light text-dark me-2">${brand.description}</span>
+                <span class="text-muted">
+                  <i class="${brand.icon} me-1"></i> ${brand.delivery}
+                </span>
+              </div>
+              ${locationDisplay}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    });
+
+    // Wait for all cards to be ready in parallel
+    const brandCards = await Promise.all(brandPromises);
+
+    brandTitle.innerHTML = brandCards.join(""); // Update DOM once
+    cartSection.style.display = "";
   }
+
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -616,20 +621,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
   function handleRemoveClick(event) {
-    // Get the closest button element and its index
     const button = event.target.closest(".remove-btn");
     const index = parseInt(button.dataset.index);
-    const itemDiv = button.closest(".d-flex"); // Get the cart item div
+    const itemDiv = button.closest(".d-flex");
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
     itemDiv.classList.add("fade-out");
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
     setTimeout(() => {
-      let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      cart.splice(index, 1);
-      localStorage.setItem("cart", JSON.stringify(cart));
       updateCartDisplay();
-    }, 300); // Delay matches CSS animation time
+    }, 300);
   }
 
   let currentItem = null;
+  let cartData = [];
   function addToCart(name, imgSrc, variations, index) {
     currentItem = {
       name,
@@ -673,6 +678,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     currentItem.size = defaultSize;
     currentItem.price = defaultPrice;
+    cartData.push(currentItem);
+
     document.getElementById("modalPrice").textContent = `${defaultPrice.toFixed(
       2
     )}`;
@@ -703,15 +710,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     handleCategoryDisplay();
 
+    document.querySelectorAll('input[name="sugar"]').forEach((input) => {
+      input.checked = false;
+    });
+    // Then set the default sugar
     const defaultSugar = document.querySelector(
       'input[name="sugar"][value="100%"]'
     );
     if (defaultSugar) {
       defaultSugar.checked = true;
       currentItem.sugar = "100%";
+    } else {
+      currentItem.sugar = null;
     }
     document.getElementById("addToCartBtn").disabled = true;
-    // Set up listeners after dynamic inputs are rendered
     setTimeout(() => {
       document.querySelectorAll('input[name="pizza"]').forEach((input) => {
         input.addEventListener("change", function () {
@@ -725,7 +737,6 @@ document.addEventListener("DOMContentLoaded", function () {
           checkAddToCartEligibility();
         });
       });
-
       document.querySelectorAll('input[name="sugar"]').forEach((input) => {
         input.addEventListener("change", function () {
           currentItem.sugar = this.value;
@@ -785,7 +796,7 @@ document.addEventListener("DOMContentLoaded", function () {
       (item) =>
         item.name === currentItem.name &&
         item.storeId === currentItem.storeId &&
-        item.sugar === currentItem.sugar
+        item.sugar === currentItem.sugar 
     );
 
     if (existing) {
@@ -796,6 +807,7 @@ document.addEventListener("DOMContentLoaded", function () {
         quantity: 1,
       });
     }
+
     localStorage.setItem("cart", JSON.stringify(cart));
     updateCartDisplay();
 
@@ -813,36 +825,40 @@ document.addEventListener("DOMContentLoaded", function () {
     const cartItems = document.getElementById("cartItems");
     const totalAmount = document.getElementById("totalAmount");
     const emptyCartMessage = document.querySelector(".empty-cart-content");
+    const reviewButton = document.querySelector(".review-button"); // 🔽 Add reference to the button
 
     cartItems.innerHTML = "";
     let total = 0;
 
     filteredItems.forEach((item, index) => {
       total += item.price * item.quantity;
+
       const itemDiv = document.createElement("div");
       itemDiv.className =
-        "d-flex  border rounded p-2 mb-2 shadow-sm bg-white position-relative";
+        "d-flex flex-column flex-md-row align-items-center border rounded p-3 mb-3 shadow-sm bg-light position-relative";
+
       itemDiv.innerHTML = `
-      <img src="${item.imgSrc}" alt="${
+      <div class="d-flex justify-content-center mb-3 mb-md-0">
+        <img src="${item.imgSrc}" alt="${
         item.name
-      }" class="me-2 rounded" style="width: 50px; height: 60px; object-fit: cover;">
-       <div class="flex-grow-1 d-flex flex-column">
-        <div class="d-block justify-content-between  w-100">
-          <h6 class="mb-1 flex-start d-flex   fw-semibold text-dark" style="font-size: 16px;">
+      }" class="me-3 rounded" style="width: 50px; height: 60px; object-fit: cover;">
+      </div>
+      <div class="flex-grow-1 d-flex flex-column justify-content-between w-100 text-start">
+        <div class="d-flex justify-content-between">
+          <h6 class="mb-1 text-dark" style="width: 150px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
             ${item.name}
           </h6>
-          <p class="text-muted flex-start d-flex  fw-semibold mb-0 mr-4" style="font-size: 16px;">
+          <p class="text-muted mb-0 fw-semibold" style="font-size: 16px;">
             ${(item.price * item.quantity).toFixed(2)} $
           </p>
         </div>
+        <div class="d-flex align-items-center mt-2">
+          <button class="btn btn-outline-secondary btn-sm minus-btn" data-index="${index}" aria-label="Decrease quantity">–</button>
+          <span class="mx-3">${item.quantity}</span>
+          <button class="btn btn-outline-secondary btn-sm plus-btn" data-index="${index}" aria-label="Increase quantity">+</button>
+        </div>
       </div>
-
-      <div class="d-flex " style="margin-top:30px">
-        <button class="btn btn-sm btn-light border " data-index="${index}">–</button>
-        <span class="mx-2">${item.quantity}</span>
-        <button class="btn btn-sm btn-light border" data-index="${index}">+</button>
-      </div>
-      <button class="btn btn-sm btn-link text-danger remove-btn" data-index="${index}" style="position: absolute; top: 5px; right: 5px;">
+      <button class="btn btn-sm btn-link text-danger position-absolute top-0 end-0 remove-btn" data-index="${index}" aria-label="Remove item">
         <i class="fas fa-times"></i>
       </button>
     `;
@@ -851,15 +867,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     totalAmount.textContent = total.toFixed(2);
 
+    // Handling cart display when empty
     if (filteredItems.length === 0) {
       if (emptyCartMessage) emptyCartMessage.style.display = "block";
       if (cartItems) cartItems.style.display = "none";
       if (totalAmount) totalAmount.textContent = "0.00";
+      if (reviewButton) reviewButton.disabled = true; 
     } else {
       if (emptyCartMessage) emptyCartMessage.style.display = "none";
       if (cartItems) cartItems.style.display = "block";
+      if (reviewButton) reviewButton.disabled = false; 
     }
-    // 🔁 Add event listeners for +/-/remove
+    // 🔁 Add event listeners for interactive buttons
     document.querySelectorAll(".plus-btn").forEach((btn) => {
       btn.addEventListener("click", handlePlusClick);
     });
@@ -870,6 +889,33 @@ document.addEventListener("DOMContentLoaded", function () {
       btn.addEventListener("click", handleRemoveClick);
     });
   }
+  const reviewButton = document.getElementById("reviewBtn");
+  reviewButton.addEventListener("click", function () {
+    const loggedIn = localStorage.getItem("loggedIn") === "true";
+    if (loggedIn) {
+      window.location.href = "detail-info.html";
+    } else {
+      window.location.href = "login.html";
+    }
+  });
+  window.addEventListener("load", function () {
+    const loggedIn = localStorage.getItem("loggedIn") === "true";
+    console.log(loggedIn);
+    if (loggedIn) {
+      document.getElementById("loginSignupLink").classList.add("d-none");
+      document.getElementById("userIcon").classList.remove("d-none");
+
+      const username = localStorage.getItem("username");
+      if (username) {
+        document.getElementById("userName").textContent = username;
+      } else {
+        console.error("Username is not set in localStorage.");
+      }
+    } else {
+      document.getElementById("loginSignupLink").classList.remove("d-none");
+      document.getElementById("userIcon").classList.add("d-none");
+    }
+  });
 
   // Call on page load
   window.onload = updateCartDisplay;
@@ -889,7 +935,8 @@ document.addEventListener("DOMContentLoaded", function () {
               data-name="${item.name}" 
               data-price="${item.price}" 
               data-imgsrc="${item.imgSrc}"  
-              data-store-id="${item.storeId}"    
+              data-store-id="${item.storeId}"   
+              data-store-name="${item.storeName}"     
               data-variations='${JSON.stringify(item.variations || [])}'
               data-index="${index}">
               <span class="fw-bold fs-5">+</span>
@@ -941,3 +988,15 @@ document.addEventListener("DOMContentLoaded", function () {
   // Correct way to run on load:
   window.onload = handleCategoryDisplay;
 });
+
+// Show logout and clear user info
+function showLogout() {
+  localStorage.setItem("isLoggedIn", "false");
+  localStorage.removeItem("loggedIn");
+  localStorage.removeItem("username");
+
+  document.getElementById("userIcon").classList.add("d-none");
+  document.getElementById("authLinks").classList.remove("d-none");
+
+  window.location.href = "login.html";
+}

@@ -2,6 +2,12 @@ body {
     font-family: Arial, sans-serif;
 }
 
+body,
+html {
+    overflow-x: hidden;
+    width: 100%;
+}
+
 .container-main {
     padding: 0px 30px 0px 30px;
     ;
@@ -87,8 +93,6 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    /* width: 15%; */
-    margin-bottom: 50px;
     background-color: #FC8A06;
 }
 
@@ -219,14 +223,14 @@ body {
     min-height: 160px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-  }
-  
-  .meal-card:hover {
-    transform: scale(1.05); 
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); 
-   cursor: pointer;
-  }
-  
+}
+
+.meal-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
 
 .meal-info {
     flex: 1;
@@ -236,7 +240,8 @@ body {
 .meal-info p {
     margin-bottom: 5px;
 }
-.img-fluids{
+
+.img-fluids {
     width: 100%;
     height: 70%;
     object-fit: contain;
@@ -249,7 +254,8 @@ body {
     object-fit: cover;
     border-radius: 8px;
 }
-.img-store{
+
+.img-store {
     border-radius: 8px 8px 0 0;
     width: 100%;
     object-fit: cover;
@@ -264,11 +270,13 @@ body {
     cursor: pointer;
     background: rgb(247, 239, 226);
 }
-.img-header{
+
+.img-header {
     width: 140px;
     height: 130px;
     border-radius: 10px;
 }
+
 .tab {
     background: none;
     border: none;
@@ -287,7 +295,8 @@ body {
 }
 
 .empty-cart-img {
-    width: 80px; /* Adjust to your image size */
+    width: 80px;
+    /* Adjust to your image size */
     margin-bottom: 20px;
 }
 
@@ -302,60 +311,62 @@ body {
 }
 
 
-.text-btn{
+.text-btn {
     display: flex;
     justify-content: space-between;
     font-weight: bold;
 }
+
 .total-amount {
     color: #333;
 }
+
 .cart-container {
     display: flex;
     flex-direction: column;
     margin-top: 100px;
-    width: 50%;
+    width: 40%;
     border: 1px solid #ddd;
     border-radius: 12px;
     overflow: hidden;
-  }
-  
-  .cart-content {
+}
+
+.cart-content {
     display: flex;
     flex-direction: column;
     flex: 1;
     padding: 20px;
     justify-content: space-between;
-  }
-  
-  /* Optional styling */
-  .cart-header {
+}
+
+/* Optional styling */
+.cart-header {
     display: flex;
     justify-content: center;
     gap: 1rem;
     padding: 10px;
-  }
-  
-  .empty-cart-img {
+}
+
+.empty-cart-img {
     max-width: 100%;
     height: auto;
     margin: 0 auto;
-  }
-  
-  .cart-total {
+}
+
+.cart-total {
     margin-top: auto;
     display: flex;
     justify-content: space-between;
     font-size: 1.2rem;
     padding: 10px 0;
-  }
-  
-  .bottom-button-wrapper {
+}
+
+.bottom-button-wrapper {
     margin-top: auto;
     padding-top: 20px;
-  }
-  
-  .review-button {
+}
+
+.review-button {
     width: 100%;
     padding: 12px;
     font-weight: bold;
@@ -364,12 +375,14 @@ body {
     border: none;
     border-radius: 8px;
     cursor: pointer;
-  }
-.add_card{
+}
+
+.add_card {
     width: 140px;
     height: 140px;
     object-fit: contain;
 }
+
 .remove-btn {
     opacity: 0.5;
     transition: opacity 0.2s;
@@ -382,6 +395,7 @@ body {
     opacity: 1;
     color: #dc3545 !important;
 }
+
 .fade-out {
     opacity: 0;
     transform: translateX(100px);
@@ -390,57 +404,218 @@ body {
     margin: 0;
     overflow: hidden;
     transition: all 0.3s ease;
-  }
-.img-detail{
+}
+
+.img-detail {
     width: 100%;
     height: 350px;
-    object-fit: cover ;
+    object-fit: cover;
 }
+
 .custom-modal-md {
-    max-width: 600px; /* or whatever width you want */
-  }
-  
+    max-width: 600px;
+    /* or whatever width you want */
+}
+
 .modal-body {
     max-height: 80vh;
     overflow-y: auto;
-  }
-  
-  .custom-card {
+}
+
+.custom-card {
     width: 100%;
     padding: 1rem;
     border: 1px solid #dee2e6;
     border-radius: 0.5rem;
     background-color: #f8f8fa;
-  }
-  
-  .required-label {
+}
+
+.required-label {
     background-color: #FC8A06;
     border: 1px solid #FC8A06;
     border-radius: 30px;
     color: white;
     width: 15%;
-    height: 25px; /* set a fixed height for vertical centering */
+    height: 25px;
+    /* set a fixed height for vertical centering */
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 13px;
-  }
-  input[type="radio"] {
-    accent-color: #ff5722; /* Change this to your desired color */
+}
+
+input[type="radio"] {
+    accent-color: #ff5722;
+    /* Change this to your desired color */
     width: 20px;
     height: 20px;
     cursor: pointer;
-  }
-  .btn-add{
-    background-color:  #FC8A06;
+}
+
+.btn-add {
+    background-color: #FC8A06;
     width: 100%;
     color: white;
     border: none;
     padding: 5px;
     border-radius: 10px;
-  }.btn-add:disabled {
+}
+
+.btn-add:disabled {
     background-color: grey !important;
     cursor: not-allowed;
     opacity: 0.6;
-  }
-  
+}
+
+.review-button:disabled {
+    background-color: #ccc;
+    color: #888;
+    cursor: not-allowed;
+    border: none;
+    opacity: 1;
+}
+
+.payment-container {
+    text-align: center;
+    margin-top: 50px;
+    font-family: Arial, sans-serif;
+}
+
+.total-amount-khqr {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+.payment-button {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.payment-button:hover {
+    background-color: #218838;
+}
+
+.payment-button:active {
+    background-color: #1e7e34;
+}
+
+body {
+    /* background-color: #cfd8e2; */
+    /* Light gray-blue background */
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container-card {
+    background-color: white;
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    padding: 2rem 2rem 1.5rem 2rem;
+    max-width: 300px;
+    margin: 5% auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.khq-header {
+    background-color: #e53935;
+    /* ABA red */
+    color: white;
+    font-weight: bold;
+    font-size: 1.25rem;
+    border-top-left-radius: 22px;
+    border-top-right-radius: 22px;
+    padding: 0.60rem 0;
+    position: relative;
+}
+
+.khq-header::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-top: 70px solid #e53935;
+    border-left: 70px solid transparent;
+    border-top-right-radius: 22px;
+
+}
+
+.account-info {
+    padding: 0.75rem 0 0.25rem;
+    font-weight: 500;
+    text-align: start;
+
+
+}
+
+.amount {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-align: start;
+}
+.qr-code {
+    width: 100%;
+    display: flex;
+}
+
+canvas#qrCanvas {
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+    /* or 400px, as needed */
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.qr-note {
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: 0.5rem;
+}
+
+.btn-primary {
+    background-color: #4f46e5;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+    background-color: #4338ca;
+}
+ .form-label-buttons .btn {
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .map-placeholder {
+      height: 150px;
+      background-color: #e9ecef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: #6c757d;
+    }
+
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
