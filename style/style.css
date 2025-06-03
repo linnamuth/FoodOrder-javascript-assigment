@@ -622,3 +622,10 @@ canvas#qrCanvas {
     gap: 0.5rem;
 }
 
+
+@media (max-width: 768px) {
+    .cart-container{
+        display: none !important;
+    }
+
+}

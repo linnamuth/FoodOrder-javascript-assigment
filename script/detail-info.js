@@ -170,7 +170,11 @@ async function fetchAndHandleUpdates() {
   isPolling = true;
 
   try {
-    const response = await fetch(`${TELEGRAM_API_BASE_URL}/getUpdates?offset=${lastUpdateId + 1}&timeout=30`);
+    const response = await fetch(
+      `${TELEGRAM_API_BASE_URL}/getUpdates?offset=${
+        lastUpdateId + 1
+      }&timeout=30`
+    );
     const data = await response.json();
 
     if (data.ok && data.result.length > 0) {
@@ -188,11 +192,10 @@ async function fetchAndHandleUpdates() {
         const text = message?.text?.trim().toLowerCase();
 
         if (text === "/start") {
-          const replyMarkup = {
-            inline_keyboard: [[{ text: "🛒 View Products", url: "https://yourdomain.com/products" }]],
-          };
-
-          await sendTelegramMessageToUser(chatId, "👋 Welcome to My Store!\nClick below to view products.", replyMarkup);
+          await sendTelegramMessageToUser(
+            chatId,
+            "👋 **Welcome!** 👋\n\nWelcome to **MyStore**! 🍔🍕🍣\n\nAre you ready to treat yourself to some delicious food? 🍽️\n\n✨ **Fast Delivery** \n\n Plase click start to order "
+          );
           localStorage.setItem(LOCAL_STORAGE_CHAT_ID_KEY, chatId.toString());
         }
       }
@@ -212,7 +215,6 @@ function startPolling() {
 }
 startPolling();
 
-
 async function handlePlaceOrder() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -230,9 +232,7 @@ async function handlePlaceOrder() {
   const remainingItems = cart.filter((item) => item.storeId !== currentStoreId);
   localStorage.setItem("cart", JSON.stringify(remainingItems));
 
-  const currentStoreName = storeCartItems[0]?.storeName || "Unknown Store";
-
-  let orderText = `✅ Your order from <b>${currentStoreName}</b> has been placed successfully!\n\n<b>Details:</b>\n`;
+  let orderText = `✅ Your order from <b>Over Store</b> has been placed successfully!\n\n<b>Details:</b>\n`;
   storeCartItems.forEach((item, index) => {
     orderText += `${index + 1}. ${item.name} x ${item.quantity}\n`;
   });
@@ -243,7 +243,7 @@ async function handlePlaceOrder() {
 
   // Send message to the linked user
   if (chatId) {
-    const messageSent = await sendTelegramMessageToUser(chatId, orderText);
+    const messageSent = await sendTelegramMessageToUser(chatI);
 
     if (messageSent) {
       Swal.fire({
