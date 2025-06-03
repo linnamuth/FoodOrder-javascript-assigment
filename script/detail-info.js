@@ -109,7 +109,6 @@ async function fetchAndStoreUserChatId() {
         const chatId = message?.chat?.id;
         const text = message?.text;
         if (text && text.trim().toLowerCase() === "/start") {
-          // ✅ Store the chat ID in localStorage
           localStorage.setItem(LOCAL_STORAGE_CHAT_ID_KEY, chatId);
           console.log("✅ Linked Telegram chat ID:", chatId);
 
@@ -123,12 +122,7 @@ async function fetchAndStoreUserChatId() {
     console.error("Error fetching chat ID from Telegram:", error);
   }
 }
-const products = [
-  { id: "p1", name: "🧴 Shampoo", price: "$5.99" },
-  { id: "p2", name: "🍫 Chocolate", price: "$2.50" },
-  { id: "p3", name: "📱 Phone Case", price: "$10.00" },
-];
-// Function to send messages to the user
+
 let lastUpdateId = parseInt(localStorage.getItem("lastUpdateId") || "0");
 let isPolling = false;
 let pollInterval = 500; // fast at start
@@ -170,11 +164,7 @@ async function fetchAndHandleUpdates() {
   isPolling = true;
 
   try {
-    const response = await fetch(
-      `${TELEGRAM_API_BASE_URL}/getUpdates?offset=${
-        lastUpdateId + 1
-      }&timeout=30`
-    );
+    const response = await fetch(`${TELEGRAM_API_BASE_URL}/getUpdates?offset=${lastUpdateId + 1}&timeout=30`);
     const data = await response.json();
 
     if (data.ok && data.result.length > 0) {
@@ -192,10 +182,7 @@ async function fetchAndHandleUpdates() {
         const text = message?.text?.trim().toLowerCase();
 
         if (text === "/start") {
-          await sendTelegramMessageToUser(
-            chatId,
-            "👋 សូមស្វាគមន៍មកកាន់ហាងរបស់ខ្ញុំ! \n\n ចុច Button Start ដើម្បីធ្វើការ Order"
-          );
+          await sendTelegramMessageToUser(chatId, "👋 សូមស្វាគមន៍មកកាន់ហាងរបស់ខ្ញុំ! \n\n ចុច Button Start ដើម្បីធ្វើការ Order");
           localStorage.setItem(LOCAL_STORAGE_CHAT_ID_KEY, chatId.toString());
         }
       }
@@ -215,6 +202,7 @@ function startPolling() {
 }
 startPolling();
 
+
 async function handlePlaceOrder() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -231,6 +219,7 @@ async function handlePlaceOrder() {
   const storeCartItems = cart.filter((item) => item.storeId === currentStoreId);
   const remainingItems = cart.filter((item) => item.storeId !== currentStoreId);
   localStorage.setItem("cart", JSON.stringify(remainingItems));
+
 
   let orderText = `✅ Your order from <b></b> has been placed successfully!\n\n<b>Details:</b>\n`;
   storeCartItems.forEach((item, index) => {
@@ -276,7 +265,18 @@ async function handlePlaceOrder() {
 
 // Initialize the app and bind event listeners
 async function initializeApp() {
-  await fetchAndStoreUserChatId(); // Only fetch user-linked chatId
+  await fetchAndStoreUserChatId();
+
+  const chatId = localStorage.getItem(LOCAL_STORAGE_CHAT_ID_KEY);
+  if (!chatId) {
+    Swal.fire({
+      icon: "info",
+      title: "Link your Telegram",
+      html: `Click <a href="https://t.me/foodOrderOnlineBot" target="_blank">here</a> to start the bot and link Telegram.`,
+      confirmButtonText: "OK"
+    });
+  }
+
   const placeOrderBtn = document.getElementById("placeOrderBtn");
   if (placeOrderBtn) {
     placeOrderBtn.addEventListener("click", handlePlaceOrder);
@@ -284,6 +284,7 @@ async function initializeApp() {
     console.error("Element with ID 'placeOrderBtn' not found.");
   }
 }
+
 document.addEventListener("DOMContentLoaded", initializeApp);
 window.addEventListener("DOMContentLoaded", () => {
   const storedName = localStorage.getItem("username");
