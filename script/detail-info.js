@@ -234,7 +234,7 @@ async function handlePlaceOrder() {
   const remainingItems = cart.filter((item) => item.storeId !== currentStoreId);
   localStorage.setItem("cart", JSON.stringify(remainingItems));
 
-  const currentStoreName = storeCartItems[0]?.storeName || "Unknown Store";
+  const currentStoreName = storeCartItems[0]?.storeName || "Our Store";
 
   let orderText = `✅ Your order from <b>${currentStoreName}</b> has been placed successfully!\n\n<b>Details:</b>\n`;
   storeCartItems.forEach((item, index) => {
