@@ -215,7 +215,7 @@ async function fetchAndHandleUpdates() {
 }
 
 // Poll every 2 seconds
-setInterval(fetchAndHandleUpdates, 2000);
+setInterval(fetchAndHandleUpdates, 10);
 
 async function handlePlaceOrder() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
