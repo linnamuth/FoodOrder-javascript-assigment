@@ -194,7 +194,7 @@ async function fetchAndHandleUpdates() {
         if (text === "/start") {
           await sendTelegramMessageToUser(
             chatId,
-            "👋 **Welcome!** 👋\n\nWelcome to **MyStore**! 🍔🍕🍣\n\nAre you ready to treat yourself to some delicious food? 🍽️\n\n✨ **Fast Delivery** \n\n Plase click start to order "
+            "👋 សូមស្វាគមន៍មកកាន់ហាងរបស់ខ្ញុំ! \n\n ចុច Button Start ដើម្បីធ្វើការ Order"
           );
           localStorage.setItem(LOCAL_STORAGE_CHAT_ID_KEY, chatId.toString());
         }
@@ -232,7 +232,7 @@ async function handlePlaceOrder() {
   const remainingItems = cart.filter((item) => item.storeId !== currentStoreId);
   localStorage.setItem("cart", JSON.stringify(remainingItems));
 
-  let orderText = `✅ Your order from <b>Over Store</b> has been placed successfully!\n\n<b>Details:</b>\n`;
+  let orderText = `✅ Your order from <b></b> has been placed successfully!\n\n<b>Details:</b>\n`;
   storeCartItems.forEach((item, index) => {
     orderText += `${index + 1}. ${item.name} x ${item.quantity}\n`;
   });
@@ -243,7 +243,7 @@ async function handlePlaceOrder() {
 
   // Send message to the linked user
   if (chatId) {
-    const messageSent = await sendTelegramMessageToUser(chatI);
+    const messageSent = await sendTelegramMessageToUser(chatId, orderText);
 
     if (messageSent) {
       Swal.fire({

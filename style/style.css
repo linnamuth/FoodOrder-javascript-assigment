@@ -624,8 +624,14 @@ canvas#qrCanvas {
 
 
 @media (max-width: 768px) {
-    .cart-container{
-        display: none !important;
+    .con-block{
+        display: block !important;
     }
+    .cart-container{
+        width: 100%;
+        margin-top: 20px;
+    }
+    
+
 
 }
