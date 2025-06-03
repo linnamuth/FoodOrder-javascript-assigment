@@ -109,6 +109,7 @@ async function fetchAndStoreUserChatId() {
         const chatId = message?.chat?.id;
         const text = message?.text;
         if (text && text.trim().toLowerCase() === "/start") {
+          // ✅ Store the chat ID in localStorage
           localStorage.setItem(LOCAL_STORAGE_CHAT_ID_KEY, chatId);
           console.log("✅ Linked Telegram chat ID:", chatId);
 
@@ -123,10 +124,9 @@ async function fetchAndStoreUserChatId() {
   }
 }
 
+// Function to send messages to the user
 let lastUpdateId = parseInt(localStorage.getItem("lastUpdateId") || "0");
 let isPolling = false;
-let pollInterval = 500; // fast at start
-let hasStarted = false;
 const processedUpdateIds = new Set();
 async function sendTelegramMessageToUser(chatId, message, replyMarkup = null) {
   const url = `${TELEGRAM_API_BASE_URL}/sendMessage`;
@@ -159,49 +159,63 @@ async function sendTelegramMessageToUser(chatId, message, replyMarkup = null) {
     return false;
   }
 }
-async function fetchAndHandleUpdates() {
-  if (isPolling) return;
-  isPolling = true;
 
+async function fetchAndHandleUpdates() {
+  if (isPolling) {
+    console.log("Polling already in progress. Skipping.");
+    return;
+  }
+  isPolling = true;
+  const url = `${TELEGRAM_API_BASE_URL}/getUpdates?offset=${lastUpdateId + 1}`; // Added timeout
   try {
-    const response = await fetch(`${TELEGRAM_API_BASE_URL}/getUpdates?offset=${lastUpdateId + 1}&timeout=30`);
+    const response = await fetch(url);
     const data = await response.json();
 
     if (data.ok && data.result.length > 0) {
-      let maxUpdateId = lastUpdateId;
+      let maxUpdateIdInCurrentBatch = lastUpdateId; // Initialize with current lastUpdateId
 
       for (const update of data.result) {
         const updateId = update.update_id;
-        maxUpdateId = Math.max(maxUpdateId, updateId);
 
-        if (processedUpdateIds.has(updateId)) continue;
-        processedUpdateIds.add(updateId);
+        maxUpdateIdInCurrentBatch = Math.max(
+          maxUpdateIdInCurrentBatch,
+          updateId
+        );
+        if (processedUpdateIds.has(updateId)) {
+          continue;
+        }
+        processedUpdateIds.add(updateId); // Mark as processed
 
         const message = update.message;
         const chatId = message?.chat?.id;
         const text = message?.text?.trim().toLowerCase();
 
         if (text === "/start") {
-          await sendTelegramMessageToUser(chatId, "👋 សូមស្វាគមន៍មកកាន់ហាងរបស់ខ្ញុំ! \n\n ចុច Button Start ដើម្បីធ្វើការ Order");
-          localStorage.setItem(LOCAL_STORAGE_CHAT_ID_KEY, chatId.toString());
+
+
+          const messageSent = await sendTelegramMessageToUser(
+            chatId,
+            "👋សូមស្វាគមន៍មកកាន់ហាងរបស់ខ្ញុំ! \n\n ចុច Button Start ដើម្បីធ្វើការ Order work",
+          );
+          if (messageSent) {
+            localStorage.setItem(LOCAL_STORAGE_CHAT_ID_KEY, chatId.toString());
+          }
         }
       }
-
-      lastUpdateId = maxUpdateId;
+      lastUpdateId = maxUpdateIdInCurrentBatch;
       localStorage.setItem("lastUpdateId", lastUpdateId.toString());
+    } else {
+      console.log("No new updates found or data.ok is false.");
     }
-  } catch (err) {
-    console.error("⚠️ Error fetching updates:", err);
+  } catch (error) {
+    console.error("⚠️ Error fetching updates:", error);
   } finally {
-    isPolling = false;
+    isPolling = false; // Allow new polling requests
   }
 }
 
-function startPolling() {
-  fetchAndHandleUpdates().finally(() => setTimeout(startPolling, pollInterval));
-}
-startPolling();
-
+// Poll every 2 seconds
+setInterval(fetchAndHandleUpdates, 2000);
 
 async function handlePlaceOrder() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -220,8 +234,9 @@ async function handlePlaceOrder() {
   const remainingItems = cart.filter((item) => item.storeId !== currentStoreId);
   localStorage.setItem("cart", JSON.stringify(remainingItems));
 
+  const currentStoreName = storeCartItems[0]?.storeName || "Unknown Store";
 
-  let orderText = `✅ Your order from <b></b> has been placed successfully!\n\n<b>Details:</b>\n`;
+  let orderText = `✅ Your order from <b>${currentStoreName}</b> has been placed successfully!\n\n<b>Details:</b>\n`;
   storeCartItems.forEach((item, index) => {
     orderText += `${index + 1}. ${item.name} x ${item.quantity}\n`;
   });
@@ -265,18 +280,7 @@ async function handlePlaceOrder() {
 
 // Initialize the app and bind event listeners
 async function initializeApp() {
-  await fetchAndStoreUserChatId();
-
-  const chatId = localStorage.getItem(LOCAL_STORAGE_CHAT_ID_KEY);
-  if (!chatId) {
-    Swal.fire({
-      icon: "info",
-      title: "Link your Telegram",
-      html: `Click <a href="https://t.me/foodOrderOnlineBot" target="_blank">here</a> to start the bot and link Telegram.`,
-      confirmButtonText: "OK"
-    });
-  }
-
+  await fetchAndStoreUserChatId(); // Only fetch user-linked chatId
   const placeOrderBtn = document.getElementById("placeOrderBtn");
   if (placeOrderBtn) {
     placeOrderBtn.addEventListener("click", handlePlaceOrder);
@@ -284,7 +288,6 @@ async function initializeApp() {
     console.error("Element with ID 'placeOrderBtn' not found.");
   }
 }
-
 document.addEventListener("DOMContentLoaded", initializeApp);
 window.addEventListener("DOMContentLoaded", () => {
   const storedName = localStorage.getItem("username");
