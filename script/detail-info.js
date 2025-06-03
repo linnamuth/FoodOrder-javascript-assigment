@@ -93,84 +93,125 @@ function updateOrderSummary() {
 // --- Configuration ---
 const BOT_TOKEN = "7905488546:AAEmKWK4drRr3j_yVoCStqqokwhESaG7UlM";
 const TELEGRAM_API_BASE_URL = `https://api.telegram.org/bot${BOT_TOKEN}`;
-const LOCAL_STORAGE_CHAT_ID_KEY = "telegramChatId";
+const LOCAL_STORAGE_CHAT_ID_KEY = "telegramChatIds";
 
-let globalChatId = localStorage.getItem(LOCAL_STORAGE_CHAT_ID_KEY);
-
-async function fetchAllChatIdsFromBot() {
+// Function to fetch chat IDs linked to users
+async function fetchAndStoreUserChatId() {
   const url = `${TELEGRAM_API_BASE_URL}/getUpdates`;
-  const LOCAL_STORAGE_CHAT_IDS_KEY = "telegramChatIds";
 
   try {
     const response = await fetch(url);
     const data = await response.json();
 
     if (data.ok && data.result.length > 0) {
-      const chatIdsSet = new Set();
+      for (const update of data.result) {
+        const message = update?.message;
+        const chatId = message?.chat?.id;
+        const text = message?.text;
+        if (text && text.trim().toLowerCase() === "/start") {
+          // ✅ Store the chat ID in localStorage
+          localStorage.setItem(LOCAL_STORAGE_CHAT_ID_KEY, chatId);
+          console.log("✅ Linked Telegram chat ID:", chatId);
 
-      data.result.forEach((update) => {
-        const chatId = update?.message?.chat?.id;
-        if (chatId) chatIdsSet.add(String(chatId));
-      });
-
-      const uniqueChatIds = Array.from(chatIdsSet);
-      localStorage.setItem(
-        LOCAL_STORAGE_CHAT_IDS_KEY,
-        JSON.stringify(uniqueChatIds)
-      );
-      console.log("Collected chat IDs:", uniqueChatIds);
-      return uniqueChatIds;
+          break;
+        }
+      }
+    } else {
+      console.warn("No updates found.");
     }
-
-    console.warn("No updates or invalid data.");
-    return [];
   } catch (error) {
-    console.error("Failed to fetch chat IDs:", error);
-    return [];
+    console.error("Error fetching chat ID from Telegram:", error);
   }
 }
+const products = [
+  { id: "p1", name: "🧴 Shampoo", price: "$5.99" },
+  { id: "p2", name: "🍫 Chocolate", price: "$2.50" },
+  { id: "p3", name: "📱 Phone Case", price: "$10.00" },
+];
+// Function to send messages to the user
+let lastUpdateId = parseInt(localStorage.getItem("lastUpdateId") || "0");
+let isPolling = false;
+let pollInterval = 500; // fast at start
+let hasStarted = false;
+const processedUpdateIds = new Set();
+async function sendTelegramMessageToUser(chatId, message, replyMarkup = null) {
+  const url = `${TELEGRAM_API_BASE_URL}/sendMessage`;
 
-async function sendTelegramMessageToAll(message) {
-  const chatIds = JSON.parse(localStorage.getItem("telegramChatIds")) || [];
+  const payload = {
+    chat_id: chatId,
+    text: message,
+    parse_mode: "HTML",
+  };
 
-  if (chatIds.length === 0) {
-    console.warn("No chat IDs found to send message.");
+  if (replyMarkup) {
+    payload.reply_markup = replyMarkup;
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+    if (!data.ok) {
+      console.error(`Telegram API error: ${data.description}`);
+      throw new Error(data.description);
+    }
+    return true;
+  } catch (error) {
+    console.error(`❌ Failed to send message to ${chatId}:`, error);
     return false;
   }
-
-  const results = await Promise.allSettled(
-    chatIds.map(async (chatId) => {
-      const url = `${TELEGRAM_API_BASE_URL}/sendMessage`;
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: message,
-            parse_mode: "HTML",
-          }),
-        });
-
-        const data = await response.json();
-        if (!data.ok) {
-          throw new Error(`Telegram API error: ${data.description}`);
-        }
-        return data;
-      } catch (error) {
-        console.error(`Failed to send message to ${chatId}:`, error);
-        return null;
-      }
-    })
-  );
-
-  const successfulSends = results.filter(
-    (r) => r.status === "fulfilled" && r.value
-  );
-  return successfulSends.length > 0;
 }
+async function fetchAndHandleUpdates() {
+  if (isPolling) return;
+  isPolling = true;
+
+  try {
+    const response = await fetch(`${TELEGRAM_API_BASE_URL}/getUpdates?offset=${lastUpdateId + 1}&timeout=30`);
+    const data = await response.json();
+
+    if (data.ok && data.result.length > 0) {
+      let maxUpdateId = lastUpdateId;
+
+      for (const update of data.result) {
+        const updateId = update.update_id;
+        maxUpdateId = Math.max(maxUpdateId, updateId);
+
+        if (processedUpdateIds.has(updateId)) continue;
+        processedUpdateIds.add(updateId);
+
+        const message = update.message;
+        const chatId = message?.chat?.id;
+        const text = message?.text?.trim().toLowerCase();
+
+        if (text === "/start") {
+          const replyMarkup = {
+            inline_keyboard: [[{ text: "🛒 View Products", url: "https://yourdomain.com/products" }]],
+          };
+
+          await sendTelegramMessageToUser(chatId, "👋 Welcome to My Store!\nClick below to view products.", replyMarkup);
+          localStorage.setItem(LOCAL_STORAGE_CHAT_ID_KEY, chatId.toString());
+        }
+      }
+
+      lastUpdateId = maxUpdateId;
+      localStorage.setItem("lastUpdateId", lastUpdateId.toString());
+    }
+  } catch (err) {
+    console.error("⚠️ Error fetching updates:", err);
+  } finally {
+    isPolling = false;
+  }
+}
+
+function startPolling() {
+  fetchAndHandleUpdates().finally(() => setTimeout(startPolling, pollInterval));
+}
+startPolling();
+
 
 async function handlePlaceOrder() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -197,32 +238,45 @@ async function handlePlaceOrder() {
   });
   orderText += "\nThank you for your purchase!";
 
-  // ✅ FIXED: use the correct function
-  const messageSent = await sendTelegramMessageToAll(orderText);
+  // Retrieve chat ID linked to the user
+  const chatId = localStorage.getItem(LOCAL_STORAGE_CHAT_ID_KEY);
 
-  if (messageSent) {
-    Swal.fire({
-      icon: "success",
-      title: "Order Placed!",
-      text: "Your order has been successfully submitted.",
-      confirmButtonText: "OK",
-    }).then(() => {
-      window.location.href = "index.html";
-    });
+  // Send message to the linked user
+  if (chatId) {
+    const messageSent = await sendTelegramMessageToUser(chatId, orderText);
+
+    if (messageSent) {
+      Swal.fire({
+        icon: "success",
+        title: "Order Placed!",
+        text: "Your order has been successfully submitted.",
+        confirmButtonText: "OK",
+      }).then(() => {
+        window.location.href = "index.html"; // Redirect after order is placed
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Order Placed, but Notification Failed",
+        text: "Your order was placed, but we couldn't send a notification to Telegram. Please check manually.",
+        confirmButtonText: "OK",
+      }).then(() => {
+        window.location.href = "index.html"; // Redirect after error
+      });
+    }
   } else {
     Swal.fire({
       icon: "error",
-      title: "Order Placed, but Notification Failed",
-      text: "Your order was placed, but we couldn't send a notification to Telegram. Please check manually.",
+      title: "Telegram Not Linked",
+      text: "Please link your Telegram account first.",
       confirmButtonText: "OK",
-    }).then(() => {
-      window.location.href = "index.html";
     });
   }
 }
 
+// Initialize the app and bind event listeners
 async function initializeApp() {
-  await fetchAllChatIdsFromBot(); // Get all users
+  await fetchAndStoreUserChatId(); // Only fetch user-linked chatId
   const placeOrderBtn = document.getElementById("placeOrderBtn");
   if (placeOrderBtn) {
     placeOrderBtn.addEventListener("click", handlePlaceOrder);
@@ -230,7 +284,6 @@ async function initializeApp() {
     console.error("Element with ID 'placeOrderBtn' not found.");
   }
 }
-
 document.addEventListener("DOMContentLoaded", initializeApp);
 window.addEventListener("DOMContentLoaded", () => {
   const storedName = localStorage.getItem("username");
