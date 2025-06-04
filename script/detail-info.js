@@ -312,11 +312,11 @@ async function handlePlaceOrder() {
 
   const storeName = storeItems[0]?.storeName || "Our Store";
 
-  let message = `✅ Your order from <b>${storeName}</b> has been placed successfully!\n\n<b>Details:</b>\n`;
+  let message = `✅ ការបញ្ជាទិញពីបានបញ្ចប់ដោយជោគជ័យ!\n\n<b>ព័ត៌មានលម្អិត:</b>\n`;
   storeItems.forEach((item, index) => {
-    message += `${index + 1}. ${item.name} x ${item.quantity}\n`;
+    message += `${index + 1}. ${item.name} ចំនួន ${item.quantity}\n`;
   });
-  message += "\nThank you for your purchase!";
+  message += "\nសូមអរគុណសម្រាប់ការជាវរបស់អ្នក!";
 
   const chatId = localStorage.getItem(LOCAL_STORAGE_CHAT_ID_KEY);
 
@@ -343,10 +343,10 @@ async function handlePlaceOrder() {
 async function initializeApp() {
   const chatId = safeGetLocalStorage(LOCAL_STORAGE_CHAT_ID_KEY);
   const placeOrderBtn = document.getElementById("placeOrderBtn");
-  if (!chatId) {    
+  if (!chatId) {
     Swal.fire({
-      icon: 'info',
-      title: 'Connect to Telegram',
+      icon: "info",
+      title: "Connect to Telegram",
       html: `
         <p>📲 Please start the Telegram bot to connect.</p>
         <p><strong>Step 1:</strong> Open <a href="https://t.me/deliveryfoodOrderbot" target="_blank">@FOODBOT</a></p>
@@ -360,7 +360,6 @@ async function initializeApp() {
       }
     });
     if (placeOrderBtn) placeOrderBtn.disabled = true;
-
   } else {
     if (placeOrderBtn) {
       placeOrderBtn.disabled = false;
