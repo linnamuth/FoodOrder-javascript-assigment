@@ -91,7 +91,7 @@ function updateOrderSummary() {
   `;
 }
 // --- Configuration ---
-const BOT_TOKEN = "8198341379:AAGbgof__nNglbuh9AtN_hMaAaVItglaJ7g";
+const BOT_TOKEN = "7227860086:AAG7q39S0YSPz01JToZhs_D1h-6b4sqRpBI";
 const TELEGRAM_API_BASE_URL = `https://api.telegram.org/bot${BOT_TOKEN}`;
 const LOCAL_STORAGE_CHAT_ID_KEY = "telegram_chat_id";
 
@@ -349,7 +349,7 @@ async function initializeApp() {
       title: "Connect to Telegram",
       html: `
         <p>📲 Please start the Telegram bot to connect.</p>
-        <p><strong>Step 1:</strong> Open <a href="https://t.me/deliveryfoodOrderbot" target="_blank">@FOODBOT</a></p>
+        <p><strong>Step 1:</strong> Open <a href="https://t.me/OrderFastDeliverybot" target="_blank">@FOODBOT</a></p>
         <p><strong>Step 2:</strong> Send <code>/start</code> in the chat.</p>
         <p>✅ Once connected, come back here to place your order.</p>
       `,
