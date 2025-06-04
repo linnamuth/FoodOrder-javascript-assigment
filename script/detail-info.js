@@ -91,140 +91,207 @@ function updateOrderSummary() {
   `;
 }
 // --- Configuration ---
-// --- Configuration ---
 const BOT_TOKEN = "8198341379:AAGbgof__nNglbuh9AtN_hMaAaVItglaJ7g";
 const TELEGRAM_API_BASE_URL = `https://api.telegram.org/bot${BOT_TOKEN}`;
-const LOCAL_STORAGE_CHAT_ID_KEY = "telegram_chat_id"; 
-// --- Local Storage Utility Functions ---
-let localStorageAvailable;
-try {
-    localStorage.setItem("test_availability", "test");
-    localStorage.removeItem("test_availability");
-    localStorageAvailable = true;
-} catch (e) {
-    console.error("localStorage is not available. Using sessionStorage as fallback.", e);
-    localStorageAvailable = false;
+const LOCAL_STORAGE_CHAT_ID_KEY = "telegram_chat_id";
+
+// Check if localStorage is available
+function isLocalStorageAvailable() {
+  try {
+    localStorage.setItem("test", "test");
+    localStorage.removeItem("test");
+    return true;
+  } catch (e) {
+    console.error("localStorage is not available:", e);
+    return false;
+  }
 }
 
+// Safely set item in localStorage with fallback to sessionStorage
 function safeSetLocalStorage(key, value) {
-    try {
-        if (localStorageAvailable) {
-            localStorage.setItem(key, value);
-        } else {
-            sessionStorage.setItem(key, value);
-        }
-    } catch (e) {
-        console.error(`Error setting item '${key}':`, e);
-    }
+  if (isLocalStorageAvailable()) {
+    localStorage.setItem(key, value);
+  } else {
+    console.warn("localStorage not available. Using sessionStorage.");
+    sessionStorage.setItem(key, value); // Fallback to sessionStorage
+  }
 }
 
+// Safely get item from localStorage with fallback to sessionStorage
 function safeGetLocalStorage(key) {
-    try {
-        if (localStorageAvailable) {
-            return localStorage.getItem(key);
-        } else {
-            return sessionStorage.getItem(key);
-        }
-    } catch (e) {
-        console.error(`Error getting item '${key}':`, e);
-        return null;
-    }
-}
-// --- Telegram API Functions ---
-async function sendTelegramMessageToUser(chatId, messageText) {
-    const url = `${TELEGRAM_API_BASE_URL}/sendMessage`;
-    const payload = {
-        chat_id: chatId,
-        text: messageText,
-        parse_mode: "HTML"
-    };
-    try {
-        const response = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-        });
-
-        const data = await response.json();
-        if (data.ok) {
-            console.log("✅ Message sent to", chatId);
-            return data;
-        } else {
-            console.error("❌ Failed to send message:", data);
-            return false;
-        }
-    } catch (error) {
-        console.error("❌ Error sending message:", error);
-        return false;
-    }
+  if (isLocalStorageAvailable()) {
+    return localStorage.getItem(key);
+  } else {
+    console.warn("localStorage not available. Using sessionStorage.");
+    return sessionStorage.getItem(key); // Fallback to sessionStorage
+  }
 }
 
+// Function to fetch and store chat ID linked to users
+async function fetchAndStoreUserChatId() {
+  const url = `${TELEGRAM_API_BASE_URL}/getUpdates`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Log the entire response for debugging
+    console.log("Telegram getUpdates response:", data);
+
+    if (data.ok && data.result.length > 0) {
+      for (const update of data.result) {
+        const message = update?.message;
+        const chatId = message?.chat?.id;
+        const text = message?.text;
+        if (text && text.trim().toLowerCase() === "/start" && chatId) {
+          const existingChatId = safeGetLocalStorage(LOCAL_STORAGE_CHAT_ID_KEY);
+          if (!existingChatId) {
+            // Store chatId if it's not already saved
+            safeSetLocalStorage(LOCAL_STORAGE_CHAT_ID_KEY, chatId);
+            console.log(`Chat ID ${chatId} stored successfully.`);
+          }
+        }
+      }
+    } else {
+      console.warn("No valid updates found.");
+    }
+  } catch (error) {
+    console.error("Error fetching chat ID from Telegram:", error);
+  }
+}
+
+// Function to send messages to users
+async function sendTelegramMessageToUser(chatId, message) {
+  const url = `${TELEGRAM_API_BASE_URL}/sendMessage`;
+  const payload = {
+    chat_id: chatId,
+    text: message,
+    parse_mode: "HTML",
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+    if (data.ok) {
+      console.log("✅ Message sent to", chatId);
+      return data;
+    } else {
+      console.error("❌ Failed to send message:", data);
+      return false;
+    }
+  } catch (error) {
+    console.error("❌ Error sending message:", error);
+    return false;
+  }
+}
+
+// Function to fetch & handle messages (polling)
 // --- Long Polling Logic ---
-let isPollingActive = false; 
+let isPollingActive = false;
+
 async function startTelegramPolling() {
-    if (isPollingActive) {
-        console.log("Polling is already active.");
-        return;
-    }
-    isPollingActive = true;
-    try {
-        while (isPollingActive) {
-            const lastUpdateId = parseInt(safeGetLocalStorage("lastUpdateId") || "0");
-            const timeoutSeconds = 30; 
-            const url = `${TELEGRAM_API_BASE_URL}/getUpdates?offset=${lastUpdateId + 1}&timeout=${timeoutSeconds}`;
-            const controller = new AbortController();
-            const fetchTimeoutId = setTimeout(() => controller.abort(), (timeoutSeconds + 5) * 1000); 
-            let response;
-            let data;
-            try {
-                response = await fetch(url, { signal: controller.signal });
-                clearTimeout(fetchTimeoutId);
-                data = await response.json();
-            } catch (fetchError) {
-                if (fetchError.name === 'AbortError') {
-                    console.warn("Polling request timed out from client side, retrying...");
-                    continue;
-                }
-                throw fetchError; 
-            }
-            if (data.ok && data.result.length > 0) {
-                for (const update of data.result) {
-                    const updateId = update.update_id;
-                    const message = update.message;
-                    const chatId = message?.chat?.id;
-                    const text = message?.text?.trim().toLowerCase();
-                    safeSetLocalStorage("lastUpdateId", updateId.toString());
-                    if (!chatId || !text) {
-                        console.log(`Skipping update ${updateId}: No chat ID or text message.`);
-                        continue; 
-                    }
-                    if (text === "/start") {
-                        const existingChatId = safeGetLocalStorage(LOCAL_STORAGE_CHAT_ID_KEY);
-                        if (!existingChatId || existingChatId !== chatId.toString()) {
-                            safeSetLocalStorage(LOCAL_STORAGE_CHAT_ID_KEY, chatId.toString());
-                            console.log(`Chat ID ${chatId} stored successfully.`);
-                        }
-                        await sendTelegramMessageToUser(
-                            chatId,
-                            "👋 សូមស្វាគមន៍មកកាន់ហាងម្ហូបរបស់យើង!\n\n📌 សូមចុចប៊ូតុង \"Order\" ដើម្បីជ្រើសរើស និងកម្មង់ម្ហូបដែលអ្នកចង់ទទួលទាន។\n\n🙏 សូមអរគុណសម្រាប់ការគាំទ្រ!"
-                        );
-                    }
-                }
-            } else if (!data.ok) {
-                await new Promise(resolve => setTimeout(resolve, 5000));
-            }
+  if (isPollingActive) {
+    console.log("Polling is already active.");
+    return;
+  }
+
+  isPollingActive = true;
+
+  try {
+    while (isPollingActive) {
+      const lastUpdateId = parseInt(safeGetLocalStorage("lastUpdateId") || "0");
+      const timeoutSeconds = 30;
+
+      const url = `${TELEGRAM_API_BASE_URL}/getUpdates?offset=${
+        lastUpdateId + 1
+      }&timeout=${timeoutSeconds}`;
+
+      const controller = new AbortController();
+      const fetchTimeoutId = setTimeout(
+        () => controller.abort(),
+        (timeoutSeconds + 5) * 1000
+      );
+
+      let response;
+      let data;
+
+      try {
+        response = await fetch(url, { signal: controller.signal });
+        clearTimeout(fetchTimeoutId);
+        data = await response.json();
+      } catch (fetchError) {
+        if (fetchError.name === "AbortError") {
+          console.warn(
+            "Polling request timed out from client side, retrying..."
+          );
+          continue;
         }
-    } catch (error) {
-        console.error("⚠️ Critical error in polling loop. Restarting after delay:", error);
-        isPollingActive = false; // Stop the current loop
-        await new Promise(resolve => setTimeout(resolve, 10000)); 
-        startTelegramPolling();
+        throw fetchError;
+      }
+      if (data.ok && data.result.length > 0) {
+        for (const update of data.result) {
+          const updateId = update.update_id;
+          const message = update.message;
+          const chatId = message?.chat?.id;
+          const text = message?.text?.trim().toLowerCase();
+          if (!chatId || !text) {
+            continue;
+          }
+          if (text === "/start") {
+            const existingChatId = safeGetLocalStorage(
+              LOCAL_STORAGE_CHAT_ID_KEY
+            );
+            if (!existingChatId || existingChatId !== chatId.toString()) {
+              safeSetLocalStorage(LOCAL_STORAGE_CHAT_ID_KEY, chatId.toString());
+              console.log(`✅ Chat ID ${chatId} stored successfully.`);
+            }
+
+            await sendTelegramMessageToUser(
+              chatId,
+              '👋 សូមស្វាគមន៍មកកាន់ហាងម្ហូបរបស់យើង!\n\n📌 សូមចុចប៊ូតុង "Order" ដើម្បីជ្រើសរើស និងកម្មង់ម្ហូបដែលអ្នកចង់ទទួលទាន។\n\n🙏 សូមអរគុណសម្រាប់ការគាំទ្រ!'
+            );
+          }
+        }
+        const lastReceivedUpdateId =
+          data.result[data.result.length - 1].update_id;
+        safeSetLocalStorage("lastUpdateId", lastReceivedUpdateId.toString());
+      } else if (!data.ok) {
+        console.warn(
+          "❌ Telegram returned an error response. Retrying in 5 seconds."
+        );
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+      }
     }
-}
-startTelegramPolling();
-function stopTelegramPolling() {
+  } catch (error) {
+    console.error(
+      "⚠️ Critical error in polling loop. Restarting after delay:",
+      error
+    );
     isPollingActive = false;
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+    startTelegramPolling(); // Restart polling after delay
+  }
 }
+async function discardOldUpdates() {
+  const response = await fetch(`${TELEGRAM_API_BASE_URL}/getUpdates`);
+  const data = await response.json();
+  if (data.ok && data.result.length > 0) {
+    const lastReceivedUpdateId = data.result[data.result.length - 1].update_id;
+    safeSetLocalStorage("lastUpdateId", lastReceivedUpdateId.toString());
+    console.log(`🔁 Discarded ${data.result.length} old updates`);
+  }
+}
+
+function stopTelegramPolling() {
+  isPollingActive = false;
+}
+discardOldUpdates();
+startTelegramPolling();
 
 async function handlePlaceOrder() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -239,8 +306,8 @@ async function handlePlaceOrder() {
   }
 
   const storeId = cart[0]?.storeId;
-  const storeItems = cart.filter(item => item.storeId === storeId);
-  const remainingItems = cart.filter(item => item.storeId !== storeId);
+  const storeItems = cart.filter((item) => item.storeId === storeId);
+  const remainingItems = cart.filter((item) => item.storeId !== storeId);
   localStorage.setItem("cart", JSON.stringify(remainingItems));
 
   const storeName = storeItems[0]?.storeName || "Our Store";
@@ -274,17 +341,35 @@ async function handlePlaceOrder() {
 }
 // Initialize the app and bind event listeners
 async function initializeApp() {
-  await fetchAndStoreUserChatId(); // Only fetch user-linked chatId
+  const chatId = safeGetLocalStorage(LOCAL_STORAGE_CHAT_ID_KEY);
   const placeOrderBtn = document.getElementById("placeOrderBtn");
-  if (placeOrderBtn) {
-    placeOrderBtn.addEventListener("click", handlePlaceOrder);
+  if (!chatId) {    
+    Swal.fire({
+      icon: 'info',
+      title: 'Connect to Telegram',
+      html: `
+        <p>📲 Please start the Telegram bot to connect.</p>
+        <p><strong>Step 1:</strong> Open <a href="https://t.me/deliveryfoodOrderbot" target="_blank">@FOODBOT</a></p>
+        <p><strong>Step 2:</strong> Send <code>/start</code> in the chat.</p>
+        <p>✅ Once connected, come back here to place your order.</p>
+      `,
+      confirmButtonText: "Got it! I've Connected",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        location.reload();
+      }
+    });
+    if (placeOrderBtn) placeOrderBtn.disabled = true;
+
   } else {
-    console.error("Element with ID 'placeOrderBtn' not found.");
+    if (placeOrderBtn) {
+      placeOrderBtn.disabled = false;
+      placeOrderBtn.addEventListener("click", handlePlaceOrder);
+    }
   }
 }
 
-window.onload = initializeApp();
-
+window.onload = initializeApp;
 
 window.addEventListener("DOMContentLoaded", () => {
   const storedName = localStorage.getItem("username");
