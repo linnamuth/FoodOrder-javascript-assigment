@@ -1,5 +1,5 @@
-body {
-    font-family: Arial, sans-serif;
+body, p, h1, h2, h3, h4, h5, h6, .navbar-nav .nav-link {
+    font-family: "Khmer", sans-serif !important; /* Use !important only as a last resort for troubleshooting */
 }
 
 body,
@@ -16,7 +16,7 @@ html {
 .navbar-brand {
     font-size: 3.5rem;
     font-weight: bold;
-    color: #FC8A06;
+    color: #e21b70;
 }
 
 .navbar-nav .nav-link {
@@ -31,7 +31,7 @@ html {
 
 .navbar-nav .nav-link.active {
     color: white !important;
-    background-color: #FC8A06;
+    background-color: #e21b70;
     border-radius: 20px;
     width: 100px;
     height: 35px;
@@ -93,7 +93,7 @@ html {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background-color: #FC8A06;
+    /* background-color: #e21b70; */
 }
 
 .restaurant-card:hover {
@@ -110,7 +110,6 @@ html {
 
 .overlay-img {
     height: 150px;
-    border-bottom: 2px solid #ddd;
     object-fit: cover;
     border-radius: 10px 10px 0px 0px;
 }
@@ -155,7 +154,6 @@ html {
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
-    margin-top: 20px;
 }
 
 .card-about-us:hover {
@@ -166,7 +164,7 @@ html {
 
 
 .open {
-    background-color: #FC8A06;
+    background-color: #e21b70;
     width: 200px;
     padding: 10px;
     border-radius: 10px;
@@ -432,8 +430,8 @@ html {
 }
 
 .required-label {
-    background-color: #FC8A06;
-    border: 1px solid #FC8A06;
+    background-color: #e21b70;
+    border: 1px solid #e21b70;
     border-radius: 30px;
     color: white;
     width: 15%;
@@ -454,7 +452,7 @@ input[type="radio"] {
 }
 
 .btn-add {
-    background-color: #FC8A06;
+    background-color: #e21b70;
     width: 100%;
     color: white;
     border: none;
@@ -635,4 +633,55 @@ canvas#qrCanvas {
     
 
 
+}
+.discount-badge {
+  background-color: #e6007e;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 999px;
+  padding: 2px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+
+.order-history-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.order-card {
+  background: white;
+  border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.2s;
+}
+
+.order-card:hover {
+  transform: scale(1.01);
+}
+
+.order-card h4 {
+  margin: 0 0 10px;
+  color: #007BFF;
+}
+
+.order-card ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin: 10px 0;
+}
+
+.order-card li {
+  margin-bottom: 5px;
+}
+
+.order-total {
+  font-weight: bold;
+  margin-top: 10px;
+  color: #28a745;
 }

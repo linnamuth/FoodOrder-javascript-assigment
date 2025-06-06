@@ -1,10 +1,8 @@
+import { translations } from "./translations.js";
 document.addEventListener("DOMContentLoaded", function () {
   const categories = {
     Amazon: [
       {
-        name: "Latte",
-        description:
-          "Espresso with steamed milk and a layer of foam, offering a creamy and smooth taste.",
         price: "4.20",
         imgSrc: "./img/latte.jpg",
         link: "categoryPage.html?category=Latte",
@@ -14,14 +12,11 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Medium", price: 4.2 },
             { size: "Large", price: 5.0 },
           ],
-          milkOptions: ["Whole", "Skim", "Oat", "Almond", "Soy"], // No price change based on milk option
-          sweetness: ["No Sugar", "Less Sugar", "Normal", "Extra Sweet"], // No price change based on sweetness
         },
+        i18nNameKey: "latte_name",
+        i18nDescriptionKey: "latte_coffee_description",
       },
       {
-        name: "Cappuccino",
-        description:
-          "A coffee made with espresso, hot milk, and topped with foamed milk.",
         price: "4.00",
         imgSrc: "./img/cappuccino.jpg",
         link: "categoryPage.html?category=Cappuccino",
@@ -31,14 +26,11 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Medium", price: 4.2 },
             { size: "Large", price: 5.0 },
           ],
-          milkOptions: ["Whole", "Oat", "Soy"],
-          sweetness: ["No Sugar", "Normal"],
         },
+        i18nNameKey: "cappuccino_name",
+        i18nDescriptionKey: "cappuccino_coffee_description",
       },
       {
-        name: "Flat White",
-        description:
-          "A strong espresso with steamed milk, similar to a latte but with less foam.",
         price: "4.30",
         imgSrc: "./img/flat-white.jpg",
         link: "categoryPage.html?category=FlatWhite",
@@ -48,9 +40,9 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Medium", price: 4.2 },
             { size: "Large", price: 5.0 },
           ],
-          milkOptions: ["Whole", "Skim", "Oat", "Almond", "Soy"],
-          sweetness: ["No Sugar", "Normal", "Extra Sweet"],
         },
+        i18nNameKey: "flat_white_name",
+        i18nDescriptionKey: "flat_white_coffee_description",
       },
       {
         name: "Caramel Macchiato",
@@ -65,14 +57,11 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Medium", price: 4.2 },
             { size: "Large", price: 5.0 },
           ],
-          milkOptions: ["Whole", "Skim", "Oat", "Almond", "Soy"],
-          sweetness: ["Less Sugar", "Normal", "Extra Sweet"],
         },
+        i18nNameKey: "caramel_macchiato_name",
+        i18nDescriptionKey: "caramel_macchiato_coffee_description",
       },
       {
-        name: "Black Coffee",
-        description:
-          "An espresso mixed with a small amount of warm milk, creating a balance between strong espresso flavor and mild milk.",
         price: "1.50",
         imgSrc: "./img/black-coffee.jpg",
         link: "categoryPage.html?category=Cortado",
@@ -82,14 +71,11 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Medium", price: 4.2 },
             { size: "Large", price: 5.0 },
           ],
-          milkOptions: ["Whole", "Skim", "Oat", "Almond", "Soy"],
-          sweetness: ["No Sugar", "Less Sugar", "Normal"],
         },
+        i18nNameKey: "cortado_name",
+        i18nDescriptionKey: "cortado_coffee_description",
       },
       {
-        name: "White Choc Macchiato",
-        description:
-          "A traditional coffee made by brewing finely ground beans, mixed with white chocolate syrup and steamed milk.",
         price: "1.75",
         imgSrc: "./img/hoc-white.jpg",
         link: "categoryPage.html?category=TurkishCoffee",
@@ -99,14 +85,11 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Medium", price: 4.2 },
             { size: "Large", price: 5.0 },
           ],
-          milkOptions: ["Whole", "Skim", "Oat", "Almond", "Soy"],
-          sweetness: ["Normal", "Extra Sweet"],
         },
+        i18nNameKey: "white_choc_macchiato_name",
+        i18nDescriptionKey: "white_choc_macchiato_coffee_description",
       },
       {
-        name: "Light Matcha Latte",
-        description:
-          "A refreshing, lightly sweetened green tea latte with matcha flavor.",
         price: "1.80",
         imgSrc: "./img/Matcha.jpg",
         link: "categoryPage.html?category=VietnameseIcedCoffee",
@@ -116,14 +99,11 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Medium", price: 4.2 },
             { size: "Large", price: 5.0 },
           ],
-          milkOptions: ["Whole", "Oat", "Soy"],
-          sweetness: ["No Sugar", "Normal", "Extra Sweet"],
         },
+        i18nNameKey: "matcha_name",
+        i18nDescriptionKey: "matcha_description",
       },
       {
-        name: "Light Honey Black Tea",
-        description:
-          "Lightly sweetened black tea with honey flavors, offering a smooth and mild taste.",
         price: "4.40",
         imgSrc: "./img/honey-black.jpg",
         link: "categoryPage.html?category=VietnameseIcedCoffee",
@@ -133,13 +113,11 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Medium", price: 4.2 },
             { size: "Large", price: 5.0 },
           ],
-          sweetness: ["No Sugar", "Less Sugar", "Normal"],
         },
+        i18nNameKey: "honey_black_name",
+        i18nDescriptionKey: "honey_black_coffee_description",
       },
       {
-        name: "Green Tea Latte",
-        description:
-          "A blend of green tea with steamed milk and a touch of sweetness, creating a smooth, mellow flavor.",
         price: "2.10",
         imgSrc: "./img/green-tea-latte.jpg",
         link: "categoryPage.html?category=VietnameseIcedCoffee",
@@ -149,37 +127,33 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Medium", price: 4.2 },
             { size: "Large", price: 5.0 },
           ],
-          milkOptions: ["Whole", "Oat", "Soy"],
-          sweetness: ["Normal", "Extra Sweet"],
         },
+        i18nNameKey: "green_tea_latte_name",
+        i18nDescriptionKey: "green_tea_latte_description",
       },
       {
-        name: "Red Bean Matcha Frappe",
-        description:
-          "Sweet, creamy frappuccino with matcha flavor and red bean topping.",
         price: "2.75",
         imgSrc: "./img/Bean-Matchea.jpg",
-        link: "categoryPage.html?category=VietnameseIcedCoffee",        
+        link: "categoryPage.html?category=VietnameseIcedCoffee",
         variations: {
           sizes: [
             { size: "Small", price: 3.5 },
             { size: "Medium", price: 4.2 },
             { size: "Large", price: 5.0 },
           ],
-          sweetness: ["Normal", "Extra Sweet"],
-          toppings: ["Red Bean", "None"],
         },
+        i18nNameKey: "latte_name",
+        i18nDescriptionKey: "latte_coffee_description",
       },
     ],
     Burgers: [
       {
-        name: "The classics for 3",
-        description:
-          "1 McChicken™, 1 Big Mac™, 1 Royal Cheeseburger, 3 medium ",
         price: "23.10",
         imgSrc: "./img/berger.png",
         alt: "Combo Meal Image",
         link: "categoryPage.html?category=Burgers",
+        i18nNameKey: "burger_combo_name",
+        i18nDescriptionKey: "burger_combo_description",
       },
       {
         name: "Beef Burgers",
@@ -189,101 +163,92 @@ document.addEventListener("DOMContentLoaded", function () {
         imgSrc: "./img/beef.jpg",
         alt: "Beef Burger Image",
         link: "categoryPage.html?category=BeefBurgers",
+        i18nNameKey: "burger_beef_name",
+        i18nDescriptionKey: "burger_beef_description",
       },
       {
-        name: "Chicken Burgers",
-        description:
-          "Made with a grilled or fried chicken patty, often topped with lettuce",
         price: "18.75",
         imgSrc: "./img/chicken.png",
         alt: "Chicken Burger Image",
         link: "categoryPage.html?category=ChickenBurgers",
+        i18nNameKey: "burger_chicken_name",
+        i18nDescriptionKey: "burger_chicken_description",
       },
       {
-        name: "Veggie Burgers",
-        description:
-          "A vegetarian option made with ingredients like beans, lentils, chickpeas, mushrooms",
         price: "19.20",
         imgSrc: "./img/veggie_burgers.jpg",
         alt: "Veggie Burger Image",
         link: "categoryPage.html?category=VeggieBurgers",
+        i18nNameKey: "burger_veggie_name",
+        i18nDescriptionKey: "burger_veggie_description",
       },
       {
-        name: "Fish Burgers",
-        description:
-          "A burger made with fish, such as a fried or grilled fish fillet .",
         price: "21.40",
         imgSrc: "./img/fish-buger.jpg",
         alt: "Fish Burger Image",
         link: "categoryPage.html?category=FishBurgers",
+        i18nNameKey: "burger_fish_name",
+        i18nDescriptionKey: "burger_fish_description",
       },
       {
-        name: "Turkey Burgers",
-        description: "A leaner alternative to beef, made with ground turkey ",
         price: "20.80",
         imgSrc: "./img/turkey.jpg",
         alt: "Turkey Burger Image",
         link: "categoryPage.html?category=TurkeyBurgers",
+        i18nNameKey: "burger_turkey_name",
+        i18nDescriptionKey: "burger_turkey_description",
       },
       {
-        name: "BBQ Burgers",
-        description:
-          "A beef burger topped with BBQ sauce, grilled onions, and sometimes bacon or cheese.",
         price: "22.50",
         imgSrc: "./img/bbq.jpg",
         alt: "BBQ Burger Image",
         link: "categoryPage.html?category=BBQBurgers",
+        i18nNameKey: "burger_bbq_name",
+        i18nDescriptionKey: "burger_bbq_description",
       },
       {
-        name: "Cheese Burgers",
-        description:
-          "A classic burger topped with cheese (American, cheddar, Swiss, etc.)",
         price: "20.00",
         imgSrc: "./img/chess.jpg",
         alt: "Cheese Burger Image",
         link: "categoryPage.html?category=CheeseBurgers",
+        i18nNameKey: "burger_cheese_name",
+        i18nDescriptionKey: "burger_cheese_description",
       },
       {
-        name: "Bacon Burgers",
-        description:
-          "A burger with crispy bacon, adding a smoky and crunchy flavor.",
         price: "21.00",
         imgSrc: "./img/bacon.jpeg",
         alt: "Bacon Burger Image",
         link: "categoryPage.html?category=BaconBurgers",
+        i18nNameKey: "burger_bacon_name",
+        i18nDescriptionKey: "burger_bacon_description",
       },
       {
-        name: "Gourmet Burgers",
-        description: "Upscale burgers featuring ingredients like truffle oil, ",
         price: "25.00",
         imgSrc: "./img/Gourmet.jpg",
         alt: "Gourmet Burger Image",
         link: "categoryPage.html?category=GourmetBurgers",
+        i18nNameKey: "burger_gourmet_name",
+        i18nDescriptionKey: "burger_gourmet_description",
       },
       {
-        name: "Vegan Burgers",
-        description:
-          "A fully plant-based option made with ingredients like tofu, tempeh",
         price: "19.50",
         imgSrc: "./img/Vegan.jpg",
         alt: "Vegan Burger Image",
         link: "categoryPage.html?category=VeganBurgers",
+        i18nNameKey: "burger_vegan_name",
+        i18nDescriptionKey: "burger_vegan_description",
       },
       {
-        name: "Open-Faced Burgers",
-        description:
-          "Served without a top bun or with just one bun, often served like an open sandwich.",
         price: "22.10",
         imgSrc: "./img/Open-Faced.jpg",
         alt: "Open-Faced Burger Image",
         link: "categoryPage.html?category=OpenFacedBurgers",
+        i18nNameKey: "burger_open_faced_name",
+        i18nDescriptionKey: "burger_open_faced_description",
       },
     ],
     Pizza: [
       {
-        name: "Margherita",
-        description:
-          "Tomato sauce, fresh mozzarella, basil leaves, and olive oil.",
         price: "15.00",
         imgSrc: "./img/margherita-pizza.jpg",
         alt: "Margherita Pizza Image",
@@ -295,10 +260,10 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Large", price: 15.0 },
           ],
         },
+        i18nNameKey: "pizza_margherita_name",
+        i18nDescriptionKey: "pizza_margherita_description",
       },
       {
-        name: "Pepperoni",
-        description: "Tomato sauce, mozzarella, and slices of pepperoni.",
         price: "16.00",
         imgSrc: "./img/Pepperoni.png",
         alt: "Pepperoni Pizza Image",
@@ -310,10 +275,10 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Large", price: 16.0 },
           ],
         },
+        i18nNameKey: "pizza_pepperoni_name",
+        i18nDescriptionKey: "pizza_pepperoni_description",
       },
       {
-        name: "Hawaiian",
-        description: "Tomato sauce, mozzarella, ham, and pineapple.",
         price: "17.00",
         imgSrc: "./img/Hawaiian.jpg",
         alt: "Hawaiian Pizza Image",
@@ -325,11 +290,10 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Large", price: 17.0 },
           ],
         },
+        i18nNameKey: "pizza_hawaiian_name",
+        i18nDescriptionKey: "pizza_hawaiian_description",
       },
       {
-        name: "Vegetarian",
-        description:
-          "Tomato sauce, mozzarella, and a variety of vegetables like bell peppers",
         price: "18.00",
         imgSrc: "./img/Vegetarian.jpg",
         alt: "Vegetarian Pizza Image",
@@ -341,11 +305,10 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Large", price: 18.0 },
           ],
         },
+        i18nNameKey: "pizza_vegetarian_name",
+        i18nDescriptionKey: "pizza_vegetarian_description",
       },
       {
-        name: "BBQ Chicken",
-        description:
-          "BBQ sauce, mozzarella, grilled chicken, red onions, and cilantro.",
         price: "19.00",
         imgSrc: "./img/Chicken-pizza.png",
         alt: "BBQ Chicken Pizza Image",
@@ -357,11 +320,10 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Large", price: 19.0 },
           ],
         },
+        i18nNameKey: "pizza_bbq_chicken_name",
+        i18nDescriptionKey: "pizza_bbq_chicken_description",
       },
       {
-        name: "Buffalo Chicken",
-        description:
-          "Buffalo sauce, mozzarella, grilled chicken, and blue cheese or ranch.",
         price: "19.50",
         imgSrc: "./img/Buffalo-Chicken.jpg",
         alt: "Buffalo Chicken Pizza Image",
@@ -373,11 +335,10 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Large", price: 19.0 },
           ],
         },
+        i18nNameKey: "pizza_buffalo_chicken_name",
+        i18nDescriptionKey: "pizza_buffalo_chicken_description",
       },
       {
-        name: "Meat Lovers",
-        description:
-          "Tomato sauce, mozzarella, pepperoni, sausage, bacon, and ham.",
         price: "22.00",
         imgSrc: "./img/Meat-Lovers.jpg",
         alt: "Meat Lovers Pizza Image",
@@ -389,11 +350,10 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Large", price: 22.0 },
           ],
         },
+        i18nNameKey: "pizza_meat_lovers_name",
+        i18nDescriptionKey: "pizza_meat_lovers_description",
       },
       {
-        name: "Seafood Pizza",
-        description:
-          "Mozzarella, tomato sauce, shrimp, calamari, mussels, and sometimes anchovies.",
         price: "23.00",
         imgSrc: "./img/Seafood-pizza.jpg",
         alt: "Seafood Pizza Image",
@@ -405,11 +365,10 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Large", price: 23.0 },
           ],
         },
+        i18nNameKey: "pizza_seafood_name",
+        i18nDescriptionKey: "pizza_seafood_description",
       },
       {
-        name: "Truffle Mushroom",
-        description:
-          "Mozzarella, wild mushrooms, truffle oil, and sometimes arugula.",
         price: "25.00",
         imgSrc: "./img/Truffle-Mushroom.jpeg",
         alt: "Truffle Mushroom Pizza Image",
@@ -421,10 +380,10 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Large", price: 25.0 },
           ],
         },
+        i18nNameKey: "pizza_truffle_mushroom_name",
+        i18nDescriptionKey: "pizza_truffle_mushroom_description",
       },
       {
-        name: "Prosciutto & Arugula",
-        description: "Mozzarella, prosciutto, arugula, and parmesan.",
         price: "26.00",
         imgSrc: "./img/Prosciutto.jpg",
         alt: "Prosciutto & Arugula Pizza Image",
@@ -436,6 +395,8 @@ document.addEventListener("DOMContentLoaded", function () {
             { size: "Large", price: 26.0 },
           ],
         },
+        i18nNameKey: "pizza_prosciutto_arugula_name",
+        i18nDescriptionKey: "pizza_prosciutto_arugula_description",
       },
     ],
   };
@@ -474,61 +435,29 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     ],
   };
+  function setLanguage(lang) {
+    const languageSwitcher = document.getElementById("languageSwitcher");
+    if (languageSwitcher) {
+      languageSwitcher.value = lang;
+    }
+    document.querySelectorAll("[data-i18n]").forEach((element) => {
+      const key = element.getAttribute("data-i18n");
+      if (translations[lang] && translations[lang][key]) {
+        element.textContent = translations[lang][key];
+      }
+    });
+    localStorage.setItem("selectedLanguage", lang);
+    if (window.currentCategory) {
+      renderCategoryCards(category);
+    }
+  }
   const urlParams = new URLSearchParams(window.location.search);
   const category = urlParams.get("category");
   const storeId = urlParams.get("storeId");
   const brandTitle = document.getElementById("brand");
   const categoryDetails = document.getElementById("restaurantDetails");
-  const openCageApiKey = "268a7e9e3ae94232ae797729b1a08c99";
-
-  const geocodeCache = new Map(); // Cache to store results
-
-  async function getCoordinatesFromAddress(address) {
-    if (geocodeCache.has(address)) return geocodeCache.get(address);
-
-    const coordsRegex = /^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/;
-    if (coordsRegex.test(address)) {
-      const [lat, lon] = address.split(",").map(Number);
-      const result = { lat, lon };
-      geocodeCache.set(address, result);
-      return result;
-    }
-
-    try {
-      const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
-        address
-      )}&key=${openCageApiKey}`;
-      const response = await fetch(url);
-      const data = await response.json();
-      if (data.results && data.results.length > 0) {
-        const result = {
-          lat: data.results[0].geometry.lat,
-          lon: data.results[0].geometry.lng,
-        };
-        geocodeCache.set(address, result); // Cache it
-        return result;
-      }
-    } catch (error) {
-      console.error("Error fetching coordinates:", error);
-    }
-
-    return null;
-  }
-  function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371;
-    const dLat = ((lat2 - lat1) * Math.PI) / 180;
-    const dLon = ((lon2 - lon1) * Math.PI) / 180;
-    const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) ** 2;
-
-    return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-  }
-  async function renderCards(lat, lng) {
+  async function renderCards() {
     const cartSection = document.getElementById("cartSection");
-
     if (
       !categories[category] ||
       !brands[category] ||
@@ -538,21 +467,9 @@ document.addEventListener("DOMContentLoaded", function () {
       cartSection.style.display = "none";
       return;
     }
-
     const brandPromises = brands[category].map(async (brand) => {
-      const brandCoords = await getCoordinatesFromAddress(brand.address);
-      const distance = brandCoords
-        ? calculateDistance(lat, lng, brandCoords.lat, brandCoords.lon)
-        : null;
-
-      const dynamicMapLink = `https://www.google.com/maps?q=${encodeURIComponent(
-        brand.address
-      )}`;
       const locationDisplay = `
-      Location: ${brand.address || "Not available"} 
-      <a href="${dynamicMapLink}" target="_blank" style="color:orange;">Open Maps</a>
-      <br>Distance: ${distance !== null ? distance.toFixed(1) + " km" : "N/A"}`;
-
+     `;
       return `
       <div>
         <div class="row g-0">
@@ -576,31 +493,11 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     `;
     });
-
-    // Wait for all cards to be ready in parallel
     const brandCards = await Promise.all(brandPromises);
-
-    brandTitle.innerHTML = brandCards.join(""); // Update DOM once
+    brandTitle.innerHTML = brandCards.join("");
     cartSection.style.display = "";
   }
-
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        renderCards(lat, lng);
-      },
-      (error) => {
-        console.warn("User denied location or there was an error.");
-        renderCards(null, null, true);
-      }
-    );
-  } else {
-    console.warn("Geolocation not supported by this browser.");
-    renderCards(null, null, true);
-  }
-  // Event handlers for plus, minus, and remove buttons
+  renderCards();
   function handlePlusClick(event) {
     const index = parseInt(event.target.dataset.index);
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -648,7 +545,6 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Variations is not an object:", variations);
       variations = {};
     }
-    // Populate modal
     const productList = categories[category] || [];
     const product = productList[index];
     if (!product) {
@@ -657,20 +553,15 @@ document.addEventListener("DOMContentLoaded", function () {
       );
       return;
     }
-
-    // Example of retrieving data for the modal
     document.getElementById("modalImage").src = product.imgSrc;
     document.getElementById("modalName").textContent = product.name;
-
     const sizeOptions = product.variations?.sizes || [];
     const defaultSizeObj =
       sizeOptions.find((v) => v.size === "Large") || sizeOptions[0];
     const defaultSize = defaultSizeObj ? defaultSizeObj.size : null;
     let defaultPrice = defaultSizeObj
       ? defaultSizeObj.price
-      : parseFloat(product.price); // Ensure price is a number
-
-    // Check if defaultPrice is a valid number
+      : parseFloat(product.price);
     if (isNaN(defaultPrice)) {
       console.error("Invalid price:", defaultPrice);
       defaultPrice = 0; // Fallback to a default value if the price is invalid
@@ -713,7 +604,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('input[name="sugar"]').forEach((input) => {
       input.checked = false;
     });
-    // Then set the default sugar
     const defaultSugar = document.querySelector(
       'input[name="sugar"][value="100%"]'
     );
@@ -759,7 +649,6 @@ document.addEventListener("DOMContentLoaded", function () {
       addToCartBtn.disabled = false;
     }
   }
-  // Common function for sugar/pizza selection
   function setupSelectionInputs(inputName) {
     document.querySelectorAll(`input[name="${inputName}"]`).forEach((input) => {
       input.addEventListener("change", () => {
@@ -784,7 +673,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
-  // Set up listeners for both sugar and pizza inputs
   ["sugar", "pizza"].forEach(setupSelectionInputs);
   window.confirmAddToCart = function () {
     if (!currentItem) {
@@ -796,7 +684,7 @@ document.addEventListener("DOMContentLoaded", function () {
       (item) =>
         item.name === currentItem.name &&
         item.storeId === currentItem.storeId &&
-        item.sugar === currentItem.sugar 
+        item.sugar === currentItem.sugar
     );
 
     if (existing) {
@@ -872,11 +760,11 @@ document.addEventListener("DOMContentLoaded", function () {
       if (emptyCartMessage) emptyCartMessage.style.display = "block";
       if (cartItems) cartItems.style.display = "none";
       if (totalAmount) totalAmount.textContent = "0.00";
-      if (reviewButton) reviewButton.disabled = true; 
+      if (reviewButton) reviewButton.disabled = true;
     } else {
       if (emptyCartMessage) emptyCartMessage.style.display = "none";
       if (cartItems) cartItems.style.display = "block";
-      if (reviewButton) reviewButton.disabled = false; 
+      if (reviewButton) reviewButton.disabled = false;
     }
     // 🔁 Add event listeners for interactive buttons
     document.querySelectorAll(".plus-btn").forEach((btn) => {
@@ -892,8 +780,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const reviewButton = document.getElementById("reviewBtn");
   reviewButton.addEventListener("click", function () {
     const loggedIn = localStorage.getItem("loggedIn") === "true";
+    const storeId = new URLSearchParams(window.location.search).get("storeId");
+
     if (loggedIn) {
-      window.location.href = "detail-info.html";
+      window.location.href = `detail-info.html?storeId=${storeId}`;
     } else {
       window.location.href = "login.html";
     }
@@ -919,56 +809,76 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Call on page load
   window.onload = updateCartDisplay;
-  if (categories[category]) {
-    const cards = categories[category]
-      .map(
-        (item, index) => `
-        <div class="meal-card d-flex rounded-3 shadow p-3 bg-white">
-          <div class="meal-info flex-grow-1 pe-3">
-            <h6 class="fw-bold text-dark">${item.name}</h6>
-            <p class="text-muted small mb-1 flex-grow-1">${item.description}</p>
-            <p>from ${item.price} $</p>
-          </div>
-          <div class="meal-img position-relative">
-            <img src="${item.imgSrc}" class="img-fluid meal-image">
-            <button class="plus-icon border-0 position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center"
-              data-name="${item.name}" 
-              data-price="${item.price}" 
-              data-imgsrc="${item.imgSrc}"  
-              data-store-id="${item.storeId}"   
-              data-store-name="${item.storeName}"     
-              data-variations='${JSON.stringify(item.variations || [])}'
-              data-index="${index}">
-              <span class="fw-bold fs-5">+</span>
-            </button>
-          </div>
-        </div>
-      `
-      )
-      .join("");
+  function renderCategoryCards(category) {
+    window.currentCategory = category;
+    const currentLang = localStorage.getItem("selectedLanguage") || "en";
 
-    categoryDetails.innerHTML = cards;
-    updateCartDisplay();
-  } else {
-    categoryDetails.innerHTML = `<img src="./img/product_not_found.jpg" alt="No Products Available" class="img-fluids">`;
+    if (categories[category]) {
+      const cards = categories[category]
+        .map((item, index) => {
+          const translatedName =
+            translations[currentLang]?.[item.i18nNameKey] || item.name;
+          const translatedDescription =
+            translations[currentLang]?.[item.i18nDescriptionKey] ||
+            item.description;
+
+          return `
+          <div class="meal-card d-flex rounded-3 shadow p-3 bg-white">
+            <div class="meal-info flex-grow-1 pe-3">
+              <h6 class="fw-bold text-dark">${translatedName}</h6>
+              <p class="text-muted small mb-1 flex-grow-1">${translatedDescription}</p>
+              <p>from ${item.price} $</p>
+            </div>
+            <div class="meal-img position-relative">
+              <img src="${item.imgSrc}" class="img-fluid meal-image">
+              <button class="plus-icon border-0 position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center"
+                data-name="${translatedName}" 
+                data-price="${item.price}" 
+                data-imgsrc="${item.imgSrc}"  
+                data-store-id="${item.storeId}"   
+                data-store-name="${item.storeName}"     
+                data-variations='${JSON.stringify(item.variations || [])}'
+                data-index="${index}">
+                <span class="fw-bold fs-5">+</span>
+              </button>
+            </div>
+          </div>
+        `;
+        })
+        .join("");
+
+      categoryDetails.innerHTML = cards;
+
+      bindAddToCartEvents(); // ✅ ADD THIS
+
+      updateCartDisplay();
+    } else {
+      categoryDetails.innerHTML = `<img src="./img/product_not_found.jpg" alt="No Products Available" class="img-fluids">`;
+    }
   }
-  // Adding event listeners to buttons after content is loaded
-  document.querySelectorAll(".plus-icon").forEach((button) => {
-    button.addEventListener("click", function () {
-      const name = this.getAttribute("data-name");
-      const imgSrc = this.getAttribute("data-imgsrc");
-      const variationsStr = this.getAttribute("data-variations");
-      const index = this.getAttribute("data-index");
-      let variations = [];
-      try {
-        variations = JSON.parse(variationsStr);
-      } catch (e) {
-        console.error("Invalid variations JSON:", variationsStr);
-      }
 
-      addToCart(name, imgSrc, variations, index);
+  renderCategoryCards(category);
+  function bindAddToCartEvents() {
+    const buttons = document.querySelectorAll(".plus-icon");
+
+    buttons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        const name = this.getAttribute("data-name");
+        const imgSrc = this.getAttribute("data-imgsrc");
+        const variationsStr = this.getAttribute("data-variations");
+        const index = this.getAttribute("data-index");
+        let variations = [];
+
+        try {
+          variations = JSON.parse(variationsStr);
+        } catch (e) {
+          console.error("Invalid variations JSON:", variationsStr);
+        }
+
+        addToCart(name, imgSrc, variations, index);
+      });
     });
-  });
+  }
 
   function handleCategoryDisplay() {
     const variationSection = document.getElementById("variationSection");
@@ -987,16 +897,45 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   // Correct way to run on load:
   window.onload = handleCategoryDisplay;
+  function initializePage() {
+    const savedLanguage = localStorage.getItem("selectedLanguage") || "en";
+    setLanguage(savedLanguage);
+
+    if (localStorage.getItem("loggedIn") === "true") {
+      document.getElementById("loginSignupLink").classList.add("d-none");
+      document.getElementById("userIcon").classList.remove("d-none");
+
+      const username = localStorage.getItem("username");
+      if (username) {
+        document.getElementById("userName").textContent = username;
+      } else {
+        console.error("Username is not set in localStorage.");
+      }
+    } else {
+      document.getElementById("loginSignupLink").classList.remove("d-none");
+      document.getElementById("userIcon").classList.add("d-none");
+    }
+
+    const languageSwitcher = document.getElementById("languageSwitcher");
+    if (languageSwitcher) {
+      languageSwitcher.addEventListener("change", function () {
+        setLanguage(this.value);
+      });
+    } else {
+      console.error("Language switcher element not found!");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", initializePage());
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const savedLanguage = localStorage.getItem("selectedLanguage") || "en";
+    setLanguage(savedLanguage);
+  });
+  const languageSwitcher = document.getElementById("languageSwitcher");
+  if (languageSwitcher) {
+    languageSwitcher.addEventListener("change", function () {
+      setLanguage(this.value);
+    });
+  }
 });
-
-// Show logout and clear user info
-function showLogout() {
-  localStorage.setItem("isLoggedIn", "false");
-  localStorage.removeItem("loggedIn");
-  localStorage.removeItem("username");
-
-  document.getElementById("userIcon").classList.add("d-none");
-  document.getElementById("authLinks").classList.remove("d-none");
-
-  window.location.href = "login.html";
-}

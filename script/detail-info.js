@@ -1,58 +1,155 @@
+import { translations } from "./translations.js";
 document.addEventListener("DOMContentLoaded", function () {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition, showError);
-  } else {
-    alert("Geolocation is not supported by this browser.");
+  let map;
+  let currentMarker;
+
+  function initializeMapWithLocation() {
+    if ("geolocation" in navigator) {
+      const geoOptions = {
+        enableHighAccuracy: true,
+        timeout: 10000, // 10 seconds
+        maximumAge: 0,
+      };
+      navigator.geolocation.getCurrentPosition(
+        showPosition,
+        showError,
+        geoOptions
+      );
+    } else {
+      displayLocationError(
+        "Geolocation is not supported by this browser. Please use a modern browser."
+      );
+      document.getElementById("map").style.display = "none";
+      document.getElementById("current-address").textContent =
+        "Geolocation not available.";
+    }
   }
 
   function showPosition(position) {
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
+    if (map && map._leaflet_id) {
+      map.setView([lat, lon], 15);
+      if (currentMarker) {
+        map.removeLayer(currentMarker);
+      }
+    } else {
+      map = L.map("map").setView([lat, lon], 15);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
-    // Initialize the map
-    const map = L.map("map").setView([lat, lon], 15);
+        maxZoom: 19,
+      }).addTo(map);
+    }
+    currentMarker = L.marker([lat, lon], { draggable: true })
+      .addTo(map)
+      .bindPopup("<b>You are here!</b><br>Fetching address...")
+      .openPopup();
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap contributors",
-    }).addTo(map);
+    currentMarker.on("dragend", function (event) {
+      const marker = event.target;
+      const position = marker.getLatLng();
+      console.log(
+        `Marker dragged to: Lat ${position.lat}, Lng ${position.lng}`
+      );
+      fetchAddressFromCoordinates(position.lat, position.lng);
+      map.panTo(position);
+    });
 
-    L.marker([lat, lon]).addTo(map).bindPopup("You are here!").openPopup();
+    fetchAddressFromCoordinates(lat, lon);
+  }
 
-    // Use reverse geocoding API to get the address from coordinates
-    const geocodeUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
+  function showError(error) {
+    let errorMessage = "Unable to retrieve your location.";
+    switch (error.code) {
+      case error.PERMISSION_DENIED:
+        errorMessage =
+          "Location access denied. Please enable location services in your browser settings.";
+        break;
+      case error.POSITION_UNAVAILABLE:
+        errorMessage = "Location information is unavailable.";
+        break;
+      case error.TIMEOUT:
+        errorMessage = "The request to get user location timed out.";
+        break;
+      case error.UNKNOWN_ERROR:
+        errorMessage = "An unknown error occurred while retrieving location.";
+        break;
+    }
+    console.error(`Geolocation Error: ${errorMessage}`, error);
+    displayLocationError(errorMessage);
+  }
+
+  function displayLocationError(message) {
+    document.getElementById("current-address").textContent = message;
+  }
+
+  function fetchAddressFromCoordinates(lat, lon) {
+    const geocodeUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
 
     fetch(geocodeUrl)
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((data) => {
-        const address = data.display_name || "Unknown location";
-        // Update the address in the DOM
-        document.getElementById("current-address").textContent = address;
+        let addressText = "Unknown location";
+        if (data && data.address) {
+          const address = data.address;
+          addressText = [
+            address.road,
+            address.house_number,
+            address.suburb,
+            address.city || address.town || address.village,
+            address.state,
+          ]
+            .filter(Boolean)
+            .join(", ");
+        }
+
+        document.getElementById("current-address").textContent = addressText;
+        if (currentMarker) {
+          currentMarker.setPopupContent(`<b>Location:</b><br>${addressText}`);
+        }
       })
       .catch((error) => {
         console.error("Error fetching the address:", error);
         document.getElementById("current-address").textContent =
-          "Unable to fetch address";
+          "Unable to fetch address. Please try again later.";
       });
   }
 
-  function showError(error) {
-    alert("Unable to retrieve your location.");
-    document.getElementById("current-address").textContent =
-      "Unable to fetch address";
-  }
+  initializeMapWithLocation();
 });
-
+function setLanguage(lang) {
+  const languageSwitcher = document.getElementById("languageSwitcher");
+  if (languageSwitcher) {
+    languageSwitcher.value = lang;
+  }
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const key = element.getAttribute("data-i18n");
+    if (translations[lang] && translations[lang][key]) {
+      element.textContent = translations[lang][key];
+    }
+  });
+  localStorage.setItem("selectedLanguage", lang);
+  updateOrderSummary();
+}
 function updateOrderSummary() {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const storeId = new URLSearchParams(window.location.search).get("storeId");
 
+  if (!storeId) {
+    console.error("No storeId found");
+    return;
+  }
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const storeCart = cart.filter((item) => item.storeId === storeId);
   const summaryContainer = document.getElementById("orderSummary");
   if (!summaryContainer) return;
-
-  summaryContainer.innerHTML = ""; // Clear any previous content
-
+  summaryContainer.innerHTML = "";
   let subtotal = 0;
-  // Add each item
-  cart.forEach((item) => {
+  storeCart.forEach((item) => {
     const itemTotal = item.price * item.quantity;
     subtotal += itemTotal;
 
@@ -63,13 +160,11 @@ function updateOrderSummary() {
       </div>
     `;
   });
-
-  // Add subtotal, delivery, VAT, total
-  const vat = +(subtotal * 0.01).toFixed(2); // Example: 1% VAT
+  const vat = +(subtotal * 0.01).toFixed(2);
   const total = subtotal + vat;
 
   summaryContainer.innerHTML += `
-    <hr />
+    <hr/>
     <div class="d-flex justify-content-between">
       <span>Subtotal</span>
       <span>$ ${subtotal.toFixed(2)}</span>
@@ -82,7 +177,7 @@ function updateOrderSummary() {
       <span>VAT</span>
       <span>$ ${vat.toFixed(2)}</span>
     </div>
-    <hr />
+    <hr/>
     <div class="d-flex justify-content-between">
       <strong>Total</strong>
       <strong>$ ${total.toFixed(2)}</strong>
@@ -90,12 +185,11 @@ function updateOrderSummary() {
     <small class="text-muted">incl. fees and tax</small>
   `;
 }
+
 // --- Configuration ---
 const BOT_TOKEN = "7227860086:AAG7q39S0YSPz01JToZhs_D1h-6b4sqRpBI";
 const TELEGRAM_API_BASE_URL = `https://api.telegram.org/bot${BOT_TOKEN}`;
 const LOCAL_STORAGE_CHAT_ID_KEY = "telegram_chat_id";
-
-// Check if localStorage is available
 function isLocalStorageAvailable() {
   try {
     localStorage.setItem("test", "test");
@@ -106,8 +200,6 @@ function isLocalStorageAvailable() {
     return false;
   }
 }
-
-// Safely set item in localStorage with fallback to sessionStorage
 function safeSetLocalStorage(key, value) {
   if (isLocalStorageAvailable()) {
     localStorage.setItem(key, value);
@@ -116,8 +208,6 @@ function safeSetLocalStorage(key, value) {
     sessionStorage.setItem(key, value); // Fallback to sessionStorage
   }
 }
-
-// Safely get item from localStorage with fallback to sessionStorage
 function safeGetLocalStorage(key) {
   if (isLocalStorageAvailable()) {
     return localStorage.getItem(key);
@@ -126,18 +216,11 @@ function safeGetLocalStorage(key) {
     return sessionStorage.getItem(key); // Fallback to sessionStorage
   }
 }
-
-// Function to fetch and store chat ID linked to users
 async function fetchAndStoreUserChatId() {
   const url = `${TELEGRAM_API_BASE_URL}/getUpdates`;
-
   try {
     const response = await fetch(url);
     const data = await response.json();
-
-    // Log the entire response for debugging
-    console.log("Telegram getUpdates response:", data);
-
     if (data.ok && data.result.length > 0) {
       for (const update of data.result) {
         const message = update?.message;
@@ -159,8 +242,6 @@ async function fetchAndStoreUserChatId() {
     console.error("Error fetching chat ID from Telegram:", error);
   }
 }
-
-// Function to send messages to users
 async function sendTelegramMessageToUser(chatId, message) {
   const url = `${TELEGRAM_API_BASE_URL}/sendMessage`;
   const payload = {
@@ -168,7 +249,6 @@ async function sendTelegramMessageToUser(chatId, message) {
     text: message,
     parse_mode: "HTML",
   };
-
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -189,19 +269,14 @@ async function sendTelegramMessageToUser(chatId, message) {
     return false;
   }
 }
-
 // Function to fetch & handle messages (polling)
-// --- Long Polling Logic ---
 let isPollingActive = false;
-
 async function startTelegramPolling() {
   if (isPollingActive) {
     console.log("Polling is already active.");
     return;
   }
-
   isPollingActive = true;
-
   try {
     while (isPollingActive) {
       const lastUpdateId = parseInt(safeGetLocalStorage("lastUpdateId") || "0");
@@ -286,17 +361,24 @@ async function discardOldUpdates() {
     console.log(`🔁 Discarded ${data.result.length} old updates`);
   }
 }
-
-function stopTelegramPolling() {
-  isPollingActive = false;
-}
-discardOldUpdates();
 startTelegramPolling();
-
 async function handlePlaceOrder() {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const storeId = new URLSearchParams(window.location.search).get("storeId");
+  const username = localStorage.getItem("username"); // ✅ Get logged-in user
 
-  if (cart.length === 0) {
+  if (!username) {
+    Swal.fire({
+      icon: "error",
+      title: "User Not Logged In",
+      text: "Please log in before placing an order.",
+    });
+    return;
+  }
+
+  const carts = JSON.parse(localStorage.getItem("cart")) || [];
+  const storeCart = carts.filter((item) => item.storeId === storeId);
+
+  if (storeCart.length === 0) {
     Swal.fire({
       icon: "warning",
       title: "Cart is Empty",
@@ -305,15 +387,28 @@ async function handlePlaceOrder() {
     return;
   }
 
-  const storeId = cart[0]?.storeId;
-  const storeItems = cart.filter((item) => item.storeId === storeId);
-  const remainingItems = cart.filter((item) => item.storeId !== storeId);
+  const remainingItems = carts.filter((item) => item.storeId !== storeId);
   localStorage.setItem("cart", JSON.stringify(remainingItems));
 
-  const storeName = storeItems[0]?.storeName || "Our Store";
+  // ✅ Save to Order History by User
+  const allOrderHistory = JSON.parse(localStorage.getItem("orderHistory")) || {};
+  const userOrderHistory = allOrderHistory[username] || [];
 
-  let message = `✅ ការបញ្ជាទិញពីបានបញ្ចប់ដោយជោគជ័យ!\n\n<b>ព័ត៌មានលម្អិត:</b>\n`;
-  storeItems.forEach((item, index) => {
+  const newOrder = {
+    id: Date.now(),
+    storeId: storeId,
+    items: storeCart,
+    date: new Date().toLocaleString(),
+  };
+
+  userOrderHistory.push(newOrder);
+  allOrderHistory[username] = userOrderHistory;
+
+  localStorage.setItem("orderHistory", JSON.stringify(allOrderHistory));
+
+  // ✅ Prepare Telegram Message
+  let message = `✅ ការបញ្ជាទិញបានបញ្ចប់ដោយជោគជ័យ!\n\n<b>ព័ត៌មានលម្អិត:</b>\n`;
+  storeCart.forEach((item, index) => {
     message += `${index + 1}. ${item.name} ចំនួន ${item.quantity}\n`;
   });
   message += "\nសូមអរគុណសម្រាប់ការជាវរបស់អ្នក!";
@@ -339,8 +434,10 @@ async function handlePlaceOrder() {
     });
   }
 }
-// Initialize the app and bind event listeners
+
+
 async function initializeApp() {
+  await discardOldUpdates();
   const chatId = safeGetLocalStorage(LOCAL_STORAGE_CHAT_ID_KEY);
   const placeOrderBtn = document.getElementById("placeOrderBtn");
   if (!chatId) {
@@ -390,3 +487,44 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 updateOrderSummary();
+function initializePage() {
+  const savedLanguage = localStorage.getItem("selectedLanguage") || "en";
+  setLanguage(savedLanguage);
+
+  if (localStorage.getItem("loggedIn") === "true") {
+    document.getElementById("loginSignupLink").classList.add("d-none");
+    document.getElementById("userIcon").classList.remove("d-none");
+
+    const username = localStorage.getItem("username");
+    if (username) {
+      document.getElementById("userName").textContent = username;
+    } else {
+      console.error("Username is not set in localStorage.");
+    }
+  } else {
+    document.getElementById("loginSignupLink").classList.remove("d-none");
+    document.getElementById("userIcon").classList.add("d-none");
+  }
+
+  const languageSwitcher = document.getElementById("languageSwitcher");
+  if (languageSwitcher) {
+    languageSwitcher.addEventListener("change", function () {
+      setLanguage(this.value);
+    });
+  } else {
+    console.error("Language switcher element not found!");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", initializePage());
+
+document.addEventListener("DOMContentLoaded", () => {
+  const savedLanguage = localStorage.getItem("selectedLanguage") || "en";
+  setLanguage(savedLanguage);
+});
+const languageSwitcher = document.getElementById("languageSwitcher");
+if (languageSwitcher) {
+  languageSwitcher.addEventListener("change", function () {
+    setLanguage(this.value);
+  });
+}
