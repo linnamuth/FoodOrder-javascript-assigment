@@ -69,24 +69,24 @@ document
 
     if (password !== confirmPassword) {
       Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Passwords do not match!',
+        position: "top-end",
+        icon: "error",
+        title: "Passwords do not match!",
         showConfirmButton: false,
         timer: 2000,
-        toast: true
+        toast: true,
       });
     } else {
       Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Registered successfully!',
+        position: "top-end",
+        icon: "success",
+        title: "Registered successfully!",
         showConfirmButton: false,
         timer: 1500,
-        toast: true
+        toast: true,
       }).then(() => {
         localStorage.setItem("loggedIn", "true");
-        localStorage.setItem("username", name); 
+        localStorage.setItem("username", name);
         // Redirect to home page
         window.location.href = "index.html";
       });

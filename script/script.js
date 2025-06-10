@@ -220,7 +220,6 @@ const DiscountRestaurants = [
     discount: "Discount 20%",
     i18nKey: "discount_fresh_fruit_juice",
   },
-
 ];
 function setLanguage(lang) {
   const languageSwitcher = document.getElementById("languageSwitcher");
@@ -253,7 +252,6 @@ function setLanguage(lang) {
   localStorage.setItem("selectedLanguage", lang);
 }
 
-
 function createCards(data, containerId, isCategory = false) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -269,10 +267,14 @@ function createCards(data, containerId, isCategory = false) {
 
       return `
         <div class="col-6 col-md-${isCategory ? "4 col-lg-2" : "2"} mb-4">
-          <div class="${isCategory ? "category-card" : "restaurant-card"} h-100">
+          <div class="${
+            isCategory ? "category-card" : "restaurant-card"
+          } h-100">
             <a href="${item.link}" class="text-decoration-none">
               <div class="image-container position-relative">
-                <img src="${item.imgSrc}" class="overlay-img img-fluid rounded" alt="${item.alt}" />
+                <img src="${
+                  item.imgSrc
+                }" class="overlay-img img-fluid rounded" alt="${item.alt}" />
                 ${
                   !isCategory && item.discount
                     ? `<div class="discount-badge position-absolute top-0 start-0 m-2 px-2 py-1 rounded-pill text-white fw-bold" style="background-color: #e6007e; font-size: 0.75rem;">
@@ -281,7 +283,9 @@ function createCards(data, containerId, isCategory = false) {
                     : ""
                 }
                 <div class="ms-3 mt-2">
-                  <h6 class="fw-bold ${isCategory ? "text-dark" : "text-black"}">${displayName}</h6>
+                  <h6 class="fw-bold ${
+                    isCategory ? "text-dark" : "text-black"
+                  }">${displayName}</h6>
                   ${
                     isCategory
                       ? `<p class="mb-0 restaurants-count-text" style="color: #e21b70" data-restaurants-count="${item.restaurants}">${item.restaurants} ${translations[currentLang]["restaurants_count"]}</p>`
@@ -296,7 +300,6 @@ function createCards(data, containerId, isCategory = false) {
     })
     .join("");
 }
-
 
 function initializePage() {
   createCards(categories, "category-container", true);
@@ -328,6 +331,20 @@ function initializePage() {
     console.error("Language switcher element not found!");
   }
 }
+function logout(event) {
+  event.preventDefault();
+
+  localStorage.removeItem("username");
+  localStorage.removeItem("loggedIn");
+
+  document.getElementById("userIcon").classList.add("d-none");
+  document.getElementById("loginSignupLink").classList.remove("d-none");
+
+  window.location.href = "login.html";
+}
+document.getElementById("logoutLink")?.addEventListener("click", (event) => {
+  logout(event); 
+});
 
 document.addEventListener("DOMContentLoaded", initializePage);
 

@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       map = L.map("map").setView([lat, lon], 15);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-
         maxZoom: 19,
       }).addTo(map);
     }
@@ -189,7 +188,8 @@ function updateOrderSummary() {
 // --- Configuration ---
 const BOT_TOKEN = "7227860086:AAG7q39S0YSPz01JToZhs_D1h-6b4sqRpBI";
 const TELEGRAM_API_BASE_URL = `https://api.telegram.org/bot${BOT_TOKEN}`;
-const LOCAL_STORAGE_CHAT_ID_KEY = "telegram_chat_id";
+const LOCAL_STORAGE_CURRENT_CHAT_ID_KEY = "telegram_current_chat_id";
+const LOCAL_STORAGE_OLD_CHAT_ID_KEY = "telegram_old_chat_id";
 function isLocalStorageAvailable() {
   try {
     localStorage.setItem("test", "test");
@@ -216,32 +216,7 @@ function safeGetLocalStorage(key) {
     return sessionStorage.getItem(key); // Fallback to sessionStorage
   }
 }
-async function fetchAndStoreUserChatId() {
-  const url = `${TELEGRAM_API_BASE_URL}/getUpdates`;
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    if (data.ok && data.result.length > 0) {
-      for (const update of data.result) {
-        const message = update?.message;
-        const chatId = message?.chat?.id;
-        const text = message?.text;
-        if (text && text.trim().toLowerCase() === "/start" && chatId) {
-          const existingChatId = safeGetLocalStorage(LOCAL_STORAGE_CHAT_ID_KEY);
-          if (!existingChatId) {
-            // Store chatId if it's not already saved
-            safeSetLocalStorage(LOCAL_STORAGE_CHAT_ID_KEY, chatId);
-            console.log(`Chat ID ${chatId} stored successfully.`);
-          }
-        }
-      }
-    } else {
-      console.warn("No valid updates found.");
-    }
-  } catch (error) {
-    console.error("Error fetching chat ID from Telegram:", error);
-  }
-}
+
 async function sendTelegramMessageToUser(chatId, message) {
   const url = `${TELEGRAM_API_BASE_URL}/sendMessage`;
   const payload = {
@@ -319,11 +294,26 @@ async function startTelegramPolling() {
           }
           if (text === "/start") {
             const existingChatId = safeGetLocalStorage(
-              LOCAL_STORAGE_CHAT_ID_KEY
+              LOCAL_STORAGE_CURRENT_CHAT_ID_KEY
             );
             if (!existingChatId || existingChatId !== chatId.toString()) {
-              safeSetLocalStorage(LOCAL_STORAGE_CHAT_ID_KEY, chatId.toString());
-              console.log(`✅ Chat ID ${chatId} stored successfully.`);
+              // Save old chat ID before overwriting
+              if (existingChatId) {
+                safeSetLocalStorage(
+                  LOCAL_STORAGE_OLD_CHAT_ID_KEY,
+                  existingChatId
+                );
+              }
+
+              safeSetLocalStorage(
+                LOCAL_STORAGE_CURRENT_CHAT_ID_KEY,
+                chatId.toString()
+              );
+              console.log(
+                `✅ New Chat ID ${chatId} stored. Old Chat ID was: ${
+                  existingChatId || "None"
+                }`
+              );
             }
 
             await sendTelegramMessageToUser(
@@ -364,7 +354,7 @@ async function discardOldUpdates() {
 startTelegramPolling();
 async function handlePlaceOrder() {
   const storeId = new URLSearchParams(window.location.search).get("storeId");
-  const username = localStorage.getItem("username"); // ✅ Get logged-in user
+  const username = localStorage.getItem("username");
 
   if (!username) {
     Swal.fire({
@@ -390,7 +380,7 @@ async function handlePlaceOrder() {
   const remainingItems = carts.filter((item) => item.storeId !== storeId);
   localStorage.setItem("cart", JSON.stringify(remainingItems));
 
-  // ✅ Save to Order History by User
+  // Save to Order History by User
   const allOrderHistory = JSON.parse(localStorage.getItem("orderHistory")) || {};
   const userOrderHistory = allOrderHistory[username] || [];
 
@@ -406,16 +396,17 @@ async function handlePlaceOrder() {
 
   localStorage.setItem("orderHistory", JSON.stringify(allOrderHistory));
 
-  // ✅ Prepare Telegram Message
-  let message = `✅ ការបញ្ជាទិញបានបញ្ចប់ដោយជោគជ័យ!\n\n<b>ព័ត៌មានលម្អិត:</b>\n`;
+  // Prepare Telegram Message
+  let message = `✅ Order placed successfully!\n\n<b>Details:</b>\n`;
   storeCart.forEach((item, index) => {
-    message += `${index + 1}. ${item.name} ចំនួន ${item.quantity}\n`;
+    message += `${index + 1}. ${item.name} x ${item.quantity}\n`;
   });
-  message += "\nសូមអរគុណសម្រាប់ការជាវរបស់អ្នក!";
+  message += "\nThank you for your purchase!";
 
-  const chatId = localStorage.getItem(LOCAL_STORAGE_CHAT_ID_KEY);
+  const chatId = safeGetLocalStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY);
 
   if (chatId) {
+    // If chatId exists, send message to Telegram
     const success = await sendTelegramMessageToUser(chatId, message);
     Swal.fire({
       icon: success ? "success" : "error",
@@ -427,20 +418,23 @@ async function handlePlaceOrder() {
       window.location.href = "index.html";
     });
   } else {
+    // If no chatId, show error message to start bot
     Swal.fire({
       icon: "error",
       title: "Telegram Not Linked",
       text: "Please click /start in the Telegram bot first.",
+    }).then(() => {
+      window.location.href = "https://t.me/OrderFastDeliverybot"; // Redirect to bot
     });
   }
 }
 
-
 async function initializeApp() {
   await discardOldUpdates();
-  const chatId = safeGetLocalStorage(LOCAL_STORAGE_CHAT_ID_KEY);
+  const chatId = safeGetLocalStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY);
   const placeOrderBtn = document.getElementById("placeOrderBtn");
-  if (!chatId) {
+  const username = localStorage.getItem("username");
+  if (!chatId && !username) {
     Swal.fire({
       icon: "info",
       title: "Connect to Telegram",
@@ -453,7 +447,7 @@ async function initializeApp() {
       confirmButtonText: "Got it! I've Connected",
     }).then((result) => {
       if (result.isConfirmed) {
-        location.reload();
+        location.reload(); 
       }
     });
     if (placeOrderBtn) placeOrderBtn.disabled = true;
@@ -466,6 +460,20 @@ async function initializeApp() {
 }
 
 window.onload = initializeApp;
+function logout(event) {
+  event.preventDefault();
+
+  localStorage.removeItem("username");
+  localStorage.removeItem("loggedIn");
+
+  document.getElementById("userIcon").classList.add("d-none");
+  document.getElementById("loginSignupLink").classList.remove("d-none");
+
+  window.location.href = "login.html";
+}
+document.getElementById("logoutLink")?.addEventListener("click", (event) => {
+  logout(event);
+});
 
 window.addEventListener("DOMContentLoaded", () => {
   const storedName = localStorage.getItem("username");

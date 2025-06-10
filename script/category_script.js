@@ -68,6 +68,20 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   document.addEventListener("DOMContentLoaded", initializePage());
+function logout(event) {
+  event.preventDefault();
+
+  localStorage.removeItem("username");
+  localStorage.removeItem("loggedIn");
+
+  document.getElementById("userIcon").classList.add("d-none");
+  document.getElementById("loginSignupLink").classList.remove("d-none");
+
+  window.location.href = "login.html";
+}
+document.getElementById("logoutLink")?.addEventListener("click", (event) => {
+  logout(event); 
+});
 
   const urlParams = new URLSearchParams(window.location.search);
   const category = urlParams.get("category");

@@ -56,8 +56,7 @@ if (languageSwitcher) {
     setLanguage(this.value);
   });
 }
-
-
+// Function to render order history
 function renderOrderHistory() {
   const username = localStorage.getItem("username");
   const container = document.getElementById("orderHistory");
@@ -82,11 +81,33 @@ function renderOrderHistory() {
     div.innerHTML = `
       <h4 style="color:#e6007e">Order #${order.id}</h4>
       <p><strong>Date:</strong> ${order.date}</p>
+      <div class="order-items">
         ${order.items.map(item => `
-            <img src="${item.imgSrc}" alt="${item.name}" style="width: 50px; height: 50px;"/>
-            ${item.name} (${item.size}) × ${item.quantity} - $${(item.price * item.quantity).toFixed(2)}
+          <div class="order-item" style="display: flex; align-items: center; margin-bottom: 5px;">
+            <img src="${item.imgSrc}" alt="${item.name}" style="width: 50px; height: 50px; margin-right: 10px;" />
+            <div>
+              <div><strong>${item.name}</strong> (${item.size})</div>
+              <div>× ${item.quantity} - $${(item.price * item.quantity).toFixed(2)}</div>
+            </div>
+          </div>
         `).join("")}
+      </div>
     `;
     container.appendChild(div);
   });
 }
+function logout(event) {
+  event.preventDefault();
+
+  localStorage.removeItem("username");
+  localStorage.removeItem("loggedIn");
+
+  document.getElementById("userIcon").classList.add("d-none");
+  document.getElementById("loginSignupLink").classList.remove("d-none");
+
+  window.location.href = "login.html";
+}
+document.getElementById("logoutLink")?.addEventListener("click", (event) => {
+  logout(event); 
+});
+
