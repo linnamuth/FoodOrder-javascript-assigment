@@ -181,7 +181,7 @@ function updateOrderSummary() {
       <strong>Total</strong>
       <strong>$ ${total.toFixed(2)}</strong>
     </div>
-    <small class="text-muted">incl. fees and tax</small>
+    <small >incl. fees and tax</small>
   `;
 }
 

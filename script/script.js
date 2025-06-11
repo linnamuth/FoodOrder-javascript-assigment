@@ -1,4 +1,5 @@
 import { translations } from "./translations.js";
+
 const categories = [
   {
     name: "Pizza", // English base name
@@ -282,16 +283,15 @@ function createCards(data, containerId, isCategory = false) {
                       </div>`
                     : ""
                 }
-                <div class="ms-3 mt-2">
-                  <h6 class="fw-bold ${
-                    isCategory ? "text-dark" : "text-black"
-                  }">${displayName}</h6>
-                  ${
-                    isCategory
-                      ? `<p class="mb-0 restaurants-count-text" style="color: #e21b70" data-restaurants-count="${item.restaurants}">${item.restaurants} ${translations[currentLang]["restaurants_count"]}</p>`
-                      : ""
-                  }
-                </div>
+             <div class="ms-3 mt-2">
+  <h6 class="fw-bold">${displayName}</h6>
+  ${
+    isCategory
+      ? `<p class="mb-0 restaurants-count-text" style="color: #e21b70" data-restaurants-count="${item.restaurants}">${item.restaurants} ${translations[currentLang]["restaurants_count"]}</p>`
+      : ""
+  }
+</div>
+
               </div>
             </a>
           </div>
@@ -343,7 +343,7 @@ function logout(event) {
   window.location.href = "login.html";
 }
 document.getElementById("logoutLink")?.addEventListener("click", (event) => {
-  logout(event); 
+  logout(event);
 });
 
 document.addEventListener("DOMContentLoaded", initializePage);

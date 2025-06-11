@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="./style/style.css" />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-light fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="index.html">
           <img
@@ -63,7 +63,8 @@
                 class="nav-link"
                 href="./history-order.html"
                 data-i18n="histroy_order"
-              ></a>
+                >Track Order</a
+              >
             </li>
 
             <li class="nav-item" id="loginSignupLink">
@@ -108,6 +109,14 @@
             <option value="en">English</option>
             <option value="kh">ខ្មែរ</option>
           </select>
+          <div>
+            <div>
+              <input type="checkbox" class="checkbox" id="toggleBtn" />
+              <label class="switch" for="toggleBtn">
+                <div class="ball"></div>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
@@ -115,7 +124,7 @@
       <div class="row g-4">
         <!-- Left Panel -->
         <div class="col-md-7">
-          <div class="card p-4 shadow-sm">
+          <div class="card-lo p-4 shadow-sm">
             <h5><strong>Delivery address</strong></h5>
             <div id="map" class="rounded mb-3" style="height: 300px"></div>
 
@@ -125,7 +134,7 @@
               </div>
             </div>
           </div>
-          <div class="card p-4 shadow-sm mt-4">
+          <div class="card-lo p-4 shadow-sm mt-4">
             <h5><strong>Personal Details</strong></h5>
             <div class="mb-2">
               <label for="name" class="form-label">Full Name</label>
@@ -155,10 +164,10 @@
             Place Order
           </button>
 
-          <p class="text-muted small">
+          <p class="small">
             By making this purchase you agree to our terms and conditions.
           </p>
-          <p class="text-muted small">
+          <p class="small">
             I agree that placing the order places me under an obligation to make
             a payment in accordance with the General Terms and Conditions.
           </p>
@@ -166,19 +175,25 @@
 
         <!-- Right Panel -->
         <div class="col-md-5">
-          <div class="card p-4 shadow-sm">
+          <div class="card-lo p-4 shadow-sm">
             <h4>Order Summary</h4>
             <div id="orderSummary"></div>
           </div>
         </div>
       </div>
     </div>
-    <footer style="background-color: #d9d9d9" class="pt-4 pb-4">
+    <footer class="footer pt-4 pb-4">
       <div class="container">
         <div class="row">
           <!-- Branding and App -->
           <div class="col-md-4 mb-4">
-            <h1 class="navbar-brand">Order</h1>
+            <h1 class="navbar-brand">
+              <img
+                src="./img/logo.png"
+                alt="Logo"
+                style="width: 100px; height: 100px"
+              />
+            </h1>
             <img
               src="./img/app.png"
               alt="App"
@@ -201,11 +216,7 @@
                 />
               </div>
               <div class="col-12 col-sm-4">
-                <button
-                  type="submit"
-                  class="btn w-100"
-                  style="background-color: #e21b70; color: white"
-                >
+                <button type="submit" class="btn subscribe-btn w-100">
                   Subscribe
                 </button>
               </div>
@@ -217,25 +228,11 @@
           <div class="col-md-2 mb-4">
             <h6 class="fw-bold">Legal Pages</h6>
             <ul class="list-unstyled">
+              <li><a href="#" class="footer-link">Terms and conditions</a></li>
+              <li><a href="#" class="footer-link">Privacy</a></li>
+              <li><a href="#" class="footer-link">Cookies</a></li>
               <li>
-                <a href="#" class="text-dark text-decoration-underline"
-                  >Terms and conditions</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-dark text-decoration-underline"
-                  >Privacy</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-dark text-decoration-underline"
-                  >Cookies</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-dark text-decoration-underline"
-                  >Modern Slavery Statement</a
-                >
+                <a href="#" class="footer-link">Modern Slavery Statement</a>
               </li>
             </ul>
           </div>
@@ -244,25 +241,11 @@
           <div class="col-md-2 mb-4">
             <h6 class="fw-bold">Important Links</h6>
             <ul class="list-unstyled">
+              <li><a href="#" class="footer-link">Get help</a></li>
+              <li><a href="#" class="footer-link">Add your restaurant</a></li>
+              <li><a href="#" class="footer-link">Sign up to deliver</a></li>
               <li>
-                <a href="#" class="text-dark text-decoration-underline"
-                  >Get help</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-dark text-decoration-underline"
-                  >Add your restaurant</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-dark text-decoration-underline"
-                  >Sign up to deliver</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-dark text-decoration-underline"
-                  >Create a business account</a
-                >
+                <a href="#" class="footer-link">Create a business account</a>
               </li>
             </ul>
           </div>
@@ -276,5 +259,9 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script src="./script/detail-info.js" type="module"></script>
+    <script type="module">
+      import { setupThemeToggle } from "./script/themeToggle.js";
+      setupThemeToggle();
+    </script>
   </body>
 </html>

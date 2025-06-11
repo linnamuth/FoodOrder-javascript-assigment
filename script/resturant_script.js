@@ -478,11 +478,11 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
           <div class="col-md-9">
             <div class="card-body">
-              <p class="text-muted mb-1">${brand.type}</p>
+              <p class="mb-1">${brand.type}</p>
               <h5 class="card-title fw-bold">${brand.brand_name}</h5>
               <div class="d-flex align-items-center mb-2">
-                <span class="badge bg-light text-dark me-2">${brand.description}</span>
-                <span class="text-muted">
+                <span class="badge text-dark me-2">${brand.description}</span>
+                <span>
                   <i class="${brand.icon} me-1"></i> ${brand.delivery}
                 </span>
               </div>
@@ -723,7 +723,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const itemDiv = document.createElement("div");
       itemDiv.className =
-        "d-flex flex-column flex-md-row align-items-center border rounded p-3 mb-3 shadow-sm bg-light position-relative";
+        "d-flex flex-column flex-md-row align-items-center border rounded p-3 mb-3 shadow-sm position-relative";
 
       itemDiv.innerHTML = `
       <div class="d-flex justify-content-center mb-3 mb-md-0">
@@ -731,15 +731,16 @@ document.addEventListener("DOMContentLoaded", function () {
         item.name
       }" class="me-3 rounded" style="width: 50px; height: 60px; object-fit: cover;">
       </div>
-      <div class="flex-grow-1 d-flex flex-column justify-content-between w-100 text-start">
-        <div class="d-flex justify-content-between">
-          <h6 class="mb-1 text-dark" style="width: 150px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-            ${item.name}
-          </h6>
-          <p class="text-muted mb-0 fw-semibold" style="font-size: 16px;">
-            ${(item.price * item.quantity).toFixed(2)} $
-          </p>
-        </div>
+            <div class="flex-grow-1 d-flex flex-column justify-content-between w-100 text-start">
+            <div class="d-flex justify-content-between">
+        <h6 class="mb-1 item-name" style="width: 150px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+          ${item.name}
+        </h6>
+        <p class="item-price mb-0 fw-semibold">
+          ${(item.price * item.quantity).toFixed(2)} $
+        </p>
+      </div>
+
         <div class="d-flex align-items-center mt-2">
           <button class="btn btn-outline-secondary btn-sm minus-btn" data-index="${index}" aria-label="Decrease quantity">–</button>
           <span class="mx-3">${item.quantity}</span>
@@ -823,10 +824,10 @@ document.addEventListener("DOMContentLoaded", function () {
             item.description;
 
           return `
-          <div class="meal-card d-flex rounded-3 shadow p-3 bg-white">
+          <div class="meal-card d-flex rounded-3 shadow p-3">
             <div class="meal-info flex-grow-1 pe-3">
-              <h6 class="fw-bold text-dark">${translatedName}</h6>
-              <p class="text-muted small mb-1 flex-grow-1">${translatedDescription}</p>
+              <h6 class="fw-bold">${translatedName}</h6>
+              <p class="small mb-1 flex-grow-1">${translatedDescription}</p>
               <p>from ${item.price} $</p>
             </div>
             <div class="meal-img position-relative">
@@ -927,20 +928,20 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   document.addEventListener("DOMContentLoaded", initializePage());
-function logout(event) {
-  event.preventDefault();
+  function logout(event) {
+    event.preventDefault();
 
-  localStorage.removeItem("username");
-  localStorage.removeItem("loggedIn");
+    localStorage.removeItem("username");
+    localStorage.removeItem("loggedIn");
 
-  document.getElementById("userIcon").classList.add("d-none");
-  document.getElementById("loginSignupLink").classList.remove("d-none");
+    document.getElementById("userIcon").classList.add("d-none");
+    document.getElementById("loginSignupLink").classList.remove("d-none");
 
-  window.location.href = "login.html";
-}
-document.getElementById("logoutLink")?.addEventListener("click", (event) => {
-  logout(event); 
-});
+    window.location.href = "login.html";
+  }
+  document.getElementById("logoutLink")?.addEventListener("click", (event) => {
+    logout(event);
+  });
   document.addEventListener("DOMContentLoaded", () => {
     const savedLanguage = localStorage.getItem("selectedLanguage") || "en";
     setLanguage(savedLanguage);

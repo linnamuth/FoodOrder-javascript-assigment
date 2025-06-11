@@ -1,5 +1,212 @@
-body, p, h1, h2, h3, h4, h5, h6, .navbar-nav .nav-link {
-    font-family: "Khmer", sans-serif !important; /* Use !important only as a last resort for troubleshooting */
+:root {
+    /*========== Colors ==========*/
+    /* Change favorite color */
+    --hue-color: 230;
+    /* HSL color mode */
+    --primary-color: hsl(var(--hue-color), 69%, 61%);
+    --primary-color-second: hsl(var(--hue-color), 69%, 61%);
+    --primary-color-lighter: hsl(var(--hue-color), 92%, 85%);
+    --text-color: hsl(var(--hue-color), 8%, 45%);
+    --text-color-light: hsl(var(--hue-color), 8%, 65%);
+    --body-color: hsl(var(--hue-color), 60%, 99%);
+    --header-height: 3rem;
+}
+
+/*========== Variables Dark theme ==========*/
+body.dark-theme {
+    /* HSL color mode */
+    --primary-color-second: hsl(var(--hue-color), 30%, 8%);
+    --text-color: hsl(var(--hue-color), 8%, 100%);
+    --input-color: hsl(var(--hue-color), 29%, 16%);
+    --body-color: hsl(var(--hue-color), 28%, 12%);
+}
+
+/*==================== BASE ====================*/
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0 0 var(--header-height) 0;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.94rem;
+    background-color: var(--body-color);
+    color: var(--text-color);
+}
+
+h1,
+h2,
+h3,
+h4 {
+    color: var(--title-color);
+    font-weight: 600;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.header {
+    width: 100%;
+    padding: 0 1rem;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    background-color: var(--body-color);
+    height: max-content;
+}
+
+/*==================== NAV ====================*/
+.navbar {
+    background-color: #f8f9fa;
+    color: black;
+}
+
+body {
+    background-color: #ffffff;
+}
+
+body.dark-theme .navbar {
+    background-color: #121212;
+}
+
+body.dark-theme {
+    background-color: #121212;
+}
+
+body.dark-theme .navbar .nav-link {
+    color: white;
+}
+
+/*==================== Dark Light Button Implementation ====================*/
+.checkbox {
+    display: none;
+}
+
+.switch {
+    background-color: #5e5d5d;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    position: relative;
+    height: 35px;
+    width: 60px;
+    /* Scale the size to your need */
+    transform: scale(0.7);
+}
+
+.switch .ball {
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    height: 22px;
+    width: 22px;
+    transform: translateX(0px);
+    transition: transform 0.2s linear;
+}
+
+.checkbox:checked+.switch .ball {
+    transform: translateX(24px);
+}
+
+/* =================footer============================= */
+/* Default light mode */
+.footer {
+    background-color: #d9d9d9;
+    color: #212529;
+}
+
+.footer .footer-link {
+    color: #212529;
+    text-decoration: underline;
+}
+
+.subscribe-btn {
+    background-color: #e21b70;
+    color: white;
+}
+
+/* Dark mode styles */
+body.dark-theme .footer {
+    background-color: #1e1e1e;
+    color: #f1f1f1;
+}
+
+body.dark-theme .footer-link {
+    color: #f1f1f1;
+}
+
+body.dark-theme .subscribe-btn {
+    background-color: #e21b70;
+    color: #fff;
+}
+
+body.dark-theme .form-control {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+body.dark-theme .meal-card {
+    box-shadow: 0 4px 12px rgba(58, 57, 57, 0.1);
+    border: 1px solid #444;
+    background-color: #161616;
+    color: #f1f1f1;
+}
+
+body,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.navbar-nav .nav-link {
+    font-family: "Khmer", sans-serif !important;
+}
+
+h6 {
+    color: black;
+}
+
+.restaurants-count-text {
+    color: #e21b70;
+}
+
+body.dark-theme h6 {
+    color: white;
+}
+
+body.dark-theme .restaurants-count-text {
+    color: white;
 }
 
 body,
@@ -216,7 +423,7 @@ html {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: white;
+    /* background-color: white; */
     border-radius: 12px;
     padding: 20px;
     min-height: 160px;
@@ -224,12 +431,60 @@ html {
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
+
 .meal-card:hover {
     transform: scale(1.05);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     cursor: pointer;
 }
 
+/* Light mode (default) */
+.item-name {
+    color: #212529;
+    /* Bootstrap text-dark */
+}
+
+.item-price {
+    color: #212529;
+    font-size: 16px;
+}
+
+/* Dark mode overrides */
+body.dark-theme .item-name {
+    color: #f1f1f1;
+}
+
+body.dark-theme .item-price {
+    color: white;
+}
+
+/* Light mode (default) */
+.card-lo {
+  background-color: #ffffff;
+  color: #212529;
+}
+
+.address-text {
+  color: #212529;
+}
+
+.map-container {
+  border: 1px solid #ccc;
+}
+
+/* Dark mode */
+body.dark-theme .card-lo {
+  background-color: #2b2b2b;
+  color: #f1f1f1;
+}
+
+body.dark-theme .address-text {
+  color: #f1f1f1;
+}
+
+body.dark-theme .map-container {
+  border: 1px solid #444;
+}
 
 .meal-info {
     flex: 1;
@@ -314,10 +569,6 @@ html {
     display: flex;
     justify-content: space-between;
     font-weight: bold;
-}
-
-.total-amount {
-    color: #333;
 }
 
 .cart-container {
@@ -413,20 +664,19 @@ html {
 
 .custom-modal-md {
     max-width: 600px;
-    /* or whatever width you want */
 }
 
 .modal-body {
     max-height: 80vh;
     overflow-y: auto;
 }
-
 .custom-card {
     width: 100%;
     padding: 1rem;
     border: 1px solid #dee2e6;
     border-radius: 0.5rem;
     background-color: #f8f8fa;
+    color: black;
 }
 
 .required-label {
@@ -436,7 +686,6 @@ html {
     color: white;
     width: 15%;
     height: 25px;
-    /* set a fixed height for vertical centering */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -445,7 +694,6 @@ html {
 
 input[type="radio"] {
     accent-color: #ff5722;
-    /* Change this to your desired color */
     width: 20px;
     height: 20px;
     cursor: pointer;
@@ -623,65 +871,71 @@ canvas#qrCanvas {
 
 
 @media (max-width: 768px) {
-    .con-block{
+    .con-block {
         display: block !important;
     }
-    .cart-container{
+
+    .cart-container {
         width: 100%;
         margin-top: 20px;
     }
-    
+
 
 
 }
+
 .discount-badge {
-  background-color: #e6007e;
-  color: white;
-  font-size: 0.75rem;
-  font-weight: bold;
-  border-radius: 999px;
-  padding: 2px 8px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+    background-color: #e6007e;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 999px;
+    padding: 2px 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 }
 
 
 .order-history-container {
-  max-width: 800px;
-  margin: 0 auto;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .order-card {
-  background: white;
-  border-radius: 8px;
+    border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;  padding: 20px;
-  margin-bottom: 20px;
-  transition: transform 0.2s;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s;
 }
-
+body.dark-theme .order-card {
+  background-color: #2b2b2b;
+  color: #f1f1f1;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
+}
 .order-card:hover {
-  transform: scale(1.01);
+    transform: scale(1.01);
 }
 
 .order-card h4 {
-  margin: 0 0 10px;
-  color: #007BFF;
+    margin: 0 0 10px;
+    color: #007BFF;
 }
 
 .order-card ul {
-  list-style-type: disc;
-  padding-left: 20px;
-  margin: 10px 0;
+    list-style-type: disc;
+    padding-left: 20px;
+    margin: 10px 0;
 }
 
 .order-card li {
-  margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .order-total {
-  font-weight: bold;
-  margin-top: 10px;
-  color: #28a745;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #28a745;
 }
