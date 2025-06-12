@@ -481,7 +481,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <p class="mb-1">${brand.type}</p>
               <h5 class="card-title fw-bold">${brand.brand_name}</h5>
               <div class="d-flex align-items-center mb-2">
-                <span class="badge text-dark me-2">${brand.description}</span>
+                <span class="badge me-2">${brand.description}</span>
                 <span>
                   <i class="${brand.icon} me-1"></i> ${brand.delivery}
                 </span>

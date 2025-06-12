@@ -89,11 +89,11 @@ body {
 }
 
 body.dark-theme .navbar {
-    background-color: #121212;
+    background-color: #1a1919;
 }
 
 body.dark-theme {
-    background-color: #121212;
+    background-color: #1a1919;
 }
 
 body.dark-theme .navbar .nav-link {
@@ -440,8 +440,7 @@ html {
 
 /* Light mode (default) */
 .item-name {
-    color: #212529;
-    /* Bootstrap text-dark */
+    color: white;
 }
 
 .item-price {
