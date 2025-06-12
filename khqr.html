@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Payway - Payment link</title>
+    <link rel="stylesheet" href="./style/style.css" />
+    <style>
+        /* Styling for the overall container */
+        .container-card {
+            width: 300px;
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Header style */
+        .khq-header {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px; /* Reduced margin between header and price */
+        }
+
+        /* Amount style */
+        .amount {
+            font-size: 28px;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 10px; /* Reduced space between price and divider */
+        }
+
+        /* Divider styling */
+        .divider {
+            border-top: 1px dashed #e0e0e0;
+            margin: 10px 0; /* Reduced margin to minimize space */
+        }
+
+        /* QR code container */
+        .qr-code {
+            margin: 20px 0;
+        }
+
+        /* QR note text */
+        .qr-note {
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-card">
+        <div class="khq-header">KHQR</div>
+        <div class="amount">$ 0</div>
+        <div class="divider"></div>
+
+        <div class="qr-code">
+            <canvas id="qrCanvas"></canvas>
+        </div>
+
+        <div class="qr-note">
+            Scan with any Mobile Banking App supporting KHQR
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script>
+        const canvas = document.getElementById("qrCanvas");
+
+        // Generate QR code
+        const qr = new QRious({
+            element: canvas,
+            value: "9497899756A7",
+            size: 300,
+            level: "H",
+        });
+
+        const ctx = canvas.getContext("2d");
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = 20; // Smaller circle
+
+        // Draw white circle in the center
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = "black";
+        ctx.fill();
+        ctx.lineWidth = 3; // Thickness of the border
+        ctx.strokeStyle = "white"; // Border color
+        ctx.stroke();
+
+        // Draw $ symbol smaller
+        ctx.font = "bold 20px Arial"; // Smaller font
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("$", centerX, centerY);
+    </script>
+</body>
+
+</html>
