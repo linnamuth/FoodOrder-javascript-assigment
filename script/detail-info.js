@@ -211,27 +211,56 @@ async function handlePlaceOrder() {
     return;
   }
 
+  // Check selected delivery option
+  const selectedDelivery = document.querySelector('input[name="deliveryOption"]:checked')?.value;
+  const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+
+  if (!selectedDelivery || !selectedPayment) {
+    Swal.fire({
+      icon: "warning",
+      title: "Incomplete Selection",
+      text: "Please select both delivery option and payment method.",
+    });
+    return;
+  }
 
   // Save to Order History by User
-  const allOrderHistory =
-    JSON.parse(localStorage.getItem("orderHistory")) || {};
+  const allOrderHistory = JSON.parse(localStorage.getItem("orderHistory")) || {};
   const userOrderHistory = allOrderHistory[username] || [];
 
   const newOrder = {
     id: Date.now(),
     storeId: storeId,
     items: storeCart,
+    deliveryMethod: selectedDelivery,
+    paymentMethod: selectedPayment,
     date: new Date().toLocaleString(),
   };
 
   userOrderHistory.push(newOrder);
   allOrderHistory[username] = userOrderHistory;
   localStorage.setItem("orderHistory", JSON.stringify(allOrderHistory));
-  window.location.href = "payment.html";
 
+  // Optional: clear the cart for this store
+  const updatedCart = carts.filter(item => item.storeId !== storeId);
+  localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+  // Show success message then redirect
+  await Swal.fire({
+    icon: "success",
+    title: "Order Placed!",
+    text: "Your order has been successfully placed.",
+    timer: 1500,
+    showConfirmButton: false
+  });
+
+  window.location.href = "payment.html";
 }
-const placeOrderBtn = document.getElementById("placeOrderBtn");
-placeOrderBtn.addEventListener("click", handlePlaceOrder);
+document.addEventListener("DOMContentLoaded", () => {
+  const placeOrderBtn = document.getElementById("placeOrderBtn");
+  placeOrderBtn.addEventListener("click", handlePlaceOrder);
+});
+
 
 // window.onload = initializeApp;
 function logout(event) {
