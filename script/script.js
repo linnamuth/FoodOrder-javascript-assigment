@@ -2,7 +2,6 @@ import { translations } from "./translations.js";
 
 const categories = [
   {
-    name: "Pizza", // English base name
     imgSrc: "./img/pizza.png",
     alt: "Pizza",
     restaurants: 3,
@@ -10,44 +9,40 @@ const categories = [
     i18nKey: "category_pizza", // Add a unique i18n key for translation
   },
   {
-    name: "Burgers",
-    imgSrc: "./img/berger.png",
+    imgSrc: "./img/buger.png",
     alt: "Burgers & Fast Food",
     restaurants: 21,
     link: "categoryPage.html?category=Burgers",
     i18nKey: "category_burgers",
   },
   {
-    name: "Salads",
-    imgSrc: "./img/source.png",
+    imgSrc: "./img/rice.png",
     alt: "Salads",
     restaurants: 31,
     link: "categoryPage.html?category=Salads",
-    i18nKey: "category_salads",
+    i18nKey: "category_rice",
   },
   {
     name: "Pasta & Casuals",
-    imgSrc: "./img/pasta.png",
+    imgSrc: "./img/mihel1.png",
     alt: "Pasta & Casuals",
     restaurants: 4,
     link: "categoryPage.html?category=Pasta&Casuals",
-    i18nKey: "category_pasta_casuals",
+    i18nKey: "khmer_noodle_seoul",
   },
   {
-    name: "Breakfast",
-    imgSrc: "./img/breakfast.png",
+    imgSrc: "./img/drink.png",
     alt: "Breakfast",
     restaurants: 11,
     link: "categoryPage.html?category=Breakfast",
-    i18nKey: "category_breakfast",
+    i18nKey: "category_drink",
   },
   {
-    name: "Soups",
-    imgSrc: "./img/soup.png",
+    imgSrc: "./img/brhet1.png",
     alt: "Soups",
     restaurants: 22,
     link: "categoryPage.html?category=Soups",
-    i18nKey: "category_soups",
+    i18nKey: "category_brhet",
   },
 ];
 const restaurants = [
@@ -90,22 +85,6 @@ const restaurants = [
     link: "resturantPage.html?category=Breakfast&storeId=108",
     storeId: "108",
     i18nKey: "restaurant_lets_eat",
-  },
-  {
-    name: "Winwin Depot Coconut Coffee (Wanda)",
-    imgSrc: "./img/coffe_1.png",
-    alt: "Pasta & Casuals",
-    link: "resturantPage.html?category=Breakfast&storeId=109",
-    storeId: "109",
-    i18nKey: "restaurant_winwin_coffee",
-  },
-  {
-    name: "Pak Hour Rice (Street 208)",
-    imgSrc: "./img/rice_1.png",
-    alt: "Pasta & Casuals",
-    link: "resturantPage.html?category=Breakfast&storeId=110",
-    storeId: "110",
-    i18nKey: "restaurant_pak_hour_rice",
   },
   {
     name: "Delicious Noodles, Toul Tom Pong Branch 1 (Street 167)",
@@ -198,14 +177,6 @@ const DiscountRestaurants = [
     i18nKey: "discount_josie_mercy",
   },
   {
-    name: "Soup Street (Street 113)",
-    imgSrc: "./img/food_3.png",
-    alt: "Tiramisu Factory",
-    link: "resturantPage.html?storeId=204",
-    discount: "Discount 40%",
-    i18nKey: "discount_soup_street",
-  },
-  {
     name: "The Enchanted Chocolate (Boeng Salaang)",
     imgSrc: "./img/food_5.png",
     alt: "Tiramisu Factory",
@@ -284,14 +255,13 @@ function createCards(data, containerId, isCategory = false) {
                     : ""
                 }
              <div class="ms-3 mt-2">
-  <h6 class="fw-bold">${displayName}</h6>
-  ${
-    isCategory
-      ? `<p class="mb-0 restaurants-count-text" style="color: #e21b70" data-restaurants-count="${item.restaurants}">${item.restaurants} ${translations[currentLang]["restaurants_count"]}</p>`
-      : ""
-  }
-</div>
-
+              <h6 class="fw-bold">${displayName}</h6>
+              ${
+                isCategory
+                  ? `<p class="mb-0 restaurants-count-text" style="color: #e21b70" data-restaurants-count="${item.restaurants}">${item.restaurants} ${translations[currentLang]["restaurants_count"]}</p>`
+                  : ""
+              }
+              </div>
               </div>
             </a>
           </div>

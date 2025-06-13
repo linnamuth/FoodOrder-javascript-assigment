@@ -1,7 +1,15 @@
 import { translations } from "./translations.js";
+import {
+  startTelegramPolling,
+  sendTelegramReceiptImage,
+  safeGetLocalStorage,
+  generateReceiptImage,
+  LOCAL_STORAGE_CURRENT_CHAT_ID_KEY,
+} from "./telegramUtils.js";
 document.addEventListener("DOMContentLoaded", function () {
   let map;
   let currentMarker;
+  startTelegramPolling();
 
   function initializeMapWithLocation() {
     if ("geolocation" in navigator) {
@@ -185,7 +193,7 @@ function updateOrderSummary() {
   `;
 }
 
-
+// MAIN ORDER HANDLING FUNCTION
 async function handlePlaceOrder() {
   const storeId = new URLSearchParams(window.location.search).get("storeId");
   const username = localStorage.getItem("username");
@@ -211,9 +219,12 @@ async function handlePlaceOrder() {
     return;
   }
 
-  // Check selected delivery option
-  const selectedDelivery = document.querySelector('input[name="deliveryOption"]:checked')?.value;
-  const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+  const selectedDelivery = document.querySelector(
+    'input[name="deliveryOption"]:checked'
+  )?.value;
+  const selectedPayment = document.querySelector(
+    'input[name="paymentMethod"]:checked'
+  )?.value;
 
   if (!selectedDelivery || !selectedPayment) {
     Swal.fire({
@@ -224,8 +235,8 @@ async function handlePlaceOrder() {
     return;
   }
 
-  // Save to Order History by User
-  const allOrderHistory = JSON.parse(localStorage.getItem("orderHistory")) || {};
+  const allOrderHistory =
+    JSON.parse(localStorage.getItem("orderHistory")) || {};
   const userOrderHistory = allOrderHistory[username] || [];
 
   const newOrder = {
@@ -241,26 +252,91 @@ async function handlePlaceOrder() {
   allOrderHistory[username] = userOrderHistory;
   localStorage.setItem("orderHistory", JSON.stringify(allOrderHistory));
 
-  // Optional: clear the cart for this store
-  const updatedCart = carts.filter(item => item.storeId !== storeId);
+  if (selectedPayment === "abaKhqr") {
+    window.location.href = "khqr.html";
+    return;
+  }
+
+  const loadingOverlay = document.getElementById("loadingOverlay");
+  loadingOverlay.style.display = "flex";
+
+  const chatId = safeGetLocalStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY);
+  if (!chatId) {
+    loadingOverlay.style.display = "none";
+
+    Swal.fire({
+      icon: "info",
+      title: "Start Telegram Bot",
+      text: "Please click 'Start' in the Telegram bot before proceeding.",
+      confirmButtonText: "Go to Telegram Bot",
+    }).then(() => {
+      window.location.href = "https://t.me/OrderFastDeliverybot";
+    });
+    return;
+  }
+
+  // ✅ Only update cart after checking chatId
+  const updatedCart = carts.filter((item) => item.storeId !== storeId);
   localStorage.setItem("cart", JSON.stringify(updatedCart));
 
-  // Show success message then redirect
-  await Swal.fire({
-    icon: "success",
-    title: "Order Placed!",
-    text: "Your order has been successfully placed.",
-    timer: 1500,
-    showConfirmButton: false
-  });
+  const cart = storeCart;
+  let totalOrderAmount = 0;
+  cart.forEach((item) => (totalOrderAmount += item.price * item.quantity));
 
-  window.location.href = "payment.html";
+  const discount = 0.0;
+  const fee = 0.0;
+  const crossCurrency = "No";
+  const finalTotalPayment = totalOrderAmount + fee - discount;
+
+  let captionMessage = `✅ <b>ការបញ្ជាទិញរបស់អ្នកបានជោគជ័យ!</b>\n`;
+  captionMessage += `🕐 សូមរង់ចាំខណៈដែលហាងកំពុងរៀបចំ។\n\n`;
+  captionMessage += `\n🙏 សូមអរគុណសម្រាប់ការទិញជាមួយយើង!`;
+
+  const MIN_LOADING_DURATION = 1500;
+  const startTime = Date.now();
+  const receiptImageBlob = await generateReceiptImage(
+    totalOrderAmount,
+    discount,
+    fee,
+    crossCurrency,
+    finalTotalPayment,
+    cart
+  );
+
+  if (receiptImageBlob) {
+    const sent = await sendTelegramReceiptImage(
+      chatId,
+      receiptImageBlob,
+      captionMessage
+    );
+    const elapsed = Date.now() - startTime;
+    const remaining = Math.max(0, MIN_LOADING_DURATION - elapsed);
+    await new Promise((resolve) => setTimeout(resolve, remaining));
+
+    if (sent) {
+      localStorage.removeItem("cart"); // ✅ Only clear cart after success
+      loadingOverlay.style.display = "none";
+      window.location.href = "success.html";
+      return;
+    }
+  }
+
+  loadingOverlay.style.display = "none";
+  resultMessage.className = "alert alert-danger d-block";
+  resultMessage.textContent = "Failed to send receipt. Please try again.";
 }
+
+
+
+// EVENT BINDING
 document.addEventListener("DOMContentLoaded", () => {
   const placeOrderBtn = document.getElementById("placeOrderBtn");
-  placeOrderBtn.addEventListener("click", handlePlaceOrder);
+  if (placeOrderBtn) {
+    placeOrderBtn.addEventListener("click", handlePlaceOrder);
+  } else {
+    console.error("❌ placeOrderBtn not found in the DOM!");
+  }
 });
-
 
 // window.onload = initializeApp;
 function logout(event) {

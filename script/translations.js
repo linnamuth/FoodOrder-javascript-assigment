@@ -12,10 +12,10 @@ export const translations = {
     // Category names
     category_pizza: "Pizza",
     category_burgers: "Burgers",
-    category_salads: "Salads",
-    category_pasta_casuals: "Pasta & Casuals",
-    category_breakfast: "Breakfast",
-    category_soups: "Soups",
+    category_rice: "Fried rice",
+    khmer_noodle_seoul: "Khmer Noodle Special ",
+    category_drink: "Drinks",
+    category_brhet: "Meetball",
 
     // Restaurant names
     restaurant_amazon_coffee: "Amazon Coffee",
@@ -26,8 +26,6 @@ export const translations = {
     restaurant_burger_king: "Burger King",
     restaurant_rice_fried_rice: "Rice and Rice Fried Rice (Street 125)",
     restaurant_lets_eat: "Let's eat (Street 1015)",
-    restaurant_winwin_coffee: "Winwin Depot Coconut Coffee (Wanda)",
-    restaurant_pak_hour_rice: "Pak Hour Rice (Street 208)",
     restaurant_delicious_noodles: "Delicious Noodles, Toul Tom Pong Branch 1 (Street 167)",
     restaurant_sok_chheng_bread: "Sok Chheng Turkish Bread (Vanda)",
     restaurant_kimmo_korean_miher: "Kimmo Korean Miher 7th Street (Central Market)",
@@ -44,7 +42,6 @@ export const translations = {
     discount_hainanese_chicken_rice_1: "Hainanese Fried Chicken Rice, O Russey (Street 125)",
     discount_hainanese_chicken_rice_2: "Hainanese Fried Chicken Rice, O Russey (Street 125)",
     discount_josie_mercy: "Josie Mercy (Boeung Keng Kang I)",
-    discount_soup_street: "Soup Street (Street 113)",
     discount_enchanted_chocolate: "The Enchanted Chocolate (Boeng Salaang)",
     discount_fresh_fruit_juice: "Fresh fruit juice and fruit shakes (Boeung Keng Kang I)",
     discount_salad_stall: "Salad stall (Street 512)",
@@ -126,10 +123,10 @@ export const translations = {
     // Category names
     category_pizza: "ភីហ្សា",
     category_burgers: "បឺហ្គឺរ",
-    category_salads: "សាឡាដ",
-    category_pasta_casuals: "ប៉ាស្តា និងម្ហូបធម្មតា",
-    category_breakfast: "អាហារពេលព្រឹក",
-    category_soups: "ស៊ុប",
+    category_rice: "បាយឆា",
+    khmer_noodle_seoul: "មីហឹរ",
+    category_drink: "ភេសជ្ជៈ",
+    category_brhet: "ប្រហិត",
 
     // Restaurant names
     restaurant_amazon_coffee: "កាហ្វេអាម៉ាហ្សូន",
@@ -140,8 +137,6 @@ export const translations = {
     restaurant_burger_king: "បឺហ្គឺរឃីង",
     restaurant_rice_fried_rice: "បាយឆាអង្ករ (ផ្លូវ ១២៥)",
     restaurant_lets_eat: "តោះញ៉ាំ (ផ្លូវ ១០១៥)",
-    restaurant_winwin_coffee: "ហាងកាហ្វេដូង វីនវីនដេប៉ូ (វ៉ាន់ដា)",
-    restaurant_pak_hour_rice: "បាយស្រូប (ផ្លូវ ២០៨)",
     restaurant_delicious_noodles: "គុយទាវឆ្ងាញ់ សាខាទួលទំពូង១ (ផ្លូវ ១៦៧)",
     restaurant_sok_chheng_bread: "នំប៉័ងទួរគី សុខឆេង (វ៉ាន់ដា)",
     restaurant_kimmo_korean_miher: "មីហឹរកូរ៉េ គីមម៉ូ ផ្លូវ៧ (ផ្សារកណ្ដាល)",
@@ -158,7 +153,6 @@ export const translations = {
     discount_hainanese_chicken_rice_1: "បាយមាន់ហៃណាន អូរឬស្សី (ផ្លូវ ១២៥)",
     discount_hainanese_chicken_rice_2: "បាយមាន់ហៃណាន អូរឬស្សី (ផ្លូវ ១២៥)",
     discount_josie_mercy: "Josie Mercy (បឹងកេងកងទី១)",
-    discount_soup_street: "ផ្លូវស៊ុប (ផ្លូវ ១១៣)",
     discount_enchanted_chocolate: "សូកូឡាអប្សរា (បឹងសាឡាង)",
     discount_fresh_fruit_juice: "ទឹកផ្លែឈើស្រស់ និងទឹកក្រឡុក (បឹងកេងកងទី១)",
     discount_salad_stall: "តូបសាឡាដ (ផ្លូវ ៥១២)",

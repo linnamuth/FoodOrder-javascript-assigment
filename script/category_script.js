@@ -9,17 +9,14 @@ document.addEventListener("DOMContentLoaded", function () {
         description: "$$ Burgers",
         link: "resturantPage.html?category=Burgers&storeId=123",
       },
+
+    ],
+    Pizza: [
       {
-        name: "Belly Burger (Street 2004)",
-        imgSrc: "./img/belly-buger.jpg",
-        description: "$$ Burgers",
-        link: "resturantPage.html?category=pizza&storeId=124",
-      },
-      {
-        name: "Luck Burger",
-        imgSrc: "./img/luck-buger.jpg",
-        description: "$$ Burgers",
-        link: "resturantPage.html?category=Burger&storeId=125",
+        name: "Pizza Company (BKK)",
+        imgSrc: "./img/pizzacompnay.png",
+        description: "$$ Pizza",
+        link: "resturantPage.html?category=Pizza&storeId=456",
       },
     ],
   };
@@ -80,7 +77,7 @@ document.getElementById("logoutLink")?.addEventListener("click", (event) => {
     const cards = categories[category]
       .map(
         (item) => `
-      <a href="${item.link}" class="text-decoration-none">
+      <a href="${item.link}" class="col-12 col-md-6 col-lg-4 mb-3">
         <div class="rounded-3 shadow bg-white">
           <img src="${item.imgSrc}" class="img-fluid img-store" alt="${item.name}">
           <div class="p-2 mb-0">
