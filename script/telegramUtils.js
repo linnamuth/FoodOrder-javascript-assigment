@@ -162,7 +162,7 @@ async function generateReceiptImage(
   // Items Section
   ctx.font = " Khmer, sans-serif !important"; // Khmer-capable font
   ctx.fillStyle = "#000";
-  ctx.fillText("Item", 20, yOffset); 
+  ctx.fillText("Item", 20, yOffset);
   yOffset += 40;
 
   ctx.font = "14px Battambang, sans-serif";
@@ -172,11 +172,7 @@ async function generateReceiptImage(
     ctx.fillText(item.name, 20, yOffset);
 
     ctx.textAlign = "right";
-    ctx.fillText(
-      `${item.price.toFixed(2)} USD x ${item.quantity}`,
-      canvas.width - 20,
-      yOffset
-    );
+    ctx.fillText(`x ${item.quantity}`, canvas.width - 20, yOffset);
 
     yOffset += 30;
   });
@@ -206,11 +202,24 @@ async function generateReceiptImage(
   const drawLineItem = (label, value, isCurrency = true) => {
     ctx.fillText(label, 20, yOffset);
     ctx.textAlign = "right";
-    ctx.fillText(
-      isCurrency ? `${value.toFixed(2)} USD` : value,
-      canvas.width - 20,
-      yOffset
-    );
+
+    if (isCurrency) {
+      const usdText = `${value.toFixed(2)} USD`;
+      const khrValue = value * 4100;
+      const khrText = `${khrValue.toLocaleString()} ៛`;
+
+      // Draw USD line
+      ctx.fillText(usdText, canvas.width - 20, yOffset);
+      yOffset += 20;
+
+      // Draw KHR line (in lighter gray or smaller font if desired)
+      ctx.fillStyle = "#888"; // optional: gray color
+      ctx.fillText(khrText, canvas.width - 20, yOffset);
+      ctx.fillStyle = "#000"; // reset to black
+    } else {
+      ctx.fillText(value, canvas.width - 20, yOffset);
+    }
+
     ctx.textAlign = "left";
     yOffset += 30;
   };

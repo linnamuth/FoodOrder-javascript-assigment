@@ -150,31 +150,52 @@ function updateOrderSummary() {
     console.error("No storeId found");
     return;
   }
+
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const storeCart = cart.filter((item) => item.storeId === storeId);
   const summaryContainer = document.getElementById("orderSummary");
   if (!summaryContainer) return;
+
   summaryContainer.innerHTML = "";
+
   let subtotal = 0;
+
+  // Currency formatters
+  const usdFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+  const khFormatter = new Intl.NumberFormat("km-KH", { style: "currency", currency: "KHR" });
+
   storeCart.forEach((item) => {
     const itemTotal = item.price * item.quantity;
     subtotal += itemTotal;
 
+    // Assume exchange rate: 1 USD = 4100 KHR (you can update this dynamically if needed)
+    const itemTotalKHR = itemTotal * 4100;
+
     summaryContainer.innerHTML += `
       <div class="d-flex justify-content-between">
         <span>${item.quantity} × ${item.name}</span>
-        <span>$ ${itemTotal.toFixed(2)}</span>
+        <span>
+          ${usdFormatter.format(itemTotal)}<br/>
+          <small class="text-muted">${khFormatter.format(itemTotalKHR)}</small>
+        </span>
       </div>
     `;
   });
+
   const vat = +(subtotal * 0.01).toFixed(2);
   const total = subtotal + vat;
+  const subtotalKHR = subtotal * 4100;
+  const vatKHR = vat * 4100;
+  const totalKHR = total * 4100;
 
   summaryContainer.innerHTML += `
     <hr/>
-    <div class="d-flex justify-content-between">
+    <div class="  d-flex justify-content-between">
       <span>Subtotal</span>
-      <span>$ ${subtotal.toFixed(2)}</span>
+      <span class="text-end">
+        ${usdFormatter.format(subtotal)}<br/>
+        <small class="text-muted">${khFormatter.format(subtotalKHR)}</small>
+      </span>
     </div>
     <div class="d-flex justify-content-between">
       <span>Standard delivery</span>
@@ -182,16 +203,23 @@ function updateOrderSummary() {
     </div>
     <div class="d-flex justify-content-between">
       <span>VAT</span>
-      <span>$ ${vat.toFixed(2)}</span>
+      <span>
+        ${usdFormatter.format(vat)}<br/>
+        <small class="text-muted">${khFormatter.format(vatKHR)}</small>
+      </span>
     </div>
     <hr/>
     <div class="d-flex justify-content-between">
       <strong>Total</strong>
-      <strong>$ ${total.toFixed(2)}</strong>
+      <strong>
+        ${usdFormatter.format(total)}<br/>
+        <small class="text-muted">${khFormatter.format(totalKHR)}</small>
+      </strong>
     </div>
-    <small >incl. fees and tax</small>
+    <small>incl. fees and tax</small>
   `;
 }
+
 
 // MAIN ORDER HANDLING FUNCTION
 async function handlePlaceOrder() {

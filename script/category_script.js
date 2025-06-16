@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
         description: "$$ Burgers",
         link: "resturantPage.html?category=Burgers&storeId=123",
       },
-
     ],
     Pizza: [
       {
@@ -17,6 +16,30 @@ document.addEventListener("DOMContentLoaded", function () {
         imgSrc: "./img/pizzacompnay.png",
         description: "$$ Pizza",
         link: "resturantPage.html?category=Pizza&storeId=456",
+      },
+    ],
+    Amazon: [
+      {
+        name: "Amazon Coffee",
+        imgSrc: "./img/amazon.jpg",
+        description: "$$ Drinks",
+        link: "resturantPage.html?category=Amazon&storeId=456",
+      },
+    ],
+    noodle: [
+      {
+        name: "Noodle",
+        imgSrc: "./img/mihel.png",
+        description: "$$ noodle",
+        link: "resturantPage.html?category=noodle&storeId=456",
+      },
+    ],
+    meetball: [
+      {
+        name: "Meetball",
+        imgSrc: "./img/brhet.png",
+        description: "$$ Meetballs",
+        link: "resturantPage.html?category=meetball&storeId=300",
       },
     ],
   };
@@ -66,9 +89,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.addEventListener("DOMContentLoaded", initializePage());
 
-document.getElementById("logoutLink")?.addEventListener("click", (event) => {
-  logout(event); 
-});
+  document.getElementById("logoutLink")?.addEventListener("click", (event) => {
+    logout(event);
+  });
 
   const urlParams = new URLSearchParams(window.location.search);
   const category = urlParams.get("category");

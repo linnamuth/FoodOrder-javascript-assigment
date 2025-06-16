@@ -27,21 +27,21 @@ const categories = [
     imgSrc: "./img/mihel1.png",
     alt: "Pasta & Casuals",
     restaurants: 4,
-    link: "categoryPage.html?category=Pasta&Casuals",
+    link: "categoryPage.html?category=noodle",
     i18nKey: "khmer_noodle_seoul",
   },
   {
     imgSrc: "./img/drink.png",
     alt: "Breakfast",
     restaurants: 11,
-    link: "categoryPage.html?category=Breakfast",
+    link: "categoryPage.html?category=Amazon",
     i18nKey: "category_drink",
   },
   {
     imgSrc: "./img/brhet1.png",
     alt: "Soups",
     restaurants: 22,
-    link: "categoryPage.html?category=Soups",
+    link: "categoryPage.html?category=meetball",
     i18nKey: "category_brhet",
   },
 ];
@@ -106,7 +106,7 @@ const restaurants = [
     name: "Kimmo Korean Miher 7th Street (Central Market)",
     imgSrc: "./img/mihel.png",
     alt: "Pasta & Casuals",
-    link: "resturantPage.html?category=Breakfast&storeId=114",
+    link: "resturantPage.html?category=noodle&storeId=114",
     storeId: "114",
     i18nKey: "restaurant_kimmo_korean_miher",
   },
@@ -129,12 +129,12 @@ const restaurants = [
 ];
 const DiscountRestaurants = [
   {
-    name: "Coffee (Sisowath)",
-    imgSrc: "./img/craft.png",
+    name: "Hainanese Fried Chicken Rice, O Russey (Street 125)",
+    imgSrc: "./img/brhet.png",
     alt: "Tiramisu Factory",
-    link: "resturantPage.html?storeId=204",
+    link: "resturantPage.html?category=meetball&storeId=300",
     discount: "Discount 20%",
-    i18nKey: "discount_coffee_sisowath", // Add i18n key
+    i18nKey: "discount_hainanese_chicken_rice_2",
   },
   {
     name: "Wright Express (Boeung Keng Kang III)",
@@ -156,18 +156,11 @@ const DiscountRestaurants = [
     name: "Hainanese Fried Chicken Rice, O Russey (Street 125)",
     imgSrc: "./img/food_1.png",
     alt: "Tiramisu Factory",
-    link: "resturantPage.html?storeId=204",
+    link: "resturantPage.html?category=chickenrice&storeId=400",
     discount: "Discount 40%",
     i18nKey: "discount_hainanese_chicken_rice_1",
   },
-  {
-    name: "Hainanese Fried Chicken Rice, O Russey (Street 125)",
-    imgSrc: "./img/brhet.png",
-    alt: "Tiramisu Factory",
-    link: "resturantPage.html?storeId=204",
-    discount: "Discount 20%",
-    i18nKey: "discount_hainanese_chicken_rice_2",
-  },
+  
   {
     name: "Josie Mercy (Boeung Keng Kang I)",
     imgSrc: "./img/food_2.png",
@@ -188,7 +181,7 @@ const DiscountRestaurants = [
     name: "Fresh fruit juice and fruit shakes (Boeung Keng Kang I)",
     imgSrc: "./img/food_6.png",
     alt: "Tiramisu Factory",
-    link: "resturantPage.html?storeId=204",
+    link: "resturantPage.html?category=drink&storeId=500",
     discount: "Discount 20%",
     i18nKey: "discount_fresh_fruit_juice",
   },
