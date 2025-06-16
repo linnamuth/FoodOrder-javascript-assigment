@@ -26,69 +26,87 @@ function showUserIcon(username) {
 }
 
 // Handle Login Form
+// Handle Login Form
 document.getElementById("loginForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
-  const email = document.getElementById("loginUsername").value;
+  const name = document.getElementById("loginUsername").value;
   const password = document.getElementById("loginPassword").value;
 
-  // Validate login
-  if (email && password) {
+  const users = JSON.parse(localStorage.getItem("users") || "[]");
+  const foundUser = users.find(
+    (user) => user.name === name && user.password === password
+  );
+
+  if (foundUser) {
     Swal.fire({
-      position: "top-end",
       icon: "success",
       title: "Logged in successfully!",
-      showConfirmButton: false,
       timer: 1500,
       toast: true,
+      position: "top-end",
+      showConfirmButton: false,
     }).then(() => {
-      // Save login info
       localStorage.setItem("loggedIn", "true");
-      localStorage.setItem("username", email);
+      localStorage.setItem("username", foundUser.name);
       window.location.href = "index.html";
     });
   } else {
     Swal.fire({
       icon: "error",
       title: "Invalid Credentials",
-      text: "Please enter both email and password.",
+      text: "Name or password is incorrect.",
     });
   }
 });
 
+
+
 // Handle Register Form
-document
-  .getElementById("registerForm")
-  .addEventListener("submit", function (e) {
-    e.preventDefault();
+document.getElementById("registerForm").addEventListener("submit", function (e) {
+  e.preventDefault();
 
-    let name = document.getElementById("registerName").value;
-    let email = document.getElementById("registerEmail").value;
-    let password = document.getElementById("registerPassword").value;
-    let confirmPassword = document.getElementById("confirmPassword").value;
+  const name = document.getElementById("registerName").value;
+  const email = document.getElementById("registerEmail").value;
+  const password = document.getElementById("registerPassword").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
 
-    if (password !== confirmPassword) {
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Passwords do not match!",
-        showConfirmButton: false,
-        timer: 2000,
-        toast: true,
-      });
-    } else {
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Registered successfully!",
-        showConfirmButton: false,
-        timer: 1500,
-        toast: true,
-      }).then(() => {
-        localStorage.setItem("loggedIn", "true");
-        localStorage.setItem("username", name);
-        // Redirect to home page
-        window.location.href = "index.html";
-      });
-    }
+  if (password !== confirmPassword) {
+    Swal.fire({
+      icon: "error",
+      title: "Passwords do not match!",
+    });
+    return;
+  }
+
+  // Get existing users from localStorage
+  const users = JSON.parse(localStorage.getItem("users") || "[]");
+
+  // Check if email already exists
+  const existingUser = users.find((user) => user.email === email);
+  if (existingUser) {
+    Swal.fire({
+      icon: "error",
+      title: "Account already exists!",
+      text: "Please use another email or login.",
+    });
+    return;
+  }
+
+  // Add new user
+  users.push({ name, email, password });
+  localStorage.setItem("users", JSON.stringify(users));
+
+  Swal.fire({
+    icon: "success",
+    title: "Registered successfully!",
+    timer: 1500,
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+  }).then(() => {
+    localStorage.setItem("loggedIn", "true");
+    localStorage.setItem("username", name);
+    window.location.href = "index.html";
   });
+});
