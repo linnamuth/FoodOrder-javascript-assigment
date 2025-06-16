@@ -137,6 +137,22 @@ const DiscountRestaurants = [
     i18nKey: "discount_hainanese_chicken_rice_2",
   },
   {
+    name: "Fresh fruit juice and fruit shakes (Boeung Keng Kang I)",
+    imgSrc: "./img/food_6.png",
+    alt: "Tiramisu Factory",
+    link: "resturantPage.html?category=drink&storeId=500",
+    discount: "Discount 20%",
+    i18nKey: "discount_fresh_fruit_juice",
+  },
+  {
+    name: "Hainanese Fried Chicken Rice, O Russey (Street 125)",
+    imgSrc: "./img/food_1.png",
+    alt: "Tiramisu Factory",
+    link: "resturantPage.html?category=chickenrice&storeId=400",
+    discount: "Discount 40%",
+    i18nKey: "discount_hainanese_chicken_rice_1",
+  },
+  {
     name: "Wright Express (Boeung Keng Kang III)",
     imgSrc: "./img/fish.png",
     alt: "Tiramisu Factory",
@@ -153,15 +169,6 @@ const DiscountRestaurants = [
     i18nKey: "discount_chip_charlie",
   },
   {
-    name: "Hainanese Fried Chicken Rice, O Russey (Street 125)",
-    imgSrc: "./img/food_1.png",
-    alt: "Tiramisu Factory",
-    link: "resturantPage.html?category=chickenrice&storeId=400",
-    discount: "Discount 40%",
-    i18nKey: "discount_hainanese_chicken_rice_1",
-  },
-  
-  {
     name: "Josie Mercy (Boeung Keng Kang I)",
     imgSrc: "./img/food_2.png",
     alt: "Tiramisu Factory",
@@ -176,14 +183,6 @@ const DiscountRestaurants = [
     link: "resturantPage.html?storeId=204",
     discount: "Discount 20%",
     i18nKey: "discount_enchanted_chocolate",
-  },
-  {
-    name: "Fresh fruit juice and fruit shakes (Boeung Keng Kang I)",
-    imgSrc: "./img/food_6.png",
-    alt: "Tiramisu Factory",
-    link: "resturantPage.html?category=drink&storeId=500",
-    discount: "Discount 20%",
-    i18nKey: "discount_fresh_fruit_juice",
   },
 ];
 function setLanguage(lang) {
