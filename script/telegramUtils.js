@@ -239,14 +239,21 @@ async function generateReceiptImage(
   // Total Payment
   ctx.font = "bold 20px Inter, sans-serif";
   ctx.fillText("Total Payment", 20, yOffset);
-  ctx.textAlign = "right";
-  ctx.fillText(`${totalPayment.toFixed(2)} USD`, canvas.width - 20, yOffset);
-  ctx.textAlign = "left";
-  yOffset += 60;
 
+  const totalPaymentKHR = totalPayment * 4100;
+
+  const formattedUSD = `${totalPayment.toFixed(2)} USD`;
+  const formattedKHR = `${Math.round(totalPaymentKHR)} KHR`;
+
+  ctx.textAlign = "right";
+  ctx.fillText(formattedUSD, canvas.width - 20, yOffset);
+
+  yOffset += 30;
+  ctx.fillText(formattedKHR, canvas.width - 20, yOffset);
+  ctx.textAlign = "left";
+  yOffset += 60; 
   ctx.font = "bold 18px Inter, sans-serif";
   ctx.textAlign = "center";
-
   return new Promise((resolve) => {
     canvas.toBlob((blob) => resolve(blob), "image/png");
   });

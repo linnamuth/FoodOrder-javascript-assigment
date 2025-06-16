@@ -54,7 +54,7 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
   } else {
     Swal.fire({
       icon: "error",
-      title: "Invalid Credentials",
+      title: "Invalid Authentication",
       text: "Name or password is incorrect.",
     });
   }
