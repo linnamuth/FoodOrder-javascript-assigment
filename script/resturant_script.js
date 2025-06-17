@@ -994,7 +994,7 @@ document.addEventListener("DOMContentLoaded", function () {
       updateCartDisplay();
     } else {
       categoryDetails.innerHTML = `
-    <div class="empty-state-message">
+    <div class="empty-state-message ">
       <img src="./img/empty.png" alt="No Products Available" class="img-fluid empty-state-image">
       <h2>No Products Available</h2>
       <p>It looks like there are no products in this category yet.</p>
