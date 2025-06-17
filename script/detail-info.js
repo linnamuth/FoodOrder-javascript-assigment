@@ -364,12 +364,19 @@ async function handlePlaceOrder() {
 // EVENT BINDING
 document.addEventListener("DOMContentLoaded", () => {
   const placeOrderBtn = document.getElementById("placeOrderBtn");
-  if (placeOrderBtn) {
+  const phoneNumberInput = document.getElementById("phone");
+  if (placeOrderBtn && phoneNumberInput) {
+    placeOrderBtn.disabled = true;
+    phoneNumberInput.addEventListener("input", () => {
+      placeOrderBtn.disabled = phoneNumberInput.value.trim() === "";
+    });
+    
     placeOrderBtn.addEventListener("click", handlePlaceOrder);
   } else {
-    console.error("❌ placeOrderBtn not found in the DOM!");
+    console.error("❌ placeOrderBtn or phoneNumberInput not found in the DOM!");
   }
 });
+
 
 // window.onload = initializeApp;
 function logout(event) {
