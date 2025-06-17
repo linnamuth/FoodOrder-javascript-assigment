@@ -110,7 +110,7 @@ export const translations = {
     pizza_prosciutto_arugula_description: "A sophisticated Prosciutto Arugula pizza with thinly sliced prosciutto, fresh arugula, mozzarella cheese, and a drizzle of balsamic glaze on a crispy crust.",
     mihel_noodle_name: "Mihel Noodle with Beef",
     mihel_noodle_description: "A delicious Mihel noodle dish with tender beef slices, fresh vegetables, and a flavorful broth, served with traditional Khmer noodles.",
-    pho_noodle_sea_food_name: "Pho Noodle with Seafood",
+    pho_noodle_sea_food_name: "Noodle Seafood",
     pho_noodle_sea_food_description: "A delightful Pho noodle dish with a medley of seafood, fresh herbs, and a rich broth, served with traditional Khmer noodles.",
     meetball_name: "Meetball",
     meetball_description: "A savory meetball dish with tender beef meatballs",

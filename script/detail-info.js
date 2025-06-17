@@ -186,7 +186,7 @@ function updateOrderSummary() {
     `;
   });
 
-  const vat = +(subtotal * 0.01).toFixed(2);
+  const vat = +(subtotal * 0.00).toFixed(2);
   const total = subtotal + vat;
   const subtotalKHR = subtotal * 4100;
   const vatKHR = vat * 4100;

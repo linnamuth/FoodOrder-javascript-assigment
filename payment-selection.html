@@ -148,9 +148,6 @@
   <body>
     <div class="payment-container">
       <div class="header">
-        <a href="#" onclick="goBackWithStoreId()">
-          <i class="bi bi-arrow-left back-arrow"></i>
-        </a>
         <span class="title">ជម្រើសបង់ប្រាក់</span>
         <span style="visibility: hidden; font-size: 1.5rem">&nbsp;</span>
       </div>
@@ -274,8 +271,10 @@
 
             const cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-            const storeId = [...new Set(cart.map((item) => item.storeId))];
-            window.location.href = `detail-info.html?storeId=${storeId}`;
+            const storeIds = new URLSearchParams(window.location.search).get(
+              "storeId"
+            );
+            window.location.href = `detail-info.html?storeId=${storeIds}`;
           } else {
             Swal.fire({
               icon: "warning",
@@ -284,12 +283,6 @@
             });
           }
         });
-      function goBackWithStoreId() {
-        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-
-        const storeId = [...new Set(cart.map((item) => item.storeId))];
-        window.location.href = `detail-info.html?storeId=${storeId}`;
-      }
     </script>
   </body>
 </html>

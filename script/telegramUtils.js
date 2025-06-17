@@ -131,8 +131,7 @@ async function generateReceiptImage(
   totalPayment,
   cart
 ) {
-  // Estimate height based on cart size
-  const estimatedHeight = 600 + cart.length * 40;
+  const estimatedHeight = 600 + cart.length * 60;
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
   canvas.width = 400;
@@ -156,30 +155,47 @@ async function generateReceiptImage(
   ctx.fillStyle = "#666";
   ctx.fillText("Transfer to:", 20, yOffset);
   yOffset += 25;
-  const savedPaymentMethod = localStorage.getItem("selectedPaymentMethod");
-  const paymentText = savedPaymentMethod ? savedPaymentMethod : "";
 
-  ctx.fillText(paymentText, 20, yOffset);
+  const savedPaymentMethod =
+    localStorage.getItem("selectedPaymentMethod") || "";
+  ctx.fillText(savedPaymentMethod, 20, yOffset);
   yOffset += 40;
 
-  // Items Section
-  ctx.font = " Khmer, sans-serif !important"; // Khmer-capable font
+  // Item Section Title
+  ctx.font = "16px Inter, sans-serif";
   ctx.fillStyle = "#000";
   ctx.fillText("Item", 20, yOffset);
-  yOffset += 40;
+  yOffset += 30;
 
-  ctx.font = "14px Battambang, sans-serif";
-
-  cart.forEach((item) => {
-    ctx.textAlign = "left";
-    ctx.fillText(item.name, 20, yOffset);
-
-    ctx.textAlign = "right";
-    ctx.fillText(`x ${item.quantity}`, canvas.width - 20, yOffset);
-
-    yOffset += 30;
+  // Preload all images
+  const imagePromises = cart.map((item) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = item.imgSrc || ""; // <-- Make sure this exists on each item
+      img.onload = () => resolve({ item, img });
+      img.onerror = () => resolve({ item, img: null });
+    });
   });
 
+  const images = await Promise.all(imagePromises);
+
+  for (const { item, img } of images) {
+    if (img) {
+      ctx.drawImage(img, 20, yOffset - 20, 40, 40); // image
+    }
+
+    ctx.textAlign = "left";
+    ctx.font = "14px Inter, sans-serif";
+    ctx.fillStyle = "#000";
+    ctx.fillText(item.name, 70, yOffset); // name
+
+    ctx.textAlign = "right";
+    ctx.fillText(`x ${item.quantity}`, canvas.width - 20, yOffset); // qty
+
+    yOffset += 50;
+  }
+
+  // Divider
   ctx.textAlign = "left";
   ctx.strokeStyle = "#EEE";
   ctx.beginPath();
@@ -197,11 +213,12 @@ async function generateReceiptImage(
   ).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(
     now.getSeconds()
   ).padStart(2, "0")}`;
+
   ctx.font = "14px Inter, sans-serif";
   ctx.fillText(transactionDateTime, 20, yOffset);
   yOffset += 40;
 
-  // Line Items (Amount, Discount, etc.)
+  // Line items
   const drawLineItem = (label, value, isCurrency = true) => {
     ctx.fillText(label, 20, yOffset);
     ctx.textAlign = "right";
@@ -209,16 +226,14 @@ async function generateReceiptImage(
     if (isCurrency) {
       const usdText = `${value.toFixed(2)} USD`;
       const khrValue = value * 4100;
-      const khrText = `${khrValue.toLocaleString()} ៛`;
+      const khrText = `${Math.round(khrValue).toLocaleString()} ៛`;
 
-      // Draw USD line
       ctx.fillText(usdText, canvas.width - 20, yOffset);
       yOffset += 20;
 
-      // Draw KHR line (in lighter gray or smaller font if desired)
-      ctx.fillStyle = "#888"; // optional: gray color
+      ctx.fillStyle = "#888";
       ctx.fillText(khrText, canvas.width - 20, yOffset);
-      ctx.fillStyle = "#000"; // reset to black
+      ctx.fillStyle = "#000";
     } else {
       ctx.fillText(value, canvas.width - 20, yOffset);
     }
@@ -232,7 +247,8 @@ async function generateReceiptImage(
   drawLineItem("Fee", fee);
   drawLineItem("Cross Currency", crossCurrency, false);
 
-  yOffset += 20;
+  // Divider
+  yOffset += 10;
   ctx.beginPath();
   ctx.moveTo(20, yOffset);
   ctx.lineTo(canvas.width - 20, yOffset);
@@ -244,19 +260,18 @@ async function generateReceiptImage(
   ctx.fillText("Total Payment", 20, yOffset);
 
   const totalPaymentKHR = totalPayment * 4100;
-
-  const formattedUSD = `${totalPayment.toFixed(2)} USD`;
-  const formattedKHR = `${Math.round(totalPaymentKHR)} KHR`;
-
   ctx.textAlign = "right";
-  ctx.fillText(formattedUSD, canvas.width - 20, yOffset);
-
+  ctx.fillText(`${totalPayment.toFixed(2)} USD`, canvas.width - 20, yOffset);
   yOffset += 30;
+  const formattedKHR = new Intl.NumberFormat("km-KH", {
+    style: "currency",
+    currency: "KHR",
+    currencyDisplay: "symbol",
+  }).format(Math.round(totalPaymentKHR));
+
   ctx.fillText(formattedKHR, canvas.width - 20, yOffset);
-  ctx.textAlign = "left";
-  yOffset += 60;
-  ctx.font = "bold 18px Inter, sans-serif";
-  ctx.textAlign = "center";
+
+  // Done
   return new Promise((resolve) => {
     canvas.toBlob((blob) => resolve(blob), "image/png");
   });

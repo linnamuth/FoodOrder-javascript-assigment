@@ -423,7 +423,6 @@ html {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* background-color: white; */
     border-radius: 12px;
     padding: 20px;
     min-height: 160px;
@@ -431,14 +430,18 @@ html {
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
+.distance-text {
+    color: #9a9a9b;
+}
 
+body.dark-theme .distance-text {
+    color: white;
+}
 .meal-card:hover {
     transform: scale(1.05);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     cursor: pointer;
 }
-
-/* Light mode (default) */
 .item-name {
     color: white;
 }
@@ -447,17 +450,12 @@ html {
     color: #212529;
     font-size: 16px;
 }
-
-/* Dark mode overrides */
 body.dark-theme .item-name {
     color: #f1f1f1;
 }
-
 body.dark-theme .item-price {
     color: white;
 }
-
-/* Light mode (default) */
 .card-lo {
     background-color: #ffffff;
     color: #212529;
@@ -827,13 +825,11 @@ canvas#qrCanvas {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     padding: 0px 20px;
 }
-
 .qr-note {
     font-size: 0.85rem;
     color: #555;
     margin-top: 0.5rem;
 }
-
 .btn-primary {
     background-color: #4f46e5;
     color: white;
@@ -843,16 +839,13 @@ canvas#qrCanvas {
     transition: background-color 0.2s ease-in-out;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
 .btn-primary:hover {
     background-color: #4338ca;
 }
-
 .form-label-buttons .btn {
     margin-right: 0.5rem;
     margin-bottom: 0.5rem;
 }
-
 .map-placeholder {
     height: 150px;
     background-color: #e9ecef;
@@ -862,32 +855,24 @@ canvas#qrCanvas {
     font-size: 1rem;
     color: #6c757d;
 }
-
 .toggle-switch {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
-
-
 @media (max-width: 768px) {
     .con-block {
         display: block !important;
     }
-
     .cart-container {
         width: 100%;
         margin-top: 20px;
     }
-
-
-
 }
-
 .discount-badge {
     background-color: #e6007e;
     color: white;
-    font-size: 0.75rem;
+    font-size: 0.75rem;     
     font-weight: bold;
     border-radius: 999px;
     padding: 2px 8px;
@@ -944,7 +929,6 @@ body.dark-theme .order-card {
 
 #loadingOverlay {
     display: none;
-    /* Hidden by default */
     position: fixed;
     top: 0;
     left: 0;
@@ -956,7 +940,6 @@ body.dark-theme .order-card {
     align-items: center;
     flex-direction: column;
 }
-
 .spinner {
     border: 6px solid #f3f3f3;
     border-top: 6px solid #e21b70;
@@ -966,7 +949,6 @@ body.dark-theme .order-card {
     animation: spin 1s linear infinite;
     margin-bottom: 15px;
 }
-
 @keyframes spin {
     0% {
         transform: rotate(0deg);
@@ -991,7 +973,8 @@ body.dark-theme .order-card {
     font-size: 14px;
     color: #555;
 }
+
 input[type="radio"]:checked {
-  background-color: #e21b70 !important;
-  border-color: #e21b70 !important;
+    background-color: #e21b70 !important;
+    border-color: #e21b70 !important;
 }

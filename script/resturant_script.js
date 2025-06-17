@@ -549,8 +549,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
   const urlParams = new URLSearchParams(window.location.search);
-  const category = urlParams.get("category");
   const storeId = urlParams.get("storeId");
+  const category = urlParams.get("category");
   const brandTitle = document.getElementById("brand");
   const categoryDetails = document.getElementById("restaurantDetails");
   async function renderCards() {

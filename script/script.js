@@ -53,6 +53,7 @@ const restaurants = [
     link: "resturantPage.html?category=Amazon&storeId=101",
     storeId: "101",
     i18nKey: "restaurant_amazon_coffee",
+    distance: 2.3,
   },
   {
     name: "Pizza Company",
@@ -61,6 +62,7 @@ const restaurants = [
     link: "resturantPage.html?category=Pizza&storeId=104",
     storeId: "104",
     i18nKey: "restaurant_pizza_company",
+    distance: 3.3,
   },
   {
     name: "Burger King",
@@ -69,6 +71,7 @@ const restaurants = [
     link: "resturantPage.html?category=Burgers&storeId=106",
     storeId: "106",
     i18nKey: "restaurant_burger_king",
+    distance: 4,
   },
   {
     name: "Rice and Rice Fried Rice (Street 125)",
@@ -77,6 +80,7 @@ const restaurants = [
     link: "resturantPage.html?category=Breakfast&storeId=107",
     storeId: "107",
     i18nKey: "restaurant_rice_fried_rice",
+    distance: 4.5,
   },
   {
     name: "Let's eat (Street 1015)",
@@ -85,6 +89,7 @@ const restaurants = [
     link: "resturantPage.html?category=Breakfast&storeId=108",
     storeId: "108",
     i18nKey: "restaurant_lets_eat",
+    distance: 8,
   },
   {
     name: "Delicious Noodles, Toul Tom Pong Branch 1 (Street 167)",
@@ -93,6 +98,7 @@ const restaurants = [
     link: "resturantPage.html?category=Breakfast&storeId=111",
     storeId: "111",
     i18nKey: "restaurant_delicious_noodles",
+    distance: 2,
   },
   {
     name: "Sok Chheng Turkish Bread (Vanda)",
@@ -101,6 +107,7 @@ const restaurants = [
     link: "resturantPage.html?category=Breakfast&storeId=113",
     storeId: "113",
     i18nKey: "restaurant_sok_chheng_bread",
+    distance: 1,
   },
   {
     name: "Kimmo Korean Miher 7th Street (Central Market)",
@@ -109,6 +116,7 @@ const restaurants = [
     link: "resturantPage.html?category=noodle&storeId=114",
     storeId: "114",
     i18nKey: "restaurant_kimmo_korean_miher",
+    distance: 3,
   },
   {
     name: "Rina Micha Guarantee (Santhormok)",
@@ -117,6 +125,7 @@ const restaurants = [
     link: "resturantPage.html?category=Breakfast&storeId=115",
     storeId: "115",
     i18nKey: "restaurant_rina_micha",
+    distance: 9,
   },
   {
     name: "I Win (Street 287)",
@@ -125,6 +134,7 @@ const restaurants = [
     link: "resturantPage.html?category=Breakfast&storeId=116",
     storeId: "116",
     i18nKey: "restaurant_i_win",
+    distance: 3,
   },
 ];
 const DiscountRestaurants = [
@@ -135,6 +145,7 @@ const DiscountRestaurants = [
     link: "resturantPage.html?category=meetball&storeId=300",
     discount: "Discount 20%",
     i18nKey: "discount_hainanese_chicken_rice_2",
+    distance: 4,
   },
   {
     name: "Fresh fruit juice and fruit shakes (Boeung Keng Kang I)",
@@ -143,6 +154,7 @@ const DiscountRestaurants = [
     link: "resturantPage.html?category=drink&storeId=500",
     discount: "Discount 20%",
     i18nKey: "discount_fresh_fruit_juice",
+    distance: 2.3,
   },
   {
     name: "Hainanese Fried Chicken Rice, O Russey (Street 125)",
@@ -151,6 +163,7 @@ const DiscountRestaurants = [
     link: "resturantPage.html?category=chickenrice&storeId=400",
     discount: "Discount 40%",
     i18nKey: "discount_hainanese_chicken_rice_1",
+    distance: 2.3,
   },
   {
     name: "Wright Express (Boeung Keng Kang III)",
@@ -159,6 +172,7 @@ const DiscountRestaurants = [
     link: "resturantPage.html?storeId=204",
     discount: "Discount 30%",
     i18nKey: "discount_wright_express",
+    distance: 5.3,
   },
   {
     name: "Chip Charlie (Toul Tom Pong)",
@@ -167,6 +181,7 @@ const DiscountRestaurants = [
     link: "resturantPage.html?storeId=204",
     discount: "Discount 50%",
     i18nKey: "discount_chip_charlie",
+    distance: 2.3,
   },
   {
     name: "Josie Mercy (Boeung Keng Kang I)",
@@ -175,6 +190,7 @@ const DiscountRestaurants = [
     link: "resturantPage.html?storeId=204",
     discount: "Discount 40%",
     i18nKey: "discount_josie_mercy",
+    distance: 9,
   },
   {
     name: "The Enchanted Chocolate (Boeng Salaang)",
@@ -183,6 +199,7 @@ const DiscountRestaurants = [
     link: "resturantPage.html?storeId=204",
     discount: "Discount 20%",
     i18nKey: "discount_enchanted_chocolate",
+    distance: 9,
   },
 ];
 function setLanguage(lang) {
@@ -246,14 +263,19 @@ function createCards(data, containerId, isCategory = false) {
                       </div>`
                     : ""
                 }
-             <div class="ms-3 mt-2">
-              <h6 class="fw-bold">${displayName}</h6>
-              ${
-                isCategory
-                  ? `<p class="mb-0 restaurants-count-text" style="color: #e21b70" data-restaurants-count="${item.restaurants}">${item.restaurants} ${translations[currentLang]["restaurants_count"]}</p>`
-                  : ""
-              }
               </div>
+              <div class="ms-3 mt-2">
+                <h6 class="fw-bold">${displayName}</h6>
+                ${
+                  isCategory
+                    ? `<p class="mb-0 restaurants-count-text" style="color: #e21b70" data-restaurants-count="${item.restaurants}">${item.restaurants} ${translations[currentLang]["restaurants_count"]}</p>`
+                    : item.distance
+? `<p class="mb-0 distance-text">  
+     <i class="bi bi-geo-alt-fill me-1" style="color: #e21b70;"></i>
+     ${item.distance} km
+   </p>`
+                    : ""
+                }
               </div>
             </a>
           </div>

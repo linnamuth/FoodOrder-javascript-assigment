@@ -218,14 +218,10 @@
                 class="payment-method-text"
                 data-i18n="payment_method"
               ></span>
-              <a
-                href="payment-selection.html"
-                class="d-flex"
-                style="cursor: pointer; text-decoration: none; color: #e21b70"
-                ;
-              >
+              <a href="#" id="payment-link" class="d-flex" style="cursor: pointer; text-decoration: none; color: #e21b70">
                 <span class="payment-method-aba">PAY With </span>
                 <i class="fas fa-arrow-right mt-1 ms-2"></i>
+              </a>
               </a>
             </div>
           </div>
@@ -385,14 +381,16 @@
       setupThemeToggle();
     </script>
     <script>
+      const storeId = new URLSearchParams(window.location.search).get("storeId");
+      const paymentLink = document.getElementById("payment-link");
+      if (storeId) {
+        paymentLink.href = `payment-selection.html?storeId=${storeId}`;
+      }
       window.onload = function () {
-        // Get the saved payment method from localStorage
         const savedPaymentMethod = localStorage.getItem(
           "selectedPaymentMethod"
         );
-
         if (savedPaymentMethod) {
-          // Change the label and description based on the saved payment method
           if (savedPaymentMethod === "ABAPAY") {
             document.getElementById("paymentLabel").textContent =
               "Pay with ABA KHQR";
