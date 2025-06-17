@@ -298,7 +298,7 @@ async function handlePlaceOrder() {
     loadingOverlay.style.display = "none";
 
     Swal.fire({
-      icon: "info",
+      icon: "info",    
       title: "Start Telegram Bot",
       text: "Please click 'Start' in the Telegram bot before proceeding.",
       confirmButtonText: "Go to Telegram Bot",

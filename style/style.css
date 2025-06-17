@@ -977,4 +977,30 @@ body.dark-theme .order-card {
 input[type="radio"]:checked {
     background-color: #e21b70 !important;
     border-color: #e21b70 !important;
+}.empty-state-message {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  margin: 40px auto; /* This centers it horizontally */
+  color: #555;
+  max-width: 600px;   /* Add a max-width to allow centering */
+}
+
+.empty-state-image {
+  max-width: 200px; /* Adjust size as needed */
+  margin: 0 auto 30px auto; /* Center and add space below */
+  display: block;
+}
+
+.empty-state-message h2 {
+  font-size: 1.8em;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.empty-state-message p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-bottom: 10px;
 }

@@ -114,6 +114,11 @@ document.addEventListener("DOMContentLoaded", function () {
       .join("");
     categoryDetails.innerHTML = cards;
   } else {
-    categoryDetails.innerHTML = `<img src="./img/product_not_found.jpg" alt="No Products Available" class="img-fluids">`;
+    categoryDetails.innerHTML = `<div class="empty-state-message">
+      <img src="./img/empty.png" alt="No Products Available" class="img-fluid empty-state-image">
+      <h2>No Products Available</h2>
+      <p>It looks like there are no products in this category yet.</p>
+      <p>Please check back later or explore other categories.</p>
+    </div>>`;
   }
 });

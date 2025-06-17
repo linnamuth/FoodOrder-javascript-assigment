@@ -443,7 +443,7 @@ document.addEventListener("DOMContentLoaded", function () {
         i18nNameKey: "chicken_rice_name",
         i18nDescriptionKey: "chicken_rice_description",
       },
-       {
+      {
         price: "4.50",
         discount: 40, // 20% discount
         imgSrc: "./img/chikenrice-2.png",
@@ -461,7 +461,7 @@ document.addEventListener("DOMContentLoaded", function () {
         i18nNameKey: "stubury_name",
         i18nDescriptionKey: "",
       },
-       {
+      {
         price: "3",
         discount: 40, // 20% discount
         imgSrc: "./img/bluberry.png",
@@ -469,7 +469,7 @@ document.addEventListener("DOMContentLoaded", function () {
         i18nNameKey: "chicken_rice_name",
         i18nDescriptionKey: "chicken_rice_description",
       },
-    ]
+    ],
   };
   const brands = {
     Amazon: [
@@ -523,14 +523,14 @@ document.addEventListener("DOMContentLoaded", function () {
         address: "Lot.5895, Hanoi Blvd, Phnom Penh Thmey, Phnom Penh",
       },
     ],
-    drink : [
+    drink: [
       {
         type: "Fresh fruit juice",
         brand_name: "Fresh fruit juice and fruit shakes (Boeung Keng Kang I)",
         image: "./img/food_6.png",
         address: "Lot.5895, Hanoi Blvd, Phnom Penh Thmey, Phnom Penh",
       },
-    ],  
+    ],
   };
   function setLanguage(lang) {
     const languageSwitcher = document.getElementById("languageSwitcher");
@@ -626,132 +626,136 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let currentItem = null;
   let cartData = [];
- function addToCart(name, imgSrc, variations, index) {
-  currentItem = {
-    name,
-    imgSrc,
-    storeId,
-    sugar: null,
-    size: null,
-    price: null,
-    
-  };
+  function addToCart(name, imgSrc, variations, index) {
+    currentItem = {
+      name,
+      imgSrc,
+      storeId,
+      sugar: null,
+      size: null,
+      price: null,
+    };
 
-  if (typeof variations !== "object") {
-    console.error("Variations is not an object:", variations);
-    variations = {};
-  }
+    if (typeof variations !== "object") {
+      console.error("Variations is not an object:", variations);
+      variations = {};
+    }
 
-  const productList = categories[category] || [];
-  const product = productList[index];
-  if (!product) {
-    console.error(`No product found at index ${index} in category ${category}`);
-    return;
-  }
+    const productList = categories[category] || [];
+    const product = productList[index];
+    if (!product) {
+      console.error(
+        `No product found at index ${index} in category ${category}`
+      );
+      return;
+    }
 
-  document.getElementById("modalImage").src = product.imgSrc;
-  document.getElementById("modalName").textContent = product.name;
+    document.getElementById("modalImage").src = product.imgSrc;
+    document.getElementById("modalName").textContent = product.name;
 
-  const discount = parseFloat(product.discount) || 0;
-  const originalPrice = parseFloat(product.price);
-  const discountedPrice = discount
-    ? originalPrice * (1 - discount / 100)
-    : originalPrice;
+    const discount = parseFloat(product.discount) || 0;
+    const originalPrice = parseFloat(product.price);
+    const discountedPrice = discount
+      ? originalPrice * (1 - discount / 100)
+      : originalPrice;
 
-  const priceHtml = discount
-    ? `<p><span class="text-muted" style="text-decoration: line-through;">${originalPrice.toFixed(2)} $</span> <span class="text-danger">${discountedPrice.toFixed(2)} $</span> <span class="text-danger">(${discount}% off)</span></p>`
-    : `<p>from ${originalPrice.toFixed(2)} $</p>`;
+    const priceHtml = discount
+      ? `<p><span class="text-muted" style="text-decoration: line-through;">${originalPrice.toFixed(
+          2
+        )} $</span> <span class="text-danger">${discountedPrice.toFixed(
+          2
+        )} $</span> <span class="text-danger">(${discount}% off)</span></p>`
+      : `<p>from ${originalPrice.toFixed(2)} $</p>`;
 
-  // Update modal price
-  document.getElementById("modalPrice").innerHTML = priceHtml;  // Show discounted price in modal
+    // Update modal price
+    document.getElementById("modalPrice").innerHTML = priceHtml; // Show discounted price in modal
 
-  // Handle size options and variations
-  const sizeOptions = product.variations?.sizes || [];
-  const defaultSizeObj =
-    sizeOptions.find((v) => v.size === "Large") || sizeOptions[0];
-  const defaultSize = defaultSizeObj ? defaultSizeObj.size : null;
-  let defaultPrice = defaultSizeObj ? defaultSizeObj.price : discountedPrice;
-  if (isNaN(defaultPrice)) {
-    defaultPrice = 0;
-  }
+    // Handle size options and variations
+    const sizeOptions = product.variations?.sizes || [];
+    const defaultSizeObj =
+      sizeOptions.find((v) => v.size === "Large") || sizeOptions[0];
+    const defaultSize = defaultSizeObj ? defaultSizeObj.size : null;
+    let defaultPrice = defaultSizeObj ? defaultSizeObj.price : discountedPrice;
+    if (isNaN(defaultPrice)) {
+      defaultPrice = 0;
+    }
 
-  currentItem.size = defaultSize;
-  currentItem.price = defaultPrice;
-  cartData.push(currentItem);
+    currentItem.size = defaultSize;
+    currentItem.price = defaultPrice;
+    cartData.push(currentItem);
 
-  // Clear and build variation options
-  const variationSection = document.getElementById("variationSection");
-  variationSection.innerHTML = `
+    // Clear and build variation options
+    const variationSection = document.getElementById("variationSection");
+    variationSection.innerHTML = `
     <div class="d-flex justify-content-between">
       <h5 style="font-weight: 700;font-size: 16px;">Variation</h5>
       <span class="required-label">Required</span>
     </div>`;
 
-  // Loop through sizes
-  sizeOptions.forEach((sizeObj, index) => {
-    const size = sizeObj.size;
-    const price = sizeObj.price;
-    const div = document.createElement("div");
-    div.className = "d-flex align-items-start gap-2 mt-4";
-    div.innerHTML = `
+    // Loop through sizes
+    sizeOptions.forEach((sizeObj, index) => {
+      const size = sizeObj.size;
+      const price = sizeObj.price;
+      const div = document.createElement("div");
+      div.className = "d-flex align-items-start gap-2 mt-4";
+      div.innerHTML = `
       <input type="radio" name="pizza" value="${size}" data-price="${price}" id="variation${index}" ${
-      size === "Large" ? "checked" : ""
-    }>
+        size === "Large" ? "checked" : ""
+      }>
       <div class="d-flex justify-content-between w-100">
         <label for="variation${index}" class="mb-0">${size}</label>
         <p class="mb-0">${price.toFixed(2)}</p>
       </div>`;
-    variationSection.appendChild(div);
-  });
-
-  handleCategoryDisplay();
-
-  // Handle sugar options
-  document.querySelectorAll('input[name="sugar"]').forEach((input) => {
-    input.checked = false;
-  });
-  const defaultSugar = document.querySelector(
-    'input[name="sugar"][value="100%"]'
-  );
-  if (defaultSugar) {
-    defaultSugar.checked = true;
-    currentItem.sugar = "100%";
-  } else {
-    currentItem.sugar = null;
-  }
-
-  // Disable the "Add to Cart" button initially
-  document.getElementById("addToCartBtn").disabled = true;
-
-  setTimeout(() => {
-    // Event listeners for size and sugar changes
-    document.querySelectorAll('input[name="pizza"]').forEach((input) => {
-      input.addEventListener("change", function () {
-        const selectedSize = this.value;
-        const selectedPrice = parseFloat(this.getAttribute("data-price"));
-        currentItem.size = selectedSize;
-        currentItem.price = selectedPrice;
-        document.getElementById(
-          "modalPrice"
-        ).textContent = `${selectedPrice.toFixed(2)}`;
-        checkAddToCartEligibility();
-      });
+      variationSection.appendChild(div);
     });
 
+    handleCategoryDisplay();
+
+    // Handle sugar options
     document.querySelectorAll('input[name="sugar"]').forEach((input) => {
-      input.addEventListener("change", function () {
-        currentItem.sugar = this.value;
-        checkAddToCartEligibility();
+      input.checked = false;
+    });
+    const defaultSugar = document.querySelector(
+      'input[name="sugar"][value="100%"]'
+    );
+    if (defaultSugar) {
+      defaultSugar.checked = true;
+      currentItem.sugar = "100%";
+    } else {
+      currentItem.sugar = null;
+    }
+
+    // Disable the "Add to Cart" button initially
+    document.getElementById("addToCartBtn").disabled = true;
+
+    setTimeout(() => {
+      // Event listeners for size and sugar changes
+      document.querySelectorAll('input[name="pizza"]').forEach((input) => {
+        input.addEventListener("change", function () {
+          const selectedSize = this.value;
+          const selectedPrice = parseFloat(this.getAttribute("data-price"));
+          currentItem.size = selectedSize;
+          currentItem.price = selectedPrice;
+          document.getElementById(
+            "modalPrice"
+          ).textContent = `${selectedPrice.toFixed(2)}`;
+          checkAddToCartEligibility();
+        });
       });
+
+      document.querySelectorAll('input[name="sugar"]').forEach((input) => {
+        input.addEventListener("change", function () {
+          currentItem.sugar = this.value;
+          checkAddToCartEligibility();
+        });
+      });
+
+      // Initial check
+      checkAddToCartEligibility();
     });
 
-    // Initial check
-    checkAddToCartEligibility();
-  });
-
-  new bootstrap.Modal(document.getElementById("productModal")).show();
-}
-
+    new bootstrap.Modal(document.getElementById("productModal")).show();
+  }
 
   function checkAddToCartEligibility() {
     const addToCartBtn = document.getElementById("addToCartBtn");
@@ -925,36 +929,40 @@ document.addEventListener("DOMContentLoaded", function () {
   // Call on page load
   window.onload = updateCartDisplay;
   function renderCategoryCards(category) {
-  window.currentCategory = category;
-  const currentLang = localStorage.getItem("selectedLanguage") || "en";
+    window.currentCategory = category;
+    const currentLang = localStorage.getItem("selectedLanguage") || "en";
 
-  if (categories[category]) {
-    const cards = categories[category]
-      .map((item, index) => {
-        const translatedName =
-          translations[currentLang]?.[item.i18nNameKey] || item.name;
-        const translatedDescription =
-          translations[currentLang]?.[item.i18nDescriptionKey] ||
-          item.description;
+    if (categories[category]) {
+      const cards = categories[category]
+        .map((item, index) => {
+          const translatedName =
+            translations[currentLang]?.[item.i18nNameKey] || item.name;
+          const translatedDescription =
+            translations[currentLang]?.[item.i18nDescriptionKey] ||
+            item.description;
 
-        // Ensure discount is a number
-        const discount = parseFloat(item.discount) || 0;
-        const originalPrice = parseFloat(item.price);
+          // Ensure discount is a number
+          const discount = parseFloat(item.discount) || 0;
+          const originalPrice = parseFloat(item.price);
 
-        // Calculate the discounted price if discount exists
-        const discountedPrice = discount
-          ? originalPrice * (1 - discount / 100)
-          : originalPrice;
+          // Calculate the discounted price if discount exists
+          const discountedPrice = discount
+            ? originalPrice * (1 - discount / 100)
+            : originalPrice;
 
-        // Calculate the discount percentage
-        const discountPercentage = discount ? `${discount}%` : '';
+          // Calculate the discount percentage
+          const discountPercentage = discount ? `${discount}%` : "";
 
-        // Set the price display
-        const Price = discount
-          ? `<p><del>${originalPrice.toFixed(2)} $</del> <span class="text-danger">${discountedPrice.toFixed(2)} $</span> <span class="text-danger">(${discountPercentage} off)</span></p>`
-          : `<p>from ${originalPrice.toFixed(2)} $</p>`;
+          // Set the price display
+          const Price = discount
+            ? `<p><del>${originalPrice.toFixed(
+                2
+              )} $</del> <span class="text-danger">${discountedPrice.toFixed(
+                2
+              )} $</span> <span class="text-danger">(${discountPercentage} off)</span></p>`
+            : `<p>from ${originalPrice.toFixed(2)} $</p>`;
 
-        return `
+          return `
           <div class="meal-card d-flex rounded-3 shadow p-3">
             <div class="meal-info flex-grow-1 pe-3">
               <h6 class="fw-bold">${translatedName}</h6>
@@ -976,19 +984,25 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
           </div>
         `;
-      })
-      .join("");
+        })
+        .join("");
 
-    categoryDetails.innerHTML = cards;
+      categoryDetails.innerHTML = cards;
 
-    bindAddToCartEvents(); // ✅ ADD THIS
+      bindAddToCartEvents(); // ✅ ADD THIS
 
-    updateCartDisplay();
-  } else {
-    categoryDetails.innerHTML = `<img src="./img/product_not_found.jpg" alt="No Products Available" class="img-fluids">`;
+      updateCartDisplay();
+    } else {
+      categoryDetails.innerHTML = `
+    <div class="empty-state-message">
+      <img src="./img/empty.png" alt="No Products Available" class="img-fluid empty-state-image">
+      <h2>No Products Available</h2>
+      <p>It looks like there are no products in this category yet.</p>
+      <p>Please check back later or explore other categories.</p>
+    </div>
+  `;
+    }
   }
-}
-
 
   renderCategoryCards(category);
   function bindAddToCartEvents() {
