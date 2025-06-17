@@ -171,12 +171,16 @@ function updateOrderSummary() {
     // Assume exchange rate: 1 USD = 4100 KHR (you can update this dynamically if needed)
     const itemTotalKHR = itemTotal * 4100;
 
+    // Add image to the item
     summaryContainer.innerHTML += `
-      <div class="d-flex justify-content-between">
-        <span>${item.quantity} × ${item.name}</span>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <img src="${item.imgSrc}" alt="${item.name}" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;" />
+          <span>${item.quantity} × ${item.name}</span>
+        </div>
         <span>
           ${usdFormatter.format(itemTotal)}<br/>
-          <small class="text-muted">${khFormatter.format(itemTotalKHR)}</small>
+          <small>${khFormatter.format(itemTotalKHR)}</small>
         </span>
       </div>
     `;
@@ -190,11 +194,11 @@ function updateOrderSummary() {
 
   summaryContainer.innerHTML += `
     <hr/>
-    <div class="  d-flex justify-content-between">
+    <div class="d-flex justify-content-between">
       <span>Subtotal</span>
       <span class="text-end">
         ${usdFormatter.format(subtotal)}<br/>
-        <small class="text-muted">${khFormatter.format(subtotalKHR)}</small>
+        <small>${khFormatter.format(subtotalKHR)}</small>
       </span>
     </div>
     <div class="d-flex justify-content-between">
@@ -205,7 +209,7 @@ function updateOrderSummary() {
       <span>VAT</span>
       <span>
         ${usdFormatter.format(vat)}<br/>
-        <small class="text-muted">${khFormatter.format(vatKHR)}</small>
+        <small>${khFormatter.format(vatKHR)}</small>
       </span>
     </div>
     <hr/>
@@ -213,12 +217,13 @@ function updateOrderSummary() {
       <strong>Total</strong>
       <strong>
         ${usdFormatter.format(total)}<br/>
-        <small class="text-muted">${khFormatter.format(totalKHR)}</small>
+        <small>${khFormatter.format(totalKHR)}</small>
       </strong>
     </div>
     <small>incl. fees and tax</small>
   `;
 }
+
 
 
 // MAIN ORDER HANDLING FUNCTION

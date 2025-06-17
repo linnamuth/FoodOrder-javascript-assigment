@@ -122,6 +122,8 @@ export const translations = {
     stubury_description: "Stubury with fresh milkshake, offering a refreshing and creamy taste.",
     bluberry_name: "Bluberry",
     bluberry_description: "Bluberry with fresh milkshake, providing a refreshing and fruity flavor.",
+        payment_method: "Payment Method"
+
   },
   kh: {
     home: "ទំព័រដើម",
@@ -247,5 +249,8 @@ export const translations = {
     stubury_description: "Stubury ក្រឡុកជាមួយទឺកដោះគោស្រស់",
     bluberry_name: "Bluberry",
     bluberry_description: "Bluberry ជាមួយទឹកដោះគោស្រស់, ផ្តល់នូវរសជាតិក្រែម និងក្លិនក្រអូប",
+    payment_method: "វិធីទូទាត់ប្រាក់"
+
+
   },
 };

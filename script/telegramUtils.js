@@ -156,7 +156,10 @@ async function generateReceiptImage(
   ctx.fillStyle = "#666";
   ctx.fillText("Transfer to:", 20, yOffset);
   yOffset += 25;
-  ctx.fillText("ABA Bank", 20, yOffset);
+  const savedPaymentMethod = localStorage.getItem("selectedPaymentMethod");
+  const paymentText = savedPaymentMethod ? savedPaymentMethod : "";
+
+  ctx.fillText(paymentText, 20, yOffset);
   yOffset += 40;
 
   // Items Section
@@ -251,7 +254,7 @@ async function generateReceiptImage(
   yOffset += 30;
   ctx.fillText(formattedKHR, canvas.width - 20, yOffset);
   ctx.textAlign = "left";
-  yOffset += 60; 
+  yOffset += 60;
   ctx.font = "bold 18px Inter, sans-serif";
   ctx.textAlign = "center";
   return new Promise((resolve) => {

@@ -24,7 +24,10 @@
       href="https://fonts.googleapis.com/css2?family=Khmer&display=swap"
       rel="stylesheet"
     />
-    
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
 
     <link rel="stylesheet" href="./style/style.css" />
   </head>
@@ -162,6 +165,7 @@
             <div class="spinner"></div>
             Acessing payment, please wait...
           </div>
+
           <div class="col-md-12 mt-4">
             <div class="card-lo p-4 shadow-sm">
               <h4>Order Summary</h4>
@@ -208,7 +212,23 @@
               </div>
             </div>
           </div>
-
+          <div class="card-lo p-4 shadow-sm mt-4">
+            <div class="payment-method-button d-flex justify-content-between">
+              <span
+                class="payment-method-text"
+                data-i18n="payment_method"
+              ></span>
+              <a
+                href="payment-selection.html"
+                class="d-flex"
+                style="cursor: pointer; text-decoration: none; color: #e21b70"
+                ;
+              >
+                <span class="payment-method-aba">PAY With </span>
+                <i class="fas fa-arrow-right mt-1 ms-2"></i>
+              </a>
+            </div>
+          </div>
           <h5 class="mt-3">Payment Method</h5>
           <div class="card-lo p-3 shadow-sm mb-3" id="paymentOptions">
             <div class="row g-3">
@@ -221,10 +241,15 @@
                       name="paymentMethod"
                       value="abaKhqr"
                     />
-                    <label class="form-check-label d-flex align-items-center">
+                    <label
+                      class="form-check-label d-flex align-items-center"
+                      id="paymentLabel"
+                    >
                       Pay with ABA KHQR
                     </label>
-                    <p style="font-size: 13px; color: gray">Scan With ABA</p>
+                    <p style="font-size: 13px; color: gray" id="paymentDesc">
+                      Scan With ABA
+                    </p>
                   </div>
 
                   <img
@@ -358,6 +383,34 @@
     <script type="module">
       import { setupThemeToggle } from "./script/themeToggle.js";
       setupThemeToggle();
+    </script>
+    <script>
+      window.onload = function () {
+        // Get the saved payment method from localStorage
+        const savedPaymentMethod = localStorage.getItem(
+          "selectedPaymentMethod"
+        );
+
+        if (savedPaymentMethod) {
+          // Change the label and description based on the saved payment method
+          if (savedPaymentMethod === "ABAPAY") {
+            document.getElementById("paymentLabel").textContent =
+              "Pay with ABA KHQR";
+            document.getElementById("paymentDesc").textContent =
+              "Scan With ABA";
+          } else if (savedPaymentMethod === "WINGBANK") {
+            document.getElementById("paymentLabel").textContent =
+              "Pay with Wing KHQR";
+            document.getElementById("paymentDesc").textContent =
+              "Scan With Wing";
+          } else if (savedPaymentMethod === "ACLEDAPAY") {
+            document.getElementById("paymentLabel").textContent =
+              "Pay with Acleda KHQR";
+            document.getElementById("paymentDesc").textContent =
+              "Scan With Acleda";
+          }
+        }
+      };
     </script>
   </body>
 </html>
