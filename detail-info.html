@@ -37,7 +37,7 @@
       class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm"
     >
       <div class="container">
-        <a class="navbar-brand" href="#"> <span>Food</span>Order </a>
+        <a class="navbar-brand" href="./home.html"> <span>Food</span>Order </a>
         <button
           class="navbar-toggler"
           type="button"
@@ -56,7 +56,7 @@
             </li>
             <li class="nav-item">
               <a
-                class="nav-link active"
+                class="nav-link"
                 href="./history-order.html"
                 data-i18n="histroy_order"
               ></a>
@@ -286,7 +286,7 @@
       <div class="container">
         <div class="row g-4">
           <div class="col-lg-3">
-            <h3 class="mb-4">FoodOrder</h3>
+            <a class="navbar-brand" href="#"> <span>Food</span>Order </a>
             <p>
               Delivering happiness through food since 2023. Order from your
               favorite restaurants with ease.
@@ -397,10 +397,6 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script src="./script/detail-info.js" type="module"></script>
-    <script type="module">
-      import { setupThemeToggle } from "./script/themeToggle.js";
-      setupThemeToggle();
-    </script>
     <script>
       const storeId = new URLSearchParams(window.location.search).get("storeId");
       const paymentLink = document.getElementById("payment-link");

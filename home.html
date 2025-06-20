@@ -131,7 +131,7 @@
     <!-- Categories Section -->
     <section class="py-5">
       <div class="container">
-        <h2 class="text-center mb-5 fw-bold">Food Categories</h2>
+        <h2 class="text-center mb-5 fw-bold" data-i18n="food_category"></h2>
         <div class="row g-4">
           <div class="col-6 col-md-3">
             <div class="category-card card h-100 text-center p-3">
@@ -148,7 +148,7 @@
                 >
                   <i class="fas fa-hamburger fs-4"></i>
                 </div>
-                <h5 class="card-title">Burgers</h5>
+                <h5 class="card-title" data-i18n="burgers">Burgers</h5>
               </div>
             </div>
           </div>
@@ -167,7 +167,7 @@
                 >
                   <i class="fas fa-pizza-slice fs-4"></i>
                 </div>
-                <h5 class="card-title">Pizza</h5>
+                <h5 class="card-title" data-i18n="pizza">Pizza</h5>
               </div>
             </div>
           </div>
@@ -186,7 +186,7 @@
                 >
                   <i class="fas fa-drumstick-bite fs-4"></i>
                 </div>
-                <h5 class="card-title">Chicken</h5>
+                <h5 class="card-title" data-i18n="chicken">Chicken</h5>
               </div>
             </div>
           </div>
@@ -205,7 +205,7 @@
                 >
                   <i class="fas fa-fish fs-4"></i>
                 </div>
-                <h5 class="card-title">Sushi</h5>
+                <h5 class="card-title" data-i18n="sushi">Sushi</h5>
               </div>
             </div>
           </div>
@@ -216,7 +216,9 @@
     <!-- Popular Restaurants -->
     <section class="py-5 bg-light">
       <div class="container">
-        <h2 class="text-center mb-5 fw-bold">Popular Restaurants</h2>
+        <h2 class="text-center mb-5 fw-bold" data-i18n="popular_resterants">
+          Popular Restaurants
+        </h2>
         <div class="row g-4">
           <!-- Restaurant 1 -->
           <div class="col-md-4">
@@ -301,10 +303,130 @@
         </div>
       </div>
     </section>
+    <!-- Customer Reviews Section -->
+    <section class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-5 fw-bold" data-i18n="customer_review">
+          Customer Review
+        </h2>
+        <div class="row g-4">
+          <!-- Review 1 -->
+          <div class="col-md-4">
+            <div class="card h-100 review-card">
+              <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                  <img
+                    src="https://randomuser.me/api/portraits/women/32.jpg"
+                    class="rounded-circle me-3"
+                    width="60"
+                    height="60"
+                    alt="Customer"
+                  />
+                  <div>
+                    <h5 class="mb-1">Sophia Chen</h5>
+                    <div class="text-warning">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p class="card-text">
+                  "The food arrived hot and fresh, exactly as described.
+                  Delivery was faster than expected even during peak hours. Will
+                  definitely order again!"
+                </p>
+                <div class="text-muted small">
+                  <i class="fas fa-utensils me-1"></i> Ordered from Burger King
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Review 2 -->
+          <div class="col-md-4">
+            <div class="card h-100 review-card">
+              <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                  <img
+                    src="https://randomuser.me/api/portraits/men/45.jpg"
+                    class="rounded-circle me-3"
+                    width="60"
+                    height="60"
+                    alt="Customer"
+                  />
+                  <div>
+                    <h5 class="mb-1">David Kim</h5>
+                    <div class="text-warning">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star-half-alt"></i>
+                    </div>
+                  </div>
+                </div>
+                <p class="card-text">
+                  "Great selection of restaurants and easy to use app. The live
+                  order tracking feature is super helpful to know exactly when
+                  my food will arrive."
+                </p>
+                <div class="text-muted small">
+                  <i class="fas fa-utensils me-1"></i> Ordered from Sushi Palace
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Review 3 -->
+          <div class="col-md-4">
+            <div class="card h-100 review-card">
+              <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                  <img
+                    src="https://randomuser.me/api/portraits/women/68.jpg"
+                    class="rounded-circle me-3"
+                    width="60"
+                    height="60"
+                    alt="Customer"
+                  />
+                  <div>
+                    <h5 class="mb-1">Maria Rodriguez</h5>
+                    <div class="text-warning">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p class="card-text">
+                  "Amazing service! When my order had a missing item, customer
+                  support resolved it immediately with a refund. Very impressed
+                  with their responsiveness."
+                </p>
+                <div class="text-muted small">
+                  <i class="fas fa-utensils me-1"></i> Ordered from Pizza Hut
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-5">
+          <a href="#" class="btn btn-pink">Leave a Review</a>
+        </div>
+      </div>
+    </section>
     <!-- App Download -->
     <section class="app-download py-5">
       <div class="container text-center">
-        <h2 class="fw-bold mb-4">Get the FoodOrder App</h2>
+        <h2 class="fw-bold mb-4" data-i18n="get_the_foodorder_app">
+          Get the FoodOrder App
+        </h2>
         <p class="lead mb-5">
           Download our app for faster ordering and exclusive offers
         </p>
@@ -334,11 +456,12 @@
         </div>
       </div>
     </section>
+
     <footer class="text-white py-5">
       <div class="container">
         <div class="row g-4">
           <div class="col-lg-3">
-            <h3 class="mb-4">FoodOrder</h3>
+            <a class="navbar-brand" href="#"> <span>Food</span>Order </a>
             <p>
               Delivering happiness through food since 2023. Order from your
               favorite restaurants with ease.
