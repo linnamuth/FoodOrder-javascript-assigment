@@ -1,6 +1,6 @@
 export const translations = {
   en: {
-    home: "Home",
+    shop: "Shop",
     histroy_order: "History Order",
     login_signup: "Login/Signup",
     sign_out: "Sign Out",
@@ -8,6 +8,7 @@ export const translations = {
     order_popular_restaurants: "Order Popular Restaurants",
     discount_section_title: "Discount", // Renamed for clarity with other discounts
     restaurants_count: "Restaurants",
+    home: "Home",
 
     // Category names
     category_pizza: "Pizza",
@@ -16,7 +17,6 @@ export const translations = {
     khmer_noodle_seoul: "Khmer Noodle Special ",
     category_drink: "Drinks",
     category_brhet: "Meetball",
-
     // Restaurant names
     restaurant_amazon_coffee: "Amazon Coffee",
     restaurant_koi_coffee: "Koi Coffee",
@@ -126,7 +126,7 @@ export const translations = {
 
   },
   kh: {
-    home: "ទំព័រដើម",
+    shop: "ហាង",
     histroy_order: "បញ្ជីទិញ",
     login_signup: "ចូល/ចុះឈ្មោះ",
     sign_out: "ចាកចេញ",
@@ -134,6 +134,7 @@ export const translations = {
     order_popular_restaurants: "បញ្ជាទិញភោជនីយដ្ឋានពេញនិយម",
     discount_section_title: "ការបញ្ចុះតម្លៃ",
     restaurants_count: "ភោជនីយដ្ឋាន",
+    home: "ទំព័រដើម",
 
     // Category names
     category_pizza: "ភីហ្សា",

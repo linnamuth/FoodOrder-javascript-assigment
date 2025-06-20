@@ -29,49 +29,43 @@
     <link rel="stylesheet" href="./style/style.css" />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg fixed-top">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">
-          <img
-            src="./img/logo.png"
-            alt="Logo"
-            style="width: 100px; height: 100px"
-          />
-        </a>
-
+    <nav
+      class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm"
+    >
+      <div class="container">
+        <a class="navbar-brand" href="#"> <span>Food</span>Order </a>
         <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="./index.html" data-i18n="home">Home</a>
+              <a class="nav-link" href="./home.html" data-i18n="home">Home</a>
             </li>
-
+            <li class="nav-item">
+              <a class="nav-link" href="./index.html" data-i18n="shop"></a>
+            </li>
             <li class="nav-item">
               <a
                 class="nav-link active"
                 href="./history-order.html"
                 data-i18n="histroy_order"
-                >Track Order</a
-              >
+              ></a>
             </li>
-
             <li class="nav-item" id="loginSignupLink">
-              <a class="nav-link" href="login.html" data-i18n="login_signup"
+              <a
+                class="nav-link"
+                href="#"
+                data-i18n="login_signup"
+                onclick="showLoginModal()"
                 >Login/Signup</a
               >
             </li>
-
             <li class="nav-item dropdown d-none" id="userIcon">
               <a
                 class="nav-link dropdown-toggle"
@@ -79,10 +73,9 @@
                 id="userDropdown"
                 role="button"
                 data-bs-toggle="dropdown"
-                aria-expanded="false"
               >
                 <i class="bi bi-person-circle" style="font-size: 1.2rem"></i>
-                <span id="userName"></span>
+                <span id="userName" class="ms-2"></span>
               </a>
               <ul
                 class="dropdown-menu dropdown-menu-end"
@@ -91,7 +84,7 @@
                 <li>
                   <a
                     class="dropdown-item"
-                    href="login.html"
+                    href="#"
                     id="logoutLink"
                     onclick="logout()"
                     data-i18n="sign_out"
@@ -103,27 +96,18 @@
           </ul>
           <select
             id="languageSwitcher"
-            class="form-select form-select-sm w-auto ms-3"
+            class="form-select form-select-sm w-auto me-2"
           >
             <option value="en">English</option>
             <option value="kh">ខ្មែរ</option>
           </select>
-          <div>
-            <div>
-              <input type="checkbox" class="checkbox" id="toggleBtn" />
-              <label class="switch" for="toggleBtn">
-                <div class="ball"></div>
-              </label>
-            </div>
-          </div>
         </div>
       </div>
     </nav>
-    >
     <div
       id="orderHistory"
       class="order-history-container"
-      style="margin-top: 140px"
+      style="margin-top: 20px"
     ></div>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>

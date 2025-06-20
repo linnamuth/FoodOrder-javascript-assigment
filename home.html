@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodPanda Clone</title>
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Khmer&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style/home.css" />
+  </head>
+  <body>
+    <nav
+      class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm"
+    >
+      <div class="container">
+        <a class="navbar-brand" href="#"> <span>Food</span>Order </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="./index.html" data-i18n="home"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./index.html" data-i18n="shop"></a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="./history-order.html"
+                data-i18n="histroy_order"
+              ></a>
+            </li>
+            <li class="nav-item" id="loginSignupLink">
+              <a
+                class="nav-link"
+                href="#"
+                data-i18n="login_signup"
+                onclick="showLoginModal()"
+                >Login/Signup</a
+              >
+            </li>
+            <li class="nav-item dropdown d-none" id="userIcon">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="userDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+              >
+                <i class="bi bi-person-circle" style="font-size: 1.2rem"></i>
+                <span id="userName" class="ms-2"></span>
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="userDropdown"
+              >
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    id="logoutLink"
+                    onclick="logout()"
+                    data-i18n="sign_out"
+                    >Sign Out</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <select
+            id="languageSwitcher"
+            class="form-select form-select-sm w-auto me-2"
+          >
+            <option value="en">English</option>
+            <option value="kh">ខ្មែរ</option>
+          </select>
+        </div>
+      </div>
+    </nav>
+    <section class="hero-section d-flex align-items-center text-white">
+      <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-4">
+          Your Favorite Food, Delivered Fast
+        </h1>
+        <p class="lead mb-5">
+          Order from the best restaurants in your city with just a few taps
+        </p>
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                placeholder="Enter your delivery address"
+              />
+              <button class="btn btn-pink" type="button">
+                <i class="fas fa-search me-2"></i> Find Food
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-5 fw-bold">Food Categories</h2>
+        <div class="row g-4">
+          <div class="col-6 col-md-3">
+            <div class="category-card card h-100 text-center p-3">
+              <div class="card-body">
+                <div
+                  class="bg-light rounded-circle mx-auto mb-3"
+                  style="
+                    width: 70px;
+                    height: 70px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <i class="fas fa-hamburger fs-4"></i>
+                </div>
+                <h5 class="card-title">Burgers</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="category-card card h-100 text-center p-3">
+              <div class="card-body">
+                <div
+                  class="bg-light rounded-circle mx-auto mb-3"
+                  style="
+                    width: 70px;
+                    height: 70px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <i class="fas fa-pizza-slice fs-4"></i>
+                </div>
+                <h5 class="card-title">Pizza</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="category-card card h-100 text-center p-3">
+              <div class="card-body">
+                <div
+                  class="bg-light rounded-circle mx-auto mb-3"
+                  style="
+                    width: 70px;
+                    height: 70px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <i class="fas fa-drumstick-bite fs-4"></i>
+                </div>
+                <h5 class="card-title">Chicken</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="category-card card h-100 text-center p-3">
+              <div class="card-body">
+                <div
+                  class="bg-light rounded-circle mx-auto mb-3"
+                  style="
+                    width: 70px;
+                    height: 70px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <i class="fas fa-fish fs-4"></i>
+                </div>
+                <h5 class="card-title">Sushi</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular Restaurants -->
+    <section class="py-5 bg-light">
+      <div class="container">
+        <h2 class="text-center mb-5 fw-bold">Popular Restaurants</h2>
+        <div class="row g-4">
+          <!-- Restaurant 1 -->
+          <div class="col-md-4">
+            <div class="restaurant-card card h-100">
+              <div class="position-relative">
+                <img
+                  src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+                  class="card-img-top"
+                  alt="Burger King"
+                  style="height: 180px; object-fit: cover"
+                />
+                <span class="discount-badge badge rounded-pill">30% OFF</span>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Burger King</h5>
+                <span class="rating-badge mb-2">
+                  <i class="fas fa-star text-warning me-1"></i> 4.5 (1.2k)
+                </span>
+                <div class="d-flex justify-content-between text-muted">
+                  <span>$$ • American</span>
+                  <span>25-35 min</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Restaurant 2 -->
+          <div class="col-md-4">
+            <div class="restaurant-card card h-100">
+              <div class="position-relative">
+                <img
+                  src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                  class="card-img-top"
+                  alt="Pizza Hut"
+                  style="height: 180px; object-fit: cover"
+                />
+                <span class="discount-badge badge rounded-pill"
+                  >FREE DELIVERY</span
+                >
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Pizza Hut</h5>
+                <span class="rating-badge mb-2">
+                  <i class="fas fa-star text-warning me-1"></i> 4.3 (980)
+                </span>
+                <div class="d-flex justify-content-between text-muted">
+                  <span>$$ • Italian</span>
+                  <span>30-45 min</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Restaurant 3 -->
+          <div class="col-md-4">
+            <div class="restaurant-card card h-100">
+              <div class="position-relative">
+                <img
+                  src="https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                  class="card-img-top"
+                  alt="Sushi Palace"
+                  style="height: 180px; object-fit: cover"
+                />
+                <span class="discount-badge badge rounded-pill">20% OFF</span>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Sushi Palace</h5>
+                <span class="rating-badge mb-2">
+                  <i class="fas fa-star text-warning me-1"></i> 4.7 (1.5k)
+                </span>
+                <div class="d-flex justify-content-between text-muted">
+                  <span>$$$ • Japanese</span>
+                  <span>40-55 min</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-5">
+          <a href="#" class="btn btn-outline-primary">View All Restaurants</a>
+        </div>
+      </div>
+    </section>
+    <!-- App Download -->
+    <section class="app-download py-5">
+      <div class="container text-center">
+        <h2 class="fw-bold mb-4">Get the FoodOrder App</h2>
+        <p class="lead mb-5">
+          Download our app for faster ordering and exclusive offers
+        </p>
+        <div class="d-flex justify-content-center flex-wrap gap-3">
+          <a href="#" class="btn btn-dark btn-lg px-4 py-3">
+            <div class="d-flex align-items-center">
+              <i class="fab fa-apple fs-3 me-3"></i>
+              <div class="text-start">
+                <small class="d-block" style="font-size: 0.7rem"
+                  >Download on the</small
+                >
+                <span class="fw-bold">App Store</span>
+              </div>
+            </div>
+          </a>
+          <a href="#" class="btn btn-dark btn-lg px-4 py-3">
+            <div class="d-flex align-items-center">
+              <i class="fab fa-google-play fs-3 me-3"></i>
+              <div class="text-start">
+                <small class="d-block" style="font-size: 0.7rem"
+                  >Get it on</small
+                >
+                <span class="fw-bold">Google Play</span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+    <footer class="text-white py-5">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-3">
+            <h3 class="mb-4">FoodOrder</h3>
+            <p>
+              Delivering happiness through food since 2023. Order from your
+              favorite restaurants with ease.
+            </p>
+            <div class="d-flex gap-3 mt-4">
+              <a href="#" class="text-white"
+                ><i class="fab fa-facebook-f"></i
+              ></a>
+              <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="text-white"
+                ><i class="fab fa-instagram"></i
+              ></a>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="footer-links">
+              <h5>Company</h5>
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >About Us</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Careers</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Blog</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Press</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="footer-links">
+              <h5>For Foodies</h5>
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Code of Conduct</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Community</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Verified Users</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Invite Friends</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="footer-links">
+              <h5>For Restaurants</h5>
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Add Restaurant</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Business App</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Restaurant Widgets</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Products for Businesses</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <hr class="my-4 bg-secondary" />
+        <div class="text-center text-white-50">
+          <small>&copy; 2023 FoodExpress. All rights reserved.</small>
+        </div>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./script/home.js" type="module"></script>
+  </body>
+</html>

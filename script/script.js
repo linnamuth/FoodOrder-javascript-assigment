@@ -2,6 +2,7 @@ import { translations } from "./translations.js";
 
 const categories = [
   {
+    category: "Pizza",
     imgSrc: "./img/pizza.png",
     alt: "Pizza",
     restaurants: 3,
@@ -56,6 +57,7 @@ const restaurants = [
     distance: 2.3,
   },
   {
+    category: "Pizza",
     name: "Pizza Company",
     imgSrc: "./img/pizzacompnay.png",
     alt: "Pizza Company",
@@ -139,6 +141,7 @@ const restaurants = [
 ];
 const DiscountRestaurants = [
   {
+    category: "Rice",
     name: "Hainanese Fried Chicken Rice, O Russey (Street 125)",
     imgSrc: "./img/brhet.png",
     alt: "Tiramisu Factory",
@@ -232,6 +235,74 @@ function setLanguage(lang) {
   createCards(DiscountRestaurants, "discount-container");
   localStorage.setItem("selectedLanguage", lang);
 }
+function applyFilter() {
+  const searchInput = document.getElementById("searchInput");
+  const searchTerm = searchInput.value.toLowerCase();
+
+  const selectedCategoryElement = document.getElementById("categoryFilter");
+  const selectedCategory = selectedCategoryElement ? selectedCategoryElement.value : "";
+
+  const filteredCategories = categories.filter((item) => {
+    const itemName = item.name ? item.name.toLowerCase() : "";
+    const matchSearch = searchTerm === "" || itemName.includes(searchTerm);
+    const matchCategory = selectedCategory === "" || item.category === selectedCategory;
+    return matchSearch && matchCategory;
+  });
+
+  const filteredRestaurants = restaurants.filter((item) => {
+    const itemName = item.name ? item.name.toLowerCase() : "";
+    const matchSearch = searchTerm === "" || itemName.includes(searchTerm);
+    const matchCategory = selectedCategory === "" || item.category === selectedCategory;
+    return matchSearch && matchCategory;
+  });
+
+  const filteredDiscounts = DiscountRestaurants.filter((item) => {
+    const itemName = item.name ? item.name.toLowerCase() : "";
+    const matchSearch = searchTerm === "" || itemName.includes(searchTerm);
+    const matchCategory = selectedCategory === "" || item.category === selectedCategory;
+    return matchSearch && matchCategory;
+  });
+
+  // 🔹 Categories
+  if (filteredCategories.length === 0) {
+    document.getElementById("category-container").innerHTML = "";
+    document.getElementById("category-empty").style.display = "block";
+  } else {
+    document.getElementById("category-empty").style.display = "none";
+    createCards(filteredCategories, "category-container", true);
+  }
+
+  // 🔹 Restaurants
+  if (filteredRestaurants.length === 0) {
+    document.getElementById("resturant-container").innerHTML = "";
+    document.getElementById("restaurant-empty").style.display = "block";
+  } else {
+    document.getElementById("restaurant-empty").style.display = "none";
+    createCards(filteredRestaurants, "resturant-container", false);
+  }
+
+  // 🔹 Discounted Restaurants
+  if (filteredDiscounts.length === 0) {
+    document.getElementById("discount-container").innerHTML = "";
+    document.getElementById("discount-empty").style.display = "block";
+  } else {
+    document.getElementById("discount-empty").style.display = "none";
+    createCards(filteredDiscounts, "discount-container", false);
+  }
+}
+
+
+document.getElementById("searchInput").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    applyFilter();
+  }
+});
+
+searchInput.addEventListener("input", function() {
+  if (searchInput.value === "") {
+    applyFilter();
+  }
+});
 
 function createCards(data, containerId, isCategory = false) {
   const container = document.getElementById(containerId);
@@ -247,35 +318,26 @@ function createCards(data, containerId, isCategory = false) {
           : item.name;
 
       return `
-        <div class="col-6 col-md-${isCategory ? "4 col-lg-2" : "2"} mb-4">
-          <div class="${
-            isCategory ? "category-card" : "restaurant-card"
-          } h-100">
+        <div class="col-6 col-md-${isCategory ? "4 col-lg-3" : "3"} mb-4">
+          <div class="${isCategory ? "category-card" : "restaurant-card"} h-100">
             <a href="${item.link}" class="text-decoration-none">
               <div class="image-container position-relative">
-                <img src="${
-                  item.imgSrc
-                }" class="overlay-img img-fluid rounded" alt="${item.alt}" />
-                ${
-                  !isCategory && item.discount
-                    ? `<div class="discount-badge position-absolute top-0 start-0 m-2 px-2 py-1 rounded-pill text-white fw-bold" style="background-color: #e6007e; font-size: 0.75rem;">
-                        <i class="bi bi-tag-fill"></i> ${item.discount}
-                      </div>`
-                    : ""
-                }
+                <img src="${item.imgSrc}" class="overlay-img img-fluid rounded" alt="${item.alt}" />
+                ${!isCategory && item.discount ? `
+                  <div class="discount-badge position-absolute top-0 start-0 m-2 px-2 py-1 rounded-pill text-white fw-bold" style="background-color: #e6007e; font-size: 0.75rem;">
+                    <i class="bi bi-tag-fill"></i> ${item.discount}
+                  </div>` : ""}
               </div>
               <div class="ms-3 mt-2">
-                <h6 class="fw-bold">${displayName}</h6>
-                ${
-                  isCategory
-                    ? `<p class="mb-0 restaurants-count-text" style="color: #e21b70" data-restaurants-count="${item.restaurants}">${item.restaurants} ${translations[currentLang]["restaurants_count"]}</p>`
-                    : item.distance
-? `<p class="mb-0 distance-text">  
-     <i class="bi bi-geo-alt-fill me-1" style="color: #e21b70;"></i>
-     ${item.distance} km
-   </p>`
-                    : ""
-                }
+<h6 class="fw-bold" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+  ${displayName}
+</h6>
+                ${isCategory ? `
+                  <p class="mb-0 restaurants-count-text" style="color: #e21b70" data-restaurants-count="${item.restaurants}">${item.restaurants} Restaurants</p>` : ""}
+                ${!isCategory && item.distance ? `
+                  <p class="mb-0 distance-text">
+                    <i class="bi bi-geo-alt-fill me-1" style="color: #e21b70;"></i> ${item.distance} km
+                  </p>` : ""}
               </div>
             </a>
           </div>
@@ -284,6 +346,19 @@ function createCards(data, containerId, isCategory = false) {
     })
     .join("");
 }
+const scrollContainer = document.getElementById("category-container");
+
+document.getElementById("scrollRightBtn").addEventListener("click", () => {
+  scrollContainer.scrollBy({ left: 300, behavior: 'smooth' });
+});
+
+document.getElementById("scrollLeftBtn").addEventListener("click", () => {
+  scrollContainer.scrollBy({ left: -300, behavior: 'smooth' });
+});
+
+
+
+
 
 function initializePage() {
   createCards(categories, "category-container", true);

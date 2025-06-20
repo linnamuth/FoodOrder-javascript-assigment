@@ -1,44 +1,4 @@
-:root {
-    /*========== Colors ==========*/
-    /* Change favorite color */
-    --hue-color: 230;
-    /* HSL color mode */
-    --primary-color: hsl(var(--hue-color), 69%, 61%);
-    --primary-color-second: hsl(var(--hue-color), 69%, 61%);
-    --primary-color-lighter: hsl(var(--hue-color), 92%, 85%);
-    --text-color: hsl(var(--hue-color), 8%, 45%);
-    --text-color-light: hsl(var(--hue-color), 8%, 65%);
-    --body-color: hsl(var(--hue-color), 60%, 99%);
-    --header-height: 3rem;
-}
 
-/*========== Variables Dark theme ==========*/
-body.dark-theme {
-    /* HSL color mode */
-    --primary-color-second: hsl(var(--hue-color), 30%, 8%);
-    --text-color: hsl(var(--hue-color), 8%, 100%);
-    --input-color: hsl(var(--hue-color), 29%, 16%);
-    --body-color: hsl(var(--hue-color), 28%, 12%);
-}
-
-/*==================== BASE ====================*/
-* {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    margin: 0 0 var(--header-height) 0;
-    font-family: "Poppins", sans-serif;
-    font-size: 0.94rem;
-    background-color: var(--body-color);
-    color: var(--text-color);
-}
 
 h1,
 h2,
@@ -66,121 +26,6 @@ img {
     gap: 1.5rem;
 }
 
-.header {
-    width: 100%;
-    padding: 0 1rem;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 100;
-    background-color: var(--body-color);
-    height: max-content;
-}
-
-/*==================== NAV ====================*/
-.navbar {
-    background-color: #f8f9fa;
-    color: black;
-}
-
-body {
-    background-color: #ffffff;
-}
-
-body.dark-theme .navbar {
-    background-color: #1a1919;
-}
-
-body.dark-theme {
-    background-color: #1a1919;
-}
-
-body.dark-theme .navbar .nav-link {
-    color: white;
-}
-
-/*==================== Dark Light Button Implementation ====================*/
-.checkbox {
-    display: none;
-}
-
-.switch {
-    background-color: #5e5d5d;
-    border-radius: 50px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 5px;
-    position: relative;
-    height: 35px;
-    width: 60px;
-    /* Scale the size to your need */
-    transform: scale(0.7);
-}
-
-.switch .ball {
-    background-color: #fff;
-    border-radius: 50%;
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    height: 22px;
-    width: 22px;
-    transform: translateX(0px);
-    transition: transform 0.2s linear;
-}
-
-.checkbox:checked+.switch .ball {
-    transform: translateX(24px);
-}
-
-/* =================footer============================= */
-/* Default light mode */
-.footer {
-    background-color: #d9d9d9;
-    color: #212529;
-}
-
-.footer .footer-link {
-    color: #212529;
-    text-decoration: underline;
-}
-
-.subscribe-btn {
-    background-color: #e21b70;
-    color: white;
-}
-
-/* Dark mode styles */
-body.dark-theme .footer {
-    background-color: #1e1e1e;
-    color: #f1f1f1;
-}
-
-body.dark-theme .footer-link {
-    color: #f1f1f1;
-}
-
-body.dark-theme .subscribe-btn {
-    background-color: #e21b70;
-    color: #fff;
-}
-
-body.dark-theme .form-control {
-    background-color: #333;
-    color: #fff;
-    border: 1px solid #555;
-}
-
-body.dark-theme .meal-card {
-    box-shadow: 0 4px 12px rgba(58, 57, 57, 0.1);
-    border: 1px solid #444;
-    background-color: #161616;
-    color: #f1f1f1;
-}
-
 body,
 p,
 h1,
@@ -201,53 +46,13 @@ h6 {
     color: #e21b70;
 }
 
-body.dark-theme h6 {
-    color: white;
-}
 
-body.dark-theme .restaurants-count-text {
-    color: white;
-}
-
-body,
-html {
-    overflow-x: hidden;
-    width: 100%;
-}
 
 .container-main {
     padding: 0px 30px 0px 30px;
     ;
 }
 
-.navbar-brand {
-    font-size: 3.5rem;
-    font-weight: bold;
-    color: #e21b70;
-}
-
-.navbar-nav .nav-link {
-    color: black;
-    margin-right: 20px;
-    font-size: 1.1rem;
-}
-
-.navbar-nav .nav-link:hover {
-    color: #ff7f50;
-}
-
-.navbar-nav .nav-link.active {
-    color: white !important;
-    background-color: #e21b70;
-    border-radius: 20px;
-    width: 130px;
-    height: 35px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
 
 .banner {
     position: relative;
@@ -1012,4 +817,216 @@ body.dark-theme .empty-state-message h2 {
   font-size: 1.1em;
   line-height: 1.6;
   margin-bottom: 10px;
+}
+#category-empty,
+#restaurant-empty, 
+#discount-empty {
+    font-style: italic;
+    color: #aaa;
+    font-size: 1.1rem;
+}
+
+.truncate-one-line {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#category-scroll-wrapper {
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+}
+
+.scroll-btn {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  z-index: 10;
+}
+.discount-banner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.banner-image {
+  width: 100%;
+  height: auto;
+  animation: pulse 3s infinite ease-in-out;
+}
+
+.discount-tag {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #ff4757;
+  color: white;
+  padding: 10px 15px;
+  font-weight: bold;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  animation: 
+    bounce 1.5s infinite alternate,
+    flash 2s infinite;
+  transform-origin: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+@keyframes bounce {
+  from { transform: translateY(0) scale(1); }
+  to { transform: translateY(-10px) scale(1.05); }
+}
+
+@keyframes flash {
+  0% { background: #ff4757; }
+  50% { background: #ff6b81; }
+  100% { background: #ff4757; }
+}
+
+/* Optional: Add a shimmer effect to the entire banner */
+.discount-banner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255,255,255,0.3) 50%,
+    transparent 100%
+  );
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  100% { left: 150%; }
+}
+:root {
+    --primary: #d70f64;
+    --secondary: #f8f9fa;
+    --accent: #ffc107;
+    --dark: #212529;
+}
+
+body{
+        font-family: "Khmer", sans-serif !important;
+
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+.navbar-brand span {
+    color: var(--primary);
+}
+
+.btn-pink {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn-pink:hover {
+    background-color: #b50a52;
+    color: white;
+}
+
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
+    background-size: cover;
+    background-position: center;
+    min-height: 400px;
+}
+
+.category-card {
+    transition: transform 0.3s;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+}
+
+.restaurant-card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.restaurant-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.discount-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: var(--primary);
+    padding: 10px;
+}
+
+.rating-badge {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: var(--dark);
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+.app-download {
+    background-color: var(--secondary);
+}
+
+footer {
+    background-color: var(--dark);
+}
+
+.footer-links h5 {
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.footer-links h5::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: var(--primary);
+}
+
+/* Add to your existing CSS */
+.navbar .nav-link.active {
+    color: var(--primary) !important;
+    font-weight: 600;
+    position: relative;
+}
+
+.navbar .nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary);
+    border-radius: 3px;
 }

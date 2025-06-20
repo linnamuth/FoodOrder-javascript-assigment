@@ -32,51 +32,45 @@
     <link rel="stylesheet" href="./style/style.css" />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg fixed-top">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">
-          <img
-            src="./img/logo.png"
-            alt="Logo"
-            style="width: 100px; height: 100px"
-          />
-        </a>
-
+    <nav
+      class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm"
+    >
+      <div class="container">
+        <a class="navbar-brand" href="#"> <span>Food</span>Order </a>
         <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link active" href="./index.html" data-i18n="home"
+              <a class="nav-link" href="./home.html" data-i18n="home"
                 >Home</a
               >
             </li>
-
+            <li class="nav-item">
+              <a class="nav-link active" href="./index.html" data-i18n="shop"></a>
+            </li>
             <li class="nav-item">
               <a
                 class="nav-link"
                 href="./history-order.html"
                 data-i18n="histroy_order"
-                >Track Order</a
-              >
+              ></a>
             </li>
-
             <li class="nav-item" id="loginSignupLink">
-              <a class="nav-link" href="login.html" data-i18n="login_signup"
+              <a
+                class="nav-link"
+                href="#"
+                data-i18n="login_signup"
+                onclick="showLoginModal()"
                 >Login/Signup</a
               >
             </li>
-
             <li class="nav-item dropdown d-none" id="userIcon">
               <a
                 class="nav-link dropdown-toggle"
@@ -84,10 +78,9 @@
                 id="userDropdown"
                 role="button"
                 data-bs-toggle="dropdown"
-                aria-expanded="false"
               >
                 <i class="bi bi-person-circle" style="font-size: 1.2rem"></i>
-                <span id="userName"></span>
+                <span id="userName" class="ms-2"></span>
               </a>
               <ul
                 class="dropdown-menu dropdown-menu-end"
@@ -96,7 +89,7 @@
                 <li>
                   <a
                     class="dropdown-item"
-                    href="login.html"
+                    href="#"
                     id="logoutLink"
                     onclick="logout()"
                     data-i18n="sign_out"
@@ -108,93 +101,121 @@
           </ul>
           <select
             id="languageSwitcher"
-            class="form-select form-select-sm w-auto ms-3"
+            class="form-select form-select-sm w-auto me-2"
           >
             <option value="en">English</option>
             <option value="kh">ខ្មែរ</option>
           </select>
-          <div>
-            <div>
-              <input type="checkbox" class="checkbox" id="toggleBtn" />
-              <label class="switch" for="toggleBtn">
-                <div class="ball"></div>
-              </label>
-            </div>
-          </div>
         </div>
       </div>
     </nav>
     <div class="container category-container" style="margin-top: 140px">
       <div id="categoryDetails" class="row mt-4"></div>
     </div>
-
-    <footer class="footer pb-4 pt-4" style="margin-top: 260px;">
+    <footer class="text-white py-5" style="margin-top: 100px">
       <div class="container">
-        <div class="row">
-          <!-- Branding and App -->
-          <div class="col-md-4 mb-4">
-            <h1 class="navbar-brand">
-              <img
-                src="./img/logo.png"
-                alt="Logo"
-                style="width: 100px; height: 100px"
-              />
-            </h1>
-            <img
-              src="./img/app.png"
-              alt="App"
-              style="width: 200px"
-              class="img-fluid"
-            />
-            <p>Company # 490039-445, Registered with House of companies.</p>
+        <div class="row g-4">
+          <div class="col-lg-3">
+            <h3 class="mb-4">FoodOrder</h3>
+            <p>
+              Delivering happiness through food since 2023. Order from your
+              favorite restaurants with ease.
+            </p>
+            <div class="d-flex gap-3 mt-4">
+              <a href="#" class="text-white"
+                ><i class="fab fa-facebook-f"></i
+              ></a>
+              <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="text-white"
+                ><i class="fab fa-instagram"></i
+              ></a>
+            </div>
           </div>
-
-          <!-- Subscribe Form -->
-          <div class="col-md-4 mb-4">
-            <h6 class="fw-bold">Get Exclusive Deals in your Inbox</h6>
-            <form class="row g-2">
-              <div class="col-12 col-sm-8">
-                <input
-                  type="email"
-                  class="form-control"
-                  placeholder="youremail@gmail.com"
-                  required
-                />
-              </div>
-              <div class="col-12 col-sm-4">
-                <button type="submit" class="btn subscribe-btn w-100">
-                  Subscribe
-                </button>
-              </div>
-            </form>
-            <p class="mt-2">We won’t spam, read our email policy.</p>
+          <div class="col-lg-3">
+            <div class="footer-links">
+              <h5>Company</h5>
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >About Us</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Careers</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Blog</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Press</a
+                  >
+                </li>
+              </ul>
+            </div>
           </div>
-
-          <!-- Legal Pages -->
-          <div class="col-md-2 mb-4">
-            <h6 class="fw-bold">Legal Pages</h6>
-            <ul class="list-unstyled">
-              <li><a href="#" class="footer-link">Terms and conditions</a></li>
-              <li><a href="#" class="footer-link">Privacy</a></li>
-              <li><a href="#" class="footer-link">Cookies</a></li>
-              <li>
-                <a href="#" class="footer-link">Modern Slavery Statement</a>
-              </li>
-            </ul>
+          <div class="col-lg-3">
+            <div class="footer-links">
+              <h5>For Foodies</h5>
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Code of Conduct</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Community</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Verified Users</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Invite Friends</a
+                  >
+                </li>
+              </ul>
+            </div>
           </div>
-
-          <!-- Important Links -->
-          <div class="col-md-2 mb-4">
-            <h6 class="fw-bold">Important Links</h6>
-            <ul class="list-unstyled">
-              <li><a href="#" class="footer-link">Get help</a></li>
-              <li><a href="#" class="footer-link">Add your restaurant</a></li>
-              <li><a href="#" class="footer-link">Sign up to deliver</a></li>
-              <li>
-                <a href="#" class="footer-link">Create a business account</a>
-              </li>
-            </ul>
+          <div class="col-lg-3">
+            <div class="footer-links">
+              <h5>For Restaurants</h5>
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Add Restaurant</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Business App</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Restaurant Widgets</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="text-white-50 text-decoration-none"
+                    >Products for Businesses</a
+                  >
+                </li>
+              </ul>
+            </div>
           </div>
+        </div>
+        <hr class="my-4 bg-secondary" />
+        <div class="text-center text-white-50">
+          <small>&copy; 2023 FoodExpress. All rights reserved.</small>
         </div>
       </div>
     </footer>
@@ -202,8 +223,4 @@
   <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="./script/category_script.js" type="module"></script>
-  <script type="module">
-    import { setupThemeToggle } from "./script/themeToggle.js";
-    setupThemeToggle();
-  </script>
 </html>

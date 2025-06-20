@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         imgSrc: "./img/bugerking.png",
         description: "$$ Burgers",
         link: "resturantPage.html?category=Burgers&storeId=123",
+        time: "30-40 min",
       },
     ],
     Pizza: [
@@ -16,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         imgSrc: "./img/pizzacompnay.png",
         description: "$$ Pizza",
         link: "resturantPage.html?category=Pizza&storeId=456",
+        time: "20-30 min",
       },
     ],
     Amazon: [
@@ -24,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
         imgSrc: "./img/amazon.jpg",
         description: "$$ Drinks",
         link: "resturantPage.html?category=Amazon&storeId=456",
+        time: "10-20 min",
       },
     ],
     noodle: [
@@ -32,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
         imgSrc: "./img/mihel.png",
         description: "$$ noodle",
         link: "resturantPage.html?category=noodle&storeId=456",
+        time: "20-30 min",
       },
     ],
     meetball: [
@@ -40,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
         imgSrc: "./img/brhet.png",
         description: "$$ Meetballs",
         link: "resturantPage.html?category=meetball&storeId=300",
+        time: "20-30 min",
       },
     ],
   };
@@ -105,7 +110,11 @@ document.addEventListener("DOMContentLoaded", function () {
           <img src="${item.imgSrc}" class="img-fluid img-store" alt="${item.name}">
           <div class="p-2 mb-0">
             <h2 style="font-size:16px; color:black" class="fw-bold">${item.name}</h2>
-            <p style="font-size:13px; color:grey">${item.description}</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <p style="font-size:15px; color:grey">${item.description}</p>
+             <p style="font-size:16px; color:grey">${item.time}</p>
+            </div>
+        
           </div>
         </div>
       </a>

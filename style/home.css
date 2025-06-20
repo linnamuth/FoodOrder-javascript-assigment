@@ -1,0 +1,122 @@
+:root {
+    --primary: #d70f64;
+    --secondary: #f8f9fa;
+    --accent: #ffc107;
+    --dark: #212529;
+}
+
+body{
+        font-family: "Khmer", sans-serif !important;
+
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+.navbar-brand span {
+    color: var(--primary);
+}
+
+.btn-pink {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn-pink:hover {
+    background-color: #b50a52;
+    color: white;
+}
+
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
+    background-size: cover;
+    background-position: center;
+    min-height: 400px;
+}
+
+.category-card {
+    transition: transform 0.3s;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+}
+
+.restaurant-card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.restaurant-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.discount-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: var(--primary);
+    padding: 10px;
+}
+
+.rating-badge {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: var(--dark);
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+.app-download {
+    background-color: var(--secondary);
+}
+
+footer {
+    background-color: var(--dark);
+}
+
+.footer-links h5 {
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.footer-links h5::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: var(--primary);
+}
+
+/* Add to your existing CSS */
+.navbar .nav-link.active {
+    color: var(--primary) !important;
+    font-weight: 600;
+    position: relative;
+}
+
+.navbar .nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary);
+    border-radius: 3px;
+}
