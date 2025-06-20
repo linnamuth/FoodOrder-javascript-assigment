@@ -329,9 +329,9 @@ function createCards(data, containerId, isCategory = false) {
                   </div>` : ""}
               </div>
               <div class="ms-3 mt-2">
-<h6 class="fw-bold" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-  ${displayName}
-</h6>
+                <h6 class="fw-bold" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                  ${displayName}
+                </h6>
                 ${isCategory ? `
                   <p class="mb-0 restaurants-count-text" style="color: #e21b70" data-restaurants-count="${item.restaurants}">${item.restaurants} Restaurants</p>` : ""}
                 ${!isCategory && item.distance ? `
