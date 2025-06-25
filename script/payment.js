@@ -14,18 +14,12 @@ function isLocalStorageAvailable() {
   }
 }
 
-function safeSetLocalStorage(key, value) {
-  if (isLocalStorageAvailable()) {
-    localStorage.setItem(key, value);
-  } else {
-    sessionStorage.setItem(key, value);
-  }
+function safeSetStorage(key, value) {
+  sessionStorage.setItem(key, value);
 }
 
-function safeGetLocalStorage(key) {
-  return isLocalStorageAvailable()
-    ? localStorage.getItem(key)
-    : sessionStorage.getItem(key);
+function safeGetStorage(key) {
+  return sessionStorage.getItem(key);
 }
 
 async function sendTelegramMessageToUser(chatId, message) {
@@ -51,7 +45,7 @@ async function startTelegramPolling() {
   isPollingActive = true;
   try {
     while (isPollingActive) {
-      const lastUpdateId = parseInt(safeGetLocalStorage("lastUpdateId") || "0");
+      const lastUpdateId = parseInt(safeGetStorage("lastUpdateId") || "0");
       const url = `${TELEGRAM_API_BASE_URL}/getUpdates?offset=${
         lastUpdateId + 1
       }&timeout=30`;
@@ -69,13 +63,13 @@ async function startTelegramPolling() {
           const chatId = update.message?.chat?.id;
           const text = update.message?.text?.trim().toLowerCase();
           if (text === "/start" && chatId) {
-            const oldId = safeGetLocalStorage(
+            const oldId = safeGetStorage(
               LOCAL_STORAGE_CURRENT_CHAT_ID_KEY
             );
             if (!oldId || oldId !== String(chatId)) {
               if (oldId)
-                safeSetLocalStorage(LOCAL_STORAGE_OLD_CHAT_ID_KEY, oldId);
-              safeSetLocalStorage(
+                safeSetStorage(LOCAL_STORAGE_OLD_CHAT_ID_KEY, oldId);
+              safeSetStorage(
                 LOCAL_STORAGE_CURRENT_CHAT_ID_KEY,
                 String(chatId)
               );
@@ -87,7 +81,7 @@ async function startTelegramPolling() {
           }
         }
         const lastId = data.result[data.result.length - 1].update_id;
-        safeSetLocalStorage("lastUpdateId", lastId.toString());
+        safeSetStorage("lastUpdateId", lastId.toString());
       }
     }
   } catch (err) {
@@ -164,7 +158,7 @@ document.getElementById("paymentForm").addEventListener("submit", async (e) => {
     success = Math.random() > 0.5;
   }
 
-  const chatId = safeGetLocalStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY);
+  const chatId = safeGetStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY);
 
   if (!chatId) {
     resultMessage.className = "alert alert-info d-block";

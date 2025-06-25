@@ -2,7 +2,7 @@ import { translations } from "./translations.js";
 import {
   startTelegramPolling,
   sendTelegramReceiptImage,
-  safeGetLocalStorage,
+  safeGetStorage,
   generateReceiptImage,
   LOCAL_STORAGE_CURRENT_CHAT_ID_KEY,
 } from "./telegramUtils.js";
@@ -299,7 +299,7 @@ async function handlePlaceOrder() {
   const loadingOverlay = document.getElementById("loadingOverlay");
   loadingOverlay.style.display = "flex";
 
-  const chatId = safeGetLocalStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY);
+  const chatId = safeGetStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY);
   if (!chatId) {
     loadingOverlay.style.display = "none";
 
@@ -491,7 +491,7 @@ paypal
       console.log("Payment details:", details);
 
       // ✅ 2. Prepare Telegram values
-      const chatId = safeGetLocalStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY);
+      const chatId = safeGetStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY);
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
       const discount = 0;
       const fee = 0;

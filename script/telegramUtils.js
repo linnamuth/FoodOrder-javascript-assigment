@@ -259,8 +259,8 @@ async function generateReceiptImage(
 export {
   sendTelegramMessageToUser,
   startTelegramPolling,
-  safeSetStorage as safeSetLocalStorage,
-  safeGetStorage as safeGetLocalStorage,
+  safeSetStorage,
+  safeGetStorage,
   sendTelegramReceiptImage,
   generateReceiptImage,
   LOCAL_STORAGE_CURRENT_CHAT_ID_KEY,

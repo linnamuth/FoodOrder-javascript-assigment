@@ -1,7 +1,7 @@
 import {
   startTelegramPolling,
   sendTelegramReceiptImage,
-  safeGetLocalStorage,
+  safeGetStorage,
   generateReceiptImage,
   LOCAL_STORAGE_CURRENT_CHAT_ID_KEY,
 } from "./telegramUtils.js";
@@ -44,7 +44,7 @@ const totalPrice = carts.reduce(
 document.getElementById("price").textContent = `$ ${totalPrice.toFixed(2)}`;
 
 async function done() {
-  const chatId = safeGetLocalStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY);
+  const chatId = safeGetStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY);
   const loadingOverlay = document.getElementById("loadingOverlay");
   loadingOverlay.style.display = "flex";
   if (!chatId) {
