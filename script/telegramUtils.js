@@ -56,12 +56,8 @@ async function startTelegramPolling() {
           if (text === "/start" && chatId) {
             const oldId = safeGetStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY);
             if (!oldId || oldId !== String(chatId)) {
-              if (oldId)
-                safeSetStorage(LOCAL_STORAGE_OLD_CHAT_ID_KEY, oldId);
-              safeSetStorage(
-                LOCAL_STORAGE_CURRENT_CHAT_ID_KEY,
-                String(chatId)
-              );
+              if (oldId) safeSetStorage(LOCAL_STORAGE_OLD_CHAT_ID_KEY, oldId);
+              safeSetStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY, String(chatId));
             }
             await sendTelegramMessageToUser(
               chatId,
@@ -118,18 +114,28 @@ async function generateReceiptImage(
   const estimatedHeight = 600 + cart.length * 60;
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
-  canvas.width = 400;
-  canvas.height = estimatedHeight;
 
+  // High-DPI scaling
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = 400 * dpr;
+  canvas.height = estimatedHeight * dpr;
+  canvas.style.width = "400px";
+  canvas.style.height = `${estimatedHeight}px`;
+  ctx.scale(dpr, dpr);
+
+  // Wait for font to be ready
+  await document.fonts.ready;
+
+  // Background
   ctx.fillStyle = "#FFFFFF";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, canvas.width / dpr, canvas.height / dpr);
 
   let yOffset = 40;
 
   ctx.font = "bold 24px Inter, sans-serif";
   ctx.fillStyle = "#333";
   ctx.textAlign = "center";
-  ctx.fillText("SUCCESS", canvas.width / 2, yOffset);
+  ctx.fillText("SUCCESS", 200, yOffset);
   yOffset += 50;
 
   ctx.textAlign = "left";
@@ -138,9 +144,10 @@ async function generateReceiptImage(
   ctx.fillText("Transfer to:", 20, yOffset);
   yOffset += 25;
 
-  const savedPaymentMethod = sessionStorage.getItem("selectedPaymentMethod") || "";
+  const savedPaymentMethod =
+  localStorage.getItem("selectedPaymentMethod") || "";
   ctx.fillText(savedPaymentMethod, 20, yOffset);
-  yOffset += 40;
+  yOffset += 20;
 
   ctx.font = "16px Inter, sans-serif";
   ctx.fillStyle = "#000";
@@ -169,7 +176,7 @@ async function generateReceiptImage(
     ctx.fillText(item.name, 70, yOffset);
 
     ctx.textAlign = "right";
-    ctx.fillText(`x ${item.quantity}`, canvas.width - 20, yOffset);
+    ctx.fillText(`x ${item.quantity}`, 380, yOffset);
 
     yOffset += 50;
   }
@@ -177,7 +184,7 @@ async function generateReceiptImage(
   ctx.strokeStyle = "#EEE";
   ctx.beginPath();
   ctx.moveTo(20, yOffset);
-  ctx.lineTo(canvas.width - 20, yOffset);
+  ctx.lineTo(380, yOffset);
   ctx.stroke();
   yOffset += 30;
 
@@ -191,10 +198,12 @@ async function generateReceiptImage(
   ).padStart(2, "0")}`;
 
   ctx.font = "14px Inter, sans-serif";
+  ctx.textAlign = "left";
   ctx.fillText(transactionDateTime, 20, yOffset);
   yOffset += 40;
 
   const drawLineItem = (label, value, isCurrency = true) => {
+    ctx.textAlign = "left";
     ctx.fillText(label, 20, yOffset);
     ctx.textAlign = "right";
 
@@ -203,17 +212,16 @@ async function generateReceiptImage(
       const khrValue = value * 4100;
       const khrText = `${Math.round(khrValue).toLocaleString()} ៛`;
 
-      ctx.fillText(usdText, canvas.width - 20, yOffset);
+      ctx.fillText(usdText, 380, yOffset);
       yOffset += 20;
 
       ctx.fillStyle = "#888";
-      ctx.fillText(khrText, canvas.width - 20, yOffset);
+      ctx.fillText(khrText, 380, yOffset);
       ctx.fillStyle = "#000";
     } else {
-      ctx.fillText(value, canvas.width - 20, yOffset);
+      ctx.fillText(value, 380, yOffset);
     }
 
-    ctx.textAlign = "left";
     yOffset += 30;
   };
 
@@ -225,32 +233,29 @@ async function generateReceiptImage(
   yOffset += 10;
   ctx.beginPath();
   ctx.moveTo(20, yOffset);
-  ctx.lineTo(canvas.width - 20, yOffset);
+  ctx.lineTo(380, yOffset);
   ctx.stroke();
   yOffset += 30;
 
   ctx.font = "bold 20px Inter, sans-serif";
+  ctx.textAlign = "left";
   ctx.fillText("Total Payment", 20, yOffset);
 
-  const totalPaymentKHR = totalPayment * 4100;
   ctx.textAlign = "right";
-  ctx.fillText(`${totalPayment.toFixed(2)} USD`, canvas.width - 20, yOffset);
-  yOffset += 30;
-
+  ctx.fillText(`${totalPayment.toFixed(2)} USD`, 380, yOffset);
+  yOffset += 25;
   const formattedKHR = new Intl.NumberFormat("km-KH", {
     style: "currency",
     currency: "KHR",
     currencyDisplay: "symbol",
-  }).format(Math.round(totalPaymentKHR));
-
-  ctx.fillText(formattedKHR, canvas.width - 20, yOffset);
-
+  }).format(Math.round(totalPayment * 4100));
+  ctx.fillText(formattedKHR, 380, yOffset);
+  yOffset += 30;
   return new Promise((resolve) => {
     canvas.toBlob((blob) => resolve(blob), "image/png");
   });
 }
 
-// ✅ Export sessionStorage-based functions
 export {
   sendTelegramMessageToUser,
   startTelegramPolling,
