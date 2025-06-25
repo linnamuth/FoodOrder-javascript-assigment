@@ -161,8 +161,14 @@ function updateOrderSummary() {
   let subtotal = 0;
 
   // Currency formatters
-  const usdFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
-  const khFormatter = new Intl.NumberFormat("km-KH", { style: "currency", currency: "KHR" });
+  const usdFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+  const khFormatter = new Intl.NumberFormat("km-KH", {
+    style: "currency",
+    currency: "KHR",
+  });
 
   storeCart.forEach((item) => {
     const itemTotal = item.price * item.quantity;
@@ -175,7 +181,9 @@ function updateOrderSummary() {
     summaryContainer.innerHTML += `
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
-          <img src="${item.imgSrc}" alt="${item.name}" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;" />
+          <img src="${item.imgSrc}" alt="${
+      item.name
+    }" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;" />
           <span>${item.quantity} × ${item.name}</span>
         </div>
         <span>
@@ -186,7 +194,7 @@ function updateOrderSummary() {
     `;
   });
 
-  const vat = +(subtotal * 0.00).toFixed(2);
+  const vat = +(subtotal * 0.0).toFixed(2);
   const total = subtotal + vat;
   const subtotalKHR = subtotal * 4100;
   const vatKHR = vat * 4100;
@@ -223,8 +231,6 @@ function updateOrderSummary() {
     <small>incl. fees and tax</small>
   `;
 }
-
-
 
 // MAIN ORDER HANDLING FUNCTION
 async function handlePlaceOrder() {
@@ -298,7 +304,7 @@ async function handlePlaceOrder() {
     loadingOverlay.style.display = "none";
 
     Swal.fire({
-      icon: "info",    
+      icon: "info",
       title: "Start Telegram Bot",
       text: "Please click 'Start' in the Telegram bot before proceeding.",
       confirmButtonText: "Go to Telegram Bot",
@@ -359,8 +365,6 @@ async function handlePlaceOrder() {
   resultMessage.textContent = "Failed to send receipt. Please try again.";
 }
 
-
-
 // EVENT BINDING
 document.addEventListener("DOMContentLoaded", () => {
   const placeOrderBtn = document.getElementById("placeOrderBtn");
@@ -370,13 +374,12 @@ document.addEventListener("DOMContentLoaded", () => {
     phoneNumberInput.addEventListener("input", () => {
       placeOrderBtn.disabled = phoneNumberInput.value.trim() === "";
     });
-    
+
     placeOrderBtn.addEventListener("click", handlePlaceOrder);
   } else {
     console.error("❌ placeOrderBtn or phoneNumberInput not found in the DOM!");
   }
 });
-
 
 // window.onload = initializeApp;
 function logout(event) {
@@ -455,3 +458,105 @@ if (languageSwitcher) {
     setLanguage(this.value);
   });
 }
+const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+let totalAmount = 0;
+cart.forEach((item) => (totalAmount += item.price * item.quantity));
+
+paypal
+  .Buttons({
+    style: {
+      layout: "vertical",
+      color: "blue",
+      shape: "rect",
+      label: "checkout",
+    },
+
+    createOrder: function (data, actions) {
+      return actions.order.create({
+        purchase_units: [
+          {
+            amount: {
+              value: totalAmount,
+            },
+          },
+        ],
+      });
+    },
+
+    onApprove: async function (data, actions) {
+      console.log("Transaction approved:", data);
+
+      // ✅ 1. Capture the payment first
+      const details = await actions.order.capture();
+      console.log("Payment details:", details);
+
+      // ✅ 2. Prepare Telegram values
+      const chatId = safeGetLocalStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY);
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const discount = 0;
+      const fee = 0;
+      const crossCurrency = "USD";
+      const finalTotalPayment = totalAmount;
+
+      let totalOrderAmount = 0;
+      cart.forEach((item) => {
+        totalOrderAmount += item.price * item.quantity;
+      });
+
+      if (!chatId) {
+        Swal.fire({
+          icon: "info",
+          title: "Start Telegram Bot",
+          text: "Please click 'Start' in the Telegram bot before proceeding.",
+          confirmButtonText: "Go to Telegram Bot",
+        }).then(() => {
+          window.location.href = "https://t.me/OrderFastDeliverybot";
+        });
+        return;
+      }
+
+      let captionMessage = `✅ <b>ការបញ្ជាទិញរបស់អ្នកបានជោគជ័យ!</b>\n`;
+      captionMessage += `🕐 សូមរង់ចាំខណៈដែលហាងកំពុងរៀបចំ។\n\n`;
+      captionMessage += `🙏 សូមអរគុណសម្រាប់ការទិញជាមួយយើង!`;
+
+      const receiptImageBlob = await generateReceiptImage(
+        totalOrderAmount,
+        discount,
+        fee,
+        crossCurrency,
+        finalTotalPayment,
+        cart
+      );
+
+      const sent = await sendTelegramReceiptImage(
+        chatId,
+        receiptImageBlob,
+        captionMessage
+      );
+      if (sent) {
+        localStorage.removeItem("cart"); // ✅ Only clear cart after success
+        loadingOverlay.style.display = "none";
+        window.location.href = "success.html";
+        return;
+      }
+
+      const MIN_LOADING_DURATION = 1000;
+      await new Promise((resolve) => setTimeout(resolve, MIN_LOADING_DURATION));
+
+      localStorage.removeItem("cart");
+
+      window.location.href = "success.html";
+    },
+  })
+  .render("#paypal-button-container");
+
+paypal
+  .Messages({
+    placement: "payment",
+    style: {
+      layout: "flex",
+      ratio: "20x1",
+    },
+    amount: totalAmount,
+  })
+  .render("#pp-message");
