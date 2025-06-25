@@ -564,15 +564,16 @@ body {
 }
 
 .container-card {
-    background-color: white;
-    border-radius: 1.25rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    padding: 0px;
-    max-width: 300px;
-    margin: 50px auto 0px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
+  background-color: white;
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 0px;
+  width: 90%;                 /* changed from fixed max-width */
+  max-width: 500px;           /* allow more room on larger screens */
+  margin: 50px auto 0px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .khq-header {
@@ -623,13 +624,14 @@ body {
 }
 
 canvas#qrCanvas {
-    width: 100%;
-    height: auto;
-    max-width: 300px;
-    border-radius: 0.75rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    padding: 0px 20px;
+  width: 100% !important;
+  height: auto;
+  max-width: 100%;            /* let it stretch inside container */
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 0px 20px;
 }
+
 .qr-note {
     font-size: 0.85rem;
     color: #555;

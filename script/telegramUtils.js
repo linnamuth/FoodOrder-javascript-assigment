@@ -1,32 +1,16 @@
 // telegramUtils.js
-
 const BOT_TOKEN = "7227860086:AAG7q39S0YSPz01JToZhs_D1h-6b4sqRpBI";
 const TELEGRAM_API_BASE_URL = `https://api.telegram.org/bot${BOT_TOKEN}`;
 const LOCAL_STORAGE_CURRENT_CHAT_ID_KEY = "telegram_current_chat_id";
 const LOCAL_STORAGE_OLD_CHAT_ID_KEY = "telegram_old_chat_id";
 
-function isLocalStorageAvailable() {
-  try {
-    localStorage.setItem("test", "test");
-    localStorage.removeItem("test");
-    return true;
-  } catch (e) {
-    return false;
-  }
+// Now always use sessionStorage
+function safeSetStorage(key, value) {
+  sessionStorage.setItem(key, value);
 }
 
-function safeSetLocalStorage(key, value) {
-  if (isLocalStorageAvailable()) {
-    localStorage.setItem(key, value);
-  } else {
-    sessionStorage.setItem(key, value);
-  }
-}
-
-function safeGetLocalStorage(key) {
-  return isLocalStorageAvailable()
-    ? localStorage.getItem(key)
-    : sessionStorage.getItem(key);
+function safeGetStorage(key) {
+  return sessionStorage.getItem(key);
 }
 
 async function sendTelegramMessageToUser(chatId, message) {
@@ -52,7 +36,7 @@ async function startTelegramPolling() {
   isPollingActive = true;
   try {
     while (isPollingActive) {
-      const lastUpdateId = parseInt(safeGetLocalStorage("lastUpdateId") || "0");
+      const lastUpdateId = parseInt(safeGetStorage("lastUpdateId") || "0");
       const url = `${TELEGRAM_API_BASE_URL}/getUpdates?offset=${
         lastUpdateId + 1
       }&timeout=30`;
@@ -70,13 +54,11 @@ async function startTelegramPolling() {
           const chatId = update.message?.chat?.id;
           const text = update.message?.text?.trim().toLowerCase();
           if (text === "/start" && chatId) {
-            const oldId = safeGetLocalStorage(
-              LOCAL_STORAGE_CURRENT_CHAT_ID_KEY
-            );
+            const oldId = safeGetStorage(LOCAL_STORAGE_CURRENT_CHAT_ID_KEY);
             if (!oldId || oldId !== String(chatId)) {
               if (oldId)
-                safeSetLocalStorage(LOCAL_STORAGE_OLD_CHAT_ID_KEY, oldId);
-              safeSetLocalStorage(
+                safeSetStorage(LOCAL_STORAGE_OLD_CHAT_ID_KEY, oldId);
+              safeSetStorage(
                 LOCAL_STORAGE_CURRENT_CHAT_ID_KEY,
                 String(chatId)
               );
@@ -88,7 +70,7 @@ async function startTelegramPolling() {
           }
         }
         const lastId = data.result[data.result.length - 1].update_id;
-        safeSetLocalStorage("lastUpdateId", lastId.toString());
+        safeSetStorage("lastUpdateId", lastId.toString());
       }
     }
   } catch (err) {
@@ -96,33 +78,35 @@ async function startTelegramPolling() {
     setTimeout(startTelegramPolling, 10000);
   }
 }
+
 async function sendTelegramReceiptImage(chatId, imageBlob, caption = "") {
-  const apiUrl = `https://api.telegram.org/bot7227860086:AAG7q39S0YSPz01JToZhs_D1h-6b4sqRpBI/sendPhoto`;
+  const apiUrl = `${TELEGRAM_API_BASE_URL}/sendPhoto`;
 
   const formData = new FormData();
   formData.append("chat_id", chatId);
-  formData.append("photo", imageBlob, "receipt.png"); // Append the blob as a file
+  formData.append("photo", imageBlob, "receipt.png");
   if (caption) {
-    formData.append("caption", caption); // Add caption if provided
-    formData.append("parse_mode", "HTML"); // Enable HTML parsing for the caption
+    formData.append("caption", caption);
+    formData.append("parse_mode", "HTML");
   }
 
   try {
     const response = await fetch(apiUrl, {
       method: "POST",
-      body: formData, // FormData handles 'Content-Type' automatically
+      body: formData,
     });
 
     const data = await response.json();
     if (!data.ok) {
       console.error("Telegram API error:", data.description);
     }
-    return data.ok; // Return true if image is sent successfully, false otherwise
+    return data.ok;
   } catch (error) {
     console.error("Error sending Telegram image:", error);
     return false;
   }
 }
+
 async function generateReceiptImage(
   amount,
   discount,
@@ -142,36 +126,31 @@ async function generateReceiptImage(
 
   let yOffset = 40;
 
-  // Title
   ctx.font = "bold 24px Inter, sans-serif";
   ctx.fillStyle = "#333";
   ctx.textAlign = "center";
   ctx.fillText("SUCCESS", canvas.width / 2, yOffset);
   yOffset += 50;
 
-  // Bank Info
   ctx.textAlign = "left";
   ctx.font = "16px Inter, sans-serif";
   ctx.fillStyle = "#666";
   ctx.fillText("Transfer to:", 20, yOffset);
   yOffset += 25;
 
-  const savedPaymentMethod =
-    localStorage.getItem("selectedPaymentMethod") || "";
+  const savedPaymentMethod = sessionStorage.getItem("selectedPaymentMethod") || "";
   ctx.fillText(savedPaymentMethod, 20, yOffset);
   yOffset += 40;
 
-  // Item Section Title
   ctx.font = "16px Inter, sans-serif";
   ctx.fillStyle = "#000";
   ctx.fillText("Item", 20, yOffset);
   yOffset += 30;
 
-  // Preload all images
   const imagePromises = cart.map((item) => {
     return new Promise((resolve) => {
       const img = new Image();
-      img.src = item.imgSrc || ""; // <-- Make sure this exists on each item
+      img.src = item.imgSrc || "";
       img.onload = () => resolve({ item, img });
       img.onerror = () => resolve({ item, img: null });
     });
@@ -181,22 +160,20 @@ async function generateReceiptImage(
 
   for (const { item, img } of images) {
     if (img) {
-      ctx.drawImage(img, 20, yOffset - 20, 40, 40); // image
+      ctx.drawImage(img, 20, yOffset - 20, 40, 40);
     }
 
     ctx.textAlign = "left";
     ctx.font = "14px Inter, sans-serif";
     ctx.fillStyle = "#000";
-    ctx.fillText(item.name, 70, yOffset); // name
+    ctx.fillText(item.name, 70, yOffset);
 
     ctx.textAlign = "right";
-    ctx.fillText(`x ${item.quantity}`, canvas.width - 20, yOffset); // qty
+    ctx.fillText(`x ${item.quantity}`, canvas.width - 20, yOffset);
 
     yOffset += 50;
   }
 
-  // Divider
-  ctx.textAlign = "left";
   ctx.strokeStyle = "#EEE";
   ctx.beginPath();
   ctx.moveTo(20, yOffset);
@@ -204,7 +181,6 @@ async function generateReceiptImage(
   ctx.stroke();
   yOffset += 30;
 
-  // DateTime
   const now = new Date();
   const transactionDateTime = `${now.getFullYear()}/${String(
     now.getMonth() + 1
@@ -218,7 +194,6 @@ async function generateReceiptImage(
   ctx.fillText(transactionDateTime, 20, yOffset);
   yOffset += 40;
 
-  // Line items
   const drawLineItem = (label, value, isCurrency = true) => {
     ctx.fillText(label, 20, yOffset);
     ctx.textAlign = "right";
@@ -247,7 +222,6 @@ async function generateReceiptImage(
   drawLineItem("Fee", fee);
   drawLineItem("Cross Currency", crossCurrency, false);
 
-  // Divider
   yOffset += 10;
   ctx.beginPath();
   ctx.moveTo(20, yOffset);
@@ -255,7 +229,6 @@ async function generateReceiptImage(
   ctx.stroke();
   yOffset += 30;
 
-  // Total Payment
   ctx.font = "bold 20px Inter, sans-serif";
   ctx.fillText("Total Payment", 20, yOffset);
 
@@ -263,6 +236,7 @@ async function generateReceiptImage(
   ctx.textAlign = "right";
   ctx.fillText(`${totalPayment.toFixed(2)} USD`, canvas.width - 20, yOffset);
   yOffset += 30;
+
   const formattedKHR = new Intl.NumberFormat("km-KH", {
     style: "currency",
     currency: "KHR",
@@ -271,18 +245,17 @@ async function generateReceiptImage(
 
   ctx.fillText(formattedKHR, canvas.width - 20, yOffset);
 
-  // Done
   return new Promise((resolve) => {
     canvas.toBlob((blob) => resolve(blob), "image/png");
   });
 }
 
-// Export functions and constants
+// ✅ Export sessionStorage-based functions
 export {
   sendTelegramMessageToUser,
   startTelegramPolling,
-  safeSetLocalStorage,
-  safeGetLocalStorage,
+  safeSetStorage as safeSetLocalStorage,
+  safeGetStorage as safeGetLocalStorage,
   sendTelegramReceiptImage,
   generateReceiptImage,
   LOCAL_STORAGE_CURRENT_CHAT_ID_KEY,
