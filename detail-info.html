@@ -404,36 +404,43 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script src="./script/detail-info.js" type="module"></script>
-    <script>
-      const storeId = new URLSearchParams(window.location.search).get("storeId");
-      const paymentLink = document.getElementById("payment-link");
-      if (storeId) {
-        paymentLink.href = `payment-selection.html?storeId=${storeId}`;
-      }
-      window.onload = function () {
-        const savedPaymentMethod = localStorage.getItem(
-          "selectedPaymentMethod"
-        );
-        if (savedPaymentMethod) {
-          if (savedPaymentMethod === "ABAPAY") {
-            document.getElementById("paymentLabel").textContent =
-              "Pay with ABA KHQR";
-            document.getElementById("paymentDesc").textContent =
-              "Scan With ABA";
-          } else if (savedPaymentMethod === "WINGBANK") {
-            document.getElementById("paymentLabel").textContent =
-              "Pay with Wing KHQR";
-            document.getElementById("paymentDesc").textContent =
-              "Scan With Wing";
-          } else if (savedPaymentMethod === "ACLEDAPAY") {
-            document.getElementById("paymentLabel").textContent =
-              "Pay with Acleda KHQR";
-            document.getElementById("paymentDesc").textContent =
-              "Scan With Acleda";
-          }
-        }
-      };
- 
-    </script>
+  <script>
+  const storeId = new URLSearchParams(window.location.search).get("storeId");
+  const paymentLink = document.getElementById("payment-link");
+
+  // Set link with storeId
+  if (storeId) {
+    paymentLink.href = `payment-selection.html?storeId=${storeId}`;
+  }
+
+  // Set default payment method if not yet set
+  const savedPaymentMethod =
+    localStorage.getItem("selectedPaymentMethod") || "ABAPAY";
+
+  // Save default if not already in localStorage
+  if (!localStorage.getItem("selectedPaymentMethod")) {
+    localStorage.setItem("selectedPaymentMethod", savedPaymentMethod);
+  }
+
+  window.onload = function () {
+    const label = document.getElementById("paymentLabel");
+    const desc = document.getElementById("paymentDesc");
+
+    switch (savedPaymentMethod) {
+      case "ABAPAY":
+        label.textContent = "Pay with ABA KHQR";
+        desc.textContent = "Scan With ABA";
+        break;
+      case "WINGBANK":
+        label.textContent = "Pay with Wing KHQR";
+        desc.textContent = "Scan With Wing";
+        break;
+      case "ACLEDAPAY":
+        label.textContent = "Pay with Acleda KHQR";
+        desc.textContent = "Scan With Acleda";
+        break;
+    }
+  };
+</script>
   </body>
 </html>
