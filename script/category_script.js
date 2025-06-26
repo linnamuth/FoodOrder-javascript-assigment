@@ -128,6 +128,6 @@ document.addEventListener("DOMContentLoaded", function () {
       <h2>No Products Available</h2>
       <p>It looks like there are no products in this category yet.</p>
       <p>Please check back later or explore other categories.</p>
-    </div>>`;
+    </div>`;
   }
 });

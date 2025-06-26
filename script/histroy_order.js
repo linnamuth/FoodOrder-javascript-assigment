@@ -71,7 +71,10 @@ function renderOrderHistory() {
   const userHistory = allOrderHistory[username] || [];
 
   if (userHistory.length === 0) {
-    container.innerHTML = "<p>No orders found.</p>";
+    container.innerHTML = `<div class="empty-state-message">
+      <img src="./img/no-order.png" alt="No Products Available" class="img-fluid empty-state-image" style="height:400px;margin-top:40px"> 
+      <h2>No Products Order</h2>
+    </div>`;
     return;
   }
 
