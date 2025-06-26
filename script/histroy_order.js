@@ -62,11 +62,6 @@ function renderOrderHistory() {
   const container = document.getElementById("orderHistory");
   container.innerHTML = "";
 
-  if (!username) {
-    container.innerHTML = "<p>Please log in to see your orders.</p>";
-    return;
-  }
-
   const allOrderHistory = JSON.parse(localStorage.getItem("orderHistory")) || {};
   const userHistory = allOrderHistory[username] || [];
 
